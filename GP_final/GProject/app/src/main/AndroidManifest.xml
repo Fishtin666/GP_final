@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GProject"
+        tools:targetApi="31" >
+
+        <activity
+            android:name=".login.regist"
+            android:exported="true"/>
+        <activity
+            android:name=".reading.R_judge"
+            android:exported="true"/>
+        <!--        <activity-->
+        <!--            android:name=".WordQuizActivity"-->
+        <!--            android:exported="true"/>-->
+        <activity
+            android:name=".meaning.ShowMeaning"
+            android:exported="true"/>
+        <activity
+            android:name=".WordListActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".reading.R_blank"
+            android:exported="true"/>
+        <activity
+            android:name=".reading.R_chose"
+            android:exported="true"/>
+        <activity
+            android:name=".reading.R_match"
+            android:exported="true"/>
+        <activity
+            android:name=".ChoseTestActivity"
+            android:exported="true"/>
+        <!--        <activity-->
+        <!--            android:name=".reading.R_topic"-->
+        <!--            android:exported="true"/>-->
+        <activity
+            android:name=".WordCard.WordCardActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".WordQuiz.LevelCQuizActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".WordQuiz.LevelBQuizActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".WordQuiz.LevelAQuizActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".reading.R_topic"
+            android:exported="true"/>
+<!---->
+        <activity
+            android:name=".Listening.listen_TTest1_Section4"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listen_TTest1_Section3"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listen_TTest1_Section2"
+            android:exported="false" />
+
+        <service
+            android:name=".Listening.TimerService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".Listening.listen_TTest1_Section1"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listent_test1_section4"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listent_test1_section3"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listent_test1_section2"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listen_Ans1"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listen_test1_Section1"
+            android:exported="false" />
+        <activity
+            android:name=".Listening.listen"
+            android:exported="true"/>
+
+
+        <activity
+            android:name=".Review.RReview"
+            android:exported="false" />
+        <activity
+            android:name=".Review.Review_choose"
+            android:exported="false" />
+        <activity
+            android:name=".Review.Review_main"
+            android:exported="true"/>
+
+
+
+<!---->
+        <activity
+            android:name=".Cross_Topic_qusetion"
+            android:exported="false" />
+        <activity
+            android:name=".Cross_Topic_topic"
+            android:exported="false" />
+        <activity
+            android:name=".AiTeacher.AiSpeakingTest"
+            android:exported="false" />
+        <activity
+            android:name=".AiTeacher.AiChat"
+            android:exported="false" />
+        <activity
+            android:name=".Speaking.Speaking_judge"
+            android:exported="false" />
+        <activity
+            android:name=".AiTeacher.Cross_Topic"
+            android:exported="true" />
+        <activity
+            android:name=".AiTeacher.AiTeacherHelp"
+            android:exported="false" />
+        <activity
+            android:name=".AiTeacher.AiTeacher2"
+            android:exported="false" />
+
+        <activity
+            android:name=".Writing.W_topic"
+            android:exported="false" />
+
+        <activity
+            android:name=".Writing.W_Judge_P1"
+            android:exported="false" />
+        <activity
+            android:name=".Writing.Writing_T2answer1"
+            android:exported="false" />
+        <activity
+            android:name=".Writing.Writing_T1answer2"
+            android:exported="false" />
+        <activity
+            android:name=".Writing.Writing_T1answer1"
+            android:exported="true" />
+        <activity
+            android:name=".QuesNumAdd"
+            android:exported="true" />
+        <activity
+            android:name=".Speaking.Speaking_part3_question"
+            android:exported="false" />
+        <activity
+            android:name=".Speaking.S_Judge_P2"
+            android:exported="false" />
+        <activity
+            android:name=".Speaking.Speaking_part2_answer"
+            android:exported="false" />
+        <activity
+            android:name=".Speaking.S_Judge_P1"
+            android:exported="false" />
+        <activity
+            android:name=".Speaking.Speaking_part1_answer"
+            android:exported="true" />
+
+        <activity
+            android:name=".Learning"
+            android:exported="true" />
+        <activity
+            android:name=".Speaking.Speaking_part2"
+            android:exported="true" />
+        <activity
+            android:name=".Speaking_questionAdd"
+            android:exported="true" />
+        <activity
+            android:name=".Speaking.Speaking_part1"
+            android:exported="true" />
+        <activity
+            android:name=".Speaking.Speaking"
+            android:exported="true" />
+        <activity
+            android:name=".AiTeacher.AiTeacher"
+            android:exported="true" />
+        <activity
+            android:name=".PronunciationAssessment"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

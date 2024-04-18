@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="12dp">
+
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignTop="@+id/Voc"
+        android:layout_alignBottom="@+id/Voc"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/Voc"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/star_black" />
+
+    <TextView
+        android:id="@+id/Voc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="vocabulary"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/phonetics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Voc"
+        android:layout_alignStart="@+id/Voc"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="/ t e s t /"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phonetics"
+        android:layout_marginTop="10dp"
+        android:id="@+id/meaningRecyclerView"/>
+
+    <ImageButton
+        android:id="@+id/voice"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/phonetics"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/phonetics"
+        android:background="#00000000"
+        app:srcCompat="@drawable/voice"
+        app:tint="#0099CC" />
+
+    <TextView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="8dp"
+        android:text="X"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+
+
+</RelativeLayout>

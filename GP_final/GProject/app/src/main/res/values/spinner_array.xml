@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Review_array">
+        <item>Reading</item>
+        <item>Listening</item>
+        <item>writing</item>
+        <item>Speaking</item>
+        <item>VR Speaking</item>
+    </string-array>
+</resources>

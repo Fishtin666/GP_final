@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "994346585230",
+    "firebase_url": "https://ielts-1d9a7-default-rtdb.firebaseio.com",
+    "project_id": "ielts-1d9a7",
+    "storage_bucket": "ielts-1d9a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994346585230:android:0dd7e3ad4b729a85d58ddf",
+        "android_client_info": {
+          "package_name": "com.IELTS.speaking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAcBgMYguKIo0T69pc7SOES_IIZ99GwiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994346585230:android:0573a5b30f52be62d58ddf",
+        "android_client_info": {
+          "package_name": "com.example.gproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAcBgMYguKIo0T69pc7SOES_IIZ99GwiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994346585230:android:48011a814f589badd58ddf",
+        "android_client_info": {
+          "package_name": "com.example.gproject_listent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAcBgMYguKIo0T69pc7SOES_IIZ99GwiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/buttonGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycler_view"
+        android:layout_above="@id/bottom_layout"
+        android:background="@drawable/rounded_corner"
+        />
+    <LinearLayout
+        android:id="@+id/buttonGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/translate"
+            android:layout_toLeftOf="@id/change_topic"
+            android:backgroundTint="#B3AFF9"
+            android:textSize="18sp"
+            android:text="翻譯"
+
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/change_topic"
+            android:backgroundTint="#B3AFF9"
+            android:textSize="18sp"
+            android:text="換個話題"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/change_topic"
+            android:id="@+id/check"
+            android:backgroundTint="#B3AFF9"
+            android:textSize="18sp"
+            android:text="改善回覆"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/topic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        >
+
+        <Button
+            android:id="@+id/topic_Travel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5B7BBA"
+            android:text="Travel"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:id="@+id/topic_Food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5B7BBA"
+            android:text="Food"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:id="@+id/topic_Happiness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5B7BBA"
+            android:text="Happiness"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:id="@+id/topic_Hobbies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5B7BBA"
+            android:text="Hobbies"
+            android:textColor="@color/white"
+            />
+
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="早安!今天要來練習英文了嘛!"
+        android:textSize="23dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:padding="8dp"
+        android:id="@+id/bottom_layout">
+
+        <EditText
+            android:id="@+id/message_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/send_btn"
+            android:background="@drawable/rounded_corner"
+            android:hint="Type something"
+            android:padding="16dp" />
+
+        <ImageButton
+
+            android:id="@+id/send_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:background="#00000000"
+            android:padding="8dp"
+            android:src="@drawable/send" />
+        <!--            android:background="?attr/selectableItemBackground"-->
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
