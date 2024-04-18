@@ -7,7 +7,8 @@ public class DataHolder {
     int cont;
     private Handler handler;
 
-    int test;
+    String HHH;
+    int a;
 
     public DataHolder(Handler handler) {
         this.handler = handler;
