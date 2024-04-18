@@ -7,7 +7,7 @@ public class DataHolder {
     int cont;
     private Handler handler;
 
-
+    String HHH;
     int alll000;
 
     public DataHolder(Handler handler) {
