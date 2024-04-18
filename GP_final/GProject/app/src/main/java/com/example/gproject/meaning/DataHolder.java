@@ -8,7 +8,7 @@ public class DataHolder {
     private Handler handler;
 
     String HHH;
-    int a;
+
 
     public DataHolder(Handler handler) {
         this.handler = handler;
