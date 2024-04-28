@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gproject.ChoseTestActivity;
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.WordListActivity;
 import com.example.gproject.WordQuiz.LevelAQuizActivity;
@@ -26,14 +27,11 @@ public class R_topic extends AppCompatActivity {
         ImageButton ButJudge = findViewById(R.id.Q2);
         ImageButton BUtChos = findViewById(R.id.Q3);
         ImageButton BUtMatch = findViewById(R.id.Q4);
-        ImageButton BUtWord = findViewById(R.id.Q6);
-        ImageButton ButTest = findViewById(R.id.Q7);
-        ImageButton ButCollect = findViewById(R.id.Q8);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(R_topic.this, R_blank.class);
+                Intent intent = new Intent(R_topic.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -60,31 +58,6 @@ public class R_topic extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goToChoseTest(4);
-            }
-        });
-
-        BUtWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(R_topic.this, LevelAQuizActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        ButTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(R_topic.this, ShowMeaning.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        ButCollect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(R_topic.this, WordListActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
     }

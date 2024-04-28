@@ -67,6 +67,7 @@ public class regist extends AppCompatActivity {
                                     // 跳转到登录页面
                                     Intent intent = new Intent(regist.this, login.class);
                                     startActivity(intent);
+                                    finish();
                                     //
                                 } else {
                                     // 注册失败

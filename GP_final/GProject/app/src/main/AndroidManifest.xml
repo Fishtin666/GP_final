@@ -19,9 +19,9 @@
         <activity
             android:name=".reading.R_judge"
             android:exported="true"/>
-        <!--        <activity-->
-        <!--            android:name=".WordQuizActivity"-->
-        <!--            android:exported="true"/>-->
+                <activity
+                    android:name=".WordCard.WordTopicActivity"
+                    android:exported="true"/>
         <activity
             android:name=".meaning.ShowMeaning"
             android:exported="true"/>
@@ -39,6 +39,8 @@
             android:exported="true"/>
         <activity
             android:name=".ChoseTestActivity"
+            android:exported="true"/>
+        <activity android:name=".MainActivity"
             android:exported="true"/>
         <!--        <activity-->
         <!--            android:name=".reading.R_topic"-->
@@ -191,8 +193,11 @@
         <activity
             android:name=".PronunciationAssessment"
             android:exported="true" />
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="true" />-->
         <activity
-            android:name=".MainActivity"
+            android:name=".login.login"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

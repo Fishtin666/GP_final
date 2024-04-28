@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gproject.WordCard.WordCardActivity;
 import com.example.gproject.Adapters.WordListAdapter;
 import com.example.gproject.Adapters.WordListData;
+import com.example.gproject.WordCard.WordTopicActivity;
 import com.example.gproject.reading.R_topic;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +45,7 @@ public class WordListActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WordListActivity.this, R_topic.class);
+                Intent intent = new Intent(WordListActivity.this, WordTopicActivity.class);
                 startActivity(intent);
                 finish();
             }

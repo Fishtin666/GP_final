@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.WordQuiz.LevelAQuizActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,6 +64,7 @@ public class login extends AppCompatActivity {
     public void goRegist(View view) {
         Intent intent = new Intent(login.this, regist.class);
         startActivity(intent);
+        finish();
     }
 
     private void loginUser() {
@@ -78,8 +80,9 @@ public class login extends AppCompatActivity {
                             // 登錄成功
                             Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
                             // 可在此處導航到主畫面或執行其他操作
-                            Intent intent = new Intent(login.this, LevelAQuizActivity.class);
+                            Intent intent = new Intent(login.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             // 登錄失敗
                             Log.e("LoginActivity", "Login failed: " + task.getException().getMessage());

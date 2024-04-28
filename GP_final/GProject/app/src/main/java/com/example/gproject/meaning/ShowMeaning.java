@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.gproject.R;
 import com.example.gproject.WordCard.WordResult2;
+import com.example.gproject.WordCard.WordTopicActivity;
 import com.example.gproject.databinding.WordDicSearchBinding;
 import com.example.gproject.reading.R_topic;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +47,7 @@ public class ShowMeaning extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShowMeaning.this, R_topic.class);
+                Intent intent = new Intent(ShowMeaning.this, WordTopicActivity.class);
                 startActivity(intent);
                 finish();
             }

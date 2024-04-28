@@ -2,7 +2,7 @@ package com.example.gproject.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
-
+import android.content.Intent;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.example.gproject.Adapters.QuestionNumberAdapter;
 import com.example.gproject.Models.QuestionNumberModel;
 import com.example.gproject.R;
+import com.example.gproject.WordCard.WordTopicActivity;
 
 import java.util.ArrayList;
 
@@ -71,28 +73,35 @@ public class TestFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView= inflater.inflate(R.layout.fragment_test, container, false);
 
-        View rootView= inflater.inflate(R.layout.ques_num_add, container, false);
+        // 创建 Intent
+        Intent intent = new Intent(getActivity(), WordTopicActivity.class);
 
-        recyclerView = rootView.findViewById(R.id.QuesNum_Recy);
+        // 启动 WordTopicActivity
+        startActivity(intent);
 
-        list =new ArrayList<>();
-
-        LinearLayoutManager manager =new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(manager);
-
-
-
-
-        for(int i=1;i<13;i++)
-            list.add(new QuestionNumberModel("考古題"+i,1));
-
-
-
-        adapter = new QuestionNumberAdapter(getContext(),list);
-        recyclerView.setAdapter(adapter);
-
-        //return inflater.inflate(R.layout.fragment_test, container, false);
+//
+//        recyclerView = rootView.findViewById(R.id.QuesNum_Recy);
+//
+//        list =new ArrayList<>();
+//
+//        LinearLayoutManager manager =new LinearLayoutManager(getContext());
+//        recyclerView.setLayoutManager(manager);
+//
+//
+//
+//
+//        for(int i=1;i<13;i++)
+//            list.add(new QuestionNumberModel("考古題"+i,1));
+//
+//
+//
+//        adapter = new QuestionNumberAdapter(getContext(),list);
+//        recyclerView.setAdapter(adapter);
+//
+//        //return inflater.inflate(R.layout.fragment_test, container, false);
         return rootView;
 
     }
