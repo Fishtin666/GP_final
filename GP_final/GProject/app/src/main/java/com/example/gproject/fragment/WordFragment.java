@@ -1,32 +1,33 @@
 package com.example.gproject.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.content.Intent;
-import androidx.core.content.ContextCompat;
+
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.example.gproject.Adapters.QuestionNumberAdapter;
+import com.example.gproject.MainActivity;
 import com.example.gproject.Models.QuestionNumberModel;
 import com.example.gproject.R;
-import com.example.gproject.WordCard.WordTopicActivity;
+import com.example.gproject.WordQuiz.WordListActivity;
+import com.example.gproject.WordQuiz.LevelAQuizActivity;
+import com.example.gproject.meaning.ShowMeaning;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TestFragment#newInstance} factory method to
+ * Use the {@link WordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment extends Fragment {
+public class WordFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +38,7 @@ public class TestFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public TestFragment() {
+    public WordFragment() {
         // Required empty public constructor
     }
 
@@ -50,8 +51,8 @@ public class TestFragment extends Fragment {
      * @return A new instance of fragment TestFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TestFragment newInstance(String param1, String param2) {
-        TestFragment fragment = new TestFragment();
+    public static WordFragment newInstance(String param1, String param2) {
+        WordFragment fragment = new WordFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -74,13 +75,38 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView= inflater.inflate(R.layout.fragment_test, container, false);
+        View rootView= inflater.inflate(R.layout.word_topic, container, false);
+        CardView dic = rootView.findViewById(R.id.dictionary);
+        CardView wordTest = rootView.findViewById(R.id.wordTest);
+        CardView wordSelect = rootView.findViewById(R.id.wordCollect);
+        ImageButton backButton = rootView.findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        // 创建 Intent
-        Intent intent = new Intent(getActivity(), WordTopicActivity.class);
+        dic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dic_click(view);
+            }
+        });
+        wordTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                word_test_click(view);
+            }
+        });
+        wordSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                word_collect_click(view);
+            }
+        });
 
-        // 启动 WordTopicActivity
-        startActivity(intent);
 
 //
 //        recyclerView = rootView.findViewById(R.id.QuesNum_Recy);
@@ -104,5 +130,17 @@ public class TestFragment extends Fragment {
 //        //return inflater.inflate(R.layout.fragment_test, container, false);
         return rootView;
 
+    }
+    public void dic_click(View view){
+        Intent intent = new Intent(getActivity(), ShowMeaning.class);
+        startActivity(intent);
+    }
+    public void word_test_click(View view){
+        Intent intent = new Intent(getActivity(), LevelAQuizActivity.class);
+        startActivity(intent);
+    }
+    public void word_collect_click(View view){
+        Intent intent = new Intent(getActivity(), WordListActivity.class);
+        startActivity(intent);
     }
 }

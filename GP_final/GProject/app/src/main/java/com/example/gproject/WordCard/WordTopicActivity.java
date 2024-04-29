@@ -2,16 +2,14 @@ package com.example.gproject.WordCard;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
-import com.example.gproject.WordListActivity;
+import com.example.gproject.WordQuiz.WordListActivity;
 import com.example.gproject.WordQuiz.LevelAQuizActivity;
 import com.example.gproject.meaning.ShowMeaning;
 

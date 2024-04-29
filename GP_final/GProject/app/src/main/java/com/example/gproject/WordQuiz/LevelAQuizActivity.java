@@ -1,7 +1,9 @@
 package com.example.gproject.WordQuiz;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -98,7 +100,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
 //                                            radioButton.setTextColor(Color.RED);
                                             Log.e("Incorrect AAA", QueWord.getText().toString());
                                         Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
-                                    }else {
+                                    } else {
                                         radioButton.setTextColor(Color.RED);
                                     }
                                 }
@@ -107,7 +109,8 @@ public class LevelAQuizActivity extends AppCompatActivity {
                                 Log.e("FireStore A2 ", "error: " + e.getMessage());
                             }
                         }
-                        showScoreDialog(score);
+                        GetScore(score,"A");
+                        ShowScoreDialog();
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("FireStore B1 ", "error: " + e.getMessage());
@@ -122,41 +125,57 @@ public class LevelAQuizActivity extends AppCompatActivity {
             Log.e("FireStore A1 ", "error: " + e.getMessage());
         }
     }
-
-    public void showScoreDialog(int score) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LevelAQuizActivity.this);
-        builder.setTitle("Your Score");
-
-        // 根据得分确定按钮文本和点击事件
-        if (score > 1) {
-            builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size()+"\nLet's go to Level B.");
-
-            builder.setPositiveButton("Go", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // 跳转到 LevelBActivity
-                    Intent intent = new Intent(LevelAQuizActivity.this, LevelBQuizActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        } else {
-            builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size()+"\nYou have to Retry!");
-
-            builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // 用户选择重试，可以在这里执行重新开始游戏的逻辑
-                    dialog.dismiss();
-                }
-            });
-        }
-
-        builder.show();
+    //save Score and Level
+    public void GetScore(int Score, String Level) {
+        //save Score
+        SharedPreferences sharedPreferences = getSharedPreferences("Score", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("Score", Score);
+        editor.apply();
+        //save level
+        SharedPreferences level=getSharedPreferences("level", MODE_PRIVATE);
+        SharedPreferences.Editor editor2= level.edit();
+        editor2.putString("level", Level);
+        editor2.apply();
     }
 
-    public void getRandomQuestionAndOptions(String collectionName) {
+    //show dialog
+    public void ShowScoreDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(LevelAQuizActivity.this);
+//        builder.setTitle("Your Score");
+        Dialog dia = new Dialog(this);
+        dia.setContentView(R.layout.word_dialog);
+        dia.show();
+//        // 根据得分确定按钮文本和点击事件
+//        if (score > 1) {
+//            builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size() + "\nLet's go to Level B.");
+//
+//            builder.setPositiveButton("Go", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    // 跳转到 LevelBActivity
+//                    Intent intent = new Intent(LevelAQuizActivity.this, LevelBQuizActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            });
+//        } else {
+//            builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size() + "\nYou have to Retry!");
+//
+//            builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    // 用户选择重试，可以在这里执行重新开始游戏的逻辑
+//                    dialog.dismiss();
+//                }
+//            });
+//        }
+//
+//        builder.show();
+    }
 
+    //getQuestion
+    public void getRandomQuestionAndOptions(String collectionName) {
         db.collection(collectionName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -179,16 +198,18 @@ public class LevelAQuizActivity extends AppCompatActivity {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Log.e("FireStore", "Failed with error: " + e.getMessage());
+                            Log.e("Level_A", "getQuestionAndOptions error" + e.getMessage());
                         }
                     }
                 });
     }
 
+    //setQuestion
     public void setRandomQuestionAndOptions(List<WordQuizData> wordList) {
+        int TestNum = 10;
         try {
-            if (wordList.size() >= 3) {
-                int numberOfQuestions = 3;
+            if (wordList.size() >= TestNum) {
+                int numberOfQuestions = TestNum;
                 for (int i = 0; i < numberOfQuestions; i++) {
                     // Select a random word as the question
                     WordQuizData questionWord = wordList.get(new Random().nextInt(wordList.size()));
@@ -223,8 +244,18 @@ public class LevelAQuizActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("FireStore2", "Failed with error: " + e.getMessage());
+            Log.e("Level_A", "Failed with error: " + e.getMessage());
         }
     }
+
+//    public void CheckTestMode(){
+//        SharedPreferences sharedPreferences = getSharedPreferences("Score", MODE_PRIVATE);
+//        String GetWord = sharedPreferences.getString("word", 0);
+//
+//        if (GetWord == "Login"){
+//            GetScore(score);
+//            ShowScoreDialog();
+//        }
+//    }
 
 }

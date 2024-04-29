@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.gproject.fragment.AiTeacherFragment;
 import com.example.gproject.fragment.LearnFragment;
-import com.example.gproject.fragment.TestFragment;
+import com.example.gproject.fragment.WordFragment;
 import com.example.gproject.fragment.WrongFragment;
 
 public class PagesAdapter extends FragmentStateAdapter {
@@ -25,7 +25,7 @@ public class PagesAdapter extends FragmentStateAdapter {
             case 1:
                 return new AiTeacherFragment();
             case 2:
-                return new TestFragment();
+                return new WordFragment();
             default:
                 return new WrongFragment();
 
