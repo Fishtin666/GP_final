@@ -17,8 +17,7 @@ import com.example.gproject.reading.R_topic;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChoseTestActivity extends AppCompatActivity {
-    //test Api
-   String apiKey = BuildConfig.API_KEY;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
