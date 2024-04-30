@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     int[] originalImages = {R.drawable.learn, R.drawable.aiteacher, R.drawable.test, R.drawable.wrong};
     public static String apiKey= BuildConfig.apikey;
-    //public static String apiKey="sk-proj-E6Mgp9OuYuxgaEorTY8LT3BlbkFJ6p00fXKD944OuPJse2sn";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
