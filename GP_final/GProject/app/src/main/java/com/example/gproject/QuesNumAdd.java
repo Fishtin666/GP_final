@@ -5,14 +5,20 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.gproject.Adapters.QuestionNumberAdapter;
 import com.example.gproject.Models.QuestionNumberModel;
+import com.example.gproject.Speaking.Speaking_part1;
+import com.example.gproject.Speaking.Speaking_part1_answer;
+import com.example.gproject.Writing.Writing_T1answer1;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,10 +36,13 @@ public class QuesNumAdd extends AppCompatActivity {
     int num;
     String task;
 
+    ImageButton back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ques_num_add);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -50,6 +59,15 @@ public class QuesNumAdd extends AppCompatActivity {
         task=getIntent().getStringExtra("task");
 
         db = FirebaseFirestore.getInstance();
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               // startActivity(new Intent(QuesNumAdd.this, Writing_T1answer1.class));
+                finish();
+            }
+        });
 
 
         if(task.equals("1")){

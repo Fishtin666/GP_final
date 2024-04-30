@@ -4,6 +4,7 @@ import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static com.example.gproject.Adapters.QuestionNumberAdapter.sharedString;
+import static com.example.gproject.MainActivity.apiKey;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -791,7 +792,7 @@ public class AiTeacher2 extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer "+apiKey)
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

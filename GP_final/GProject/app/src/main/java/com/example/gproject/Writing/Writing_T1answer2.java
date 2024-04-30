@@ -1,5 +1,6 @@
 package com.example.gproject.Writing;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -8,17 +9,29 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.gproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Writing_T1answer2 extends AppCompatActivity {
     int QuesNum;
 
-    TextView Ans;
+    EditText Ans;
     Bundle bundle=new Bundle();
 
     public static String PassAns;
+    private DatabaseReference databaseReference;
+    FirebaseAuth auth;
+    ImageButton back;
+
 
 
     String ans;
@@ -27,19 +40,32 @@ public class Writing_T1answer2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.writing_t1answer2);
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
-       // QuesNum=getIntent().getIntExtra("QuesNum",1);
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                PassAns = Ans.getText().toString();
+                finish();
+            }
+        });
+
+        //QuesNum=getIntent().getIntExtra("QuesNum",1);
         Ans=findViewById(R.id.editText);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             ans = extras.getString("Ans");
-
+            QuesNum = extras.getInt("num");
 
 
         }
@@ -68,10 +94,40 @@ public class Writing_T1answer2 extends AppCompatActivity {
     }
 
     public void finishClick(View v){
-        bundle.putString("Ans",Ans.getText().toString());
-        Intent intent =new Intent(this, W_Judge_P1.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = Ans.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Writing")
+                    .child("W_T1_Q" + QuesNum + "_answers")
+                    .push(); // 使用 push() 生成唯一键
+
+            userAnswersRef.setValue(answerText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                // 存储成功
+                                bundle.putString("Ans",Ans.getText().toString());
+                                Intent intent =new Intent(Writing_T1answer2.this, W_Judge_P1.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
+        }
+
+
 
     }
 

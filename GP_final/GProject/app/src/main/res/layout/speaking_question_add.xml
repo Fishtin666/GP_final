@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#DDDADA"
-    tools:context=".Speaking_questionAdd">
+    tools:context=".Speaking.Speaking_questionAdd">
 
     <View
         android:id="@+id/view"
@@ -25,4 +25,16 @@
         android:paddingBottom="10dp"
         android:layout_below="@id/view"
          />
+
+    <ImageButton
+        android:id="@+id/back2"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=""
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </RelativeLayout>

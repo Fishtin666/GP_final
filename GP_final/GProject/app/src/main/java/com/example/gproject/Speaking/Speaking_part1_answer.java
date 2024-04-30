@@ -6,6 +6,7 @@ import static android.Manifest.permission.RECORD_AUDIO;
 import static android.content.ContentValues.TAG;
 
 import static com.example.gproject.Adapters.QuestionNumberAdapter.sharedString;
+import static com.example.gproject.MainActivity.apiKey;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -116,7 +117,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     ImageView mic,voice,hint;
 
-    ImageButton dic;
+    ImageButton dic,back;
     TextView answer,question;
     ProgressBar progressBar;
 
@@ -195,6 +196,15 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
         progressBar.setVisibility(View.INVISIBLE);
         answer.setMovementMethod(new ScrollingMovementMethod());
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
 
 
         String Question=getIntent().getStringExtra("question");
@@ -516,7 +526,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer "+apiKey)
                 .post(body)
                 .build();
 

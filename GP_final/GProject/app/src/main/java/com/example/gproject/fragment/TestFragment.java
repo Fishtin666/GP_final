@@ -72,28 +72,28 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView= inflater.inflate(R.layout.ques_num_add, container, false);
+//        View rootView= inflater.inflate(R.layout.ques_num_add, container, false);
+//
+//        recyclerView = rootView.findViewById(R.id.QuesNum_Recy);
+//
+//        list =new ArrayList<>();
+//
+//        LinearLayoutManager manager =new LinearLayoutManager(getContext());
+//        recyclerView.setLayoutManager(manager);
+//
+//
+//
+//
+//        for(int i=1;i<13;i++)
+//            list.add(new QuestionNumberModel("考古題"+i,1));
+//
+//
+//
+//        adapter = new QuestionNumberAdapter(getContext(),list);
+//        recyclerView.setAdapter(adapter);
 
-        recyclerView = rootView.findViewById(R.id.QuesNum_Recy);
-
-        list =new ArrayList<>();
-
-        LinearLayoutManager manager =new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(manager);
-
-
-
-
-        for(int i=1;i<13;i++)
-            list.add(new QuestionNumberModel("考古題"+i,1));
-
-
-
-        adapter = new QuestionNumberAdapter(getContext(),list);
-        recyclerView.setAdapter(adapter);
-
-        //return inflater.inflate(R.layout.fragment_test, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_test, container, false);
+        //return rootView;
 
     }
 }

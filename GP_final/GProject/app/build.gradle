@@ -6,6 +6,9 @@ plugins {
 android {
     namespace 'com.example.gproject'
     compileSdk 33
+//    Properties properties = new Properties()
+//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//    def apikey = properties.getProperty('apikey')
 
     defaultConfig {
         applicationId "com.example.gproject"
@@ -15,10 +18,24 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //buildConfigField "String" , "API_KEY" ,  apikey
+
+
+        // Get the API keys from local.properties
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        // Set API keys in BuildConfig
+        buildConfigField "String", "apikey", "\"${properties.getProperty("apikey")}\""
+
+
     }
+
+
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 
     buildTypes {

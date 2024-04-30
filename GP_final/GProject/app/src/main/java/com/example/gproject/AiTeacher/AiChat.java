@@ -17,8 +17,11 @@ import com.example.gproject.R;
 
 import java.util.ArrayList;
 
+import io.grpc.android.BuildConfig;
+
 
 public class AiChat extends AppCompatActivity {
+
     ArrayList<TopicModel> list;
     TopicAdapter adapter;
 

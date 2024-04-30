@@ -2,6 +2,8 @@ package com.example.gproject;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.gproject.MainActivity.apiKey;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -170,7 +172,7 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer "+apiKey)
                 .post(body)
                 .build();
 

@@ -16,8 +16,7 @@ import com.example.gproject.Cross_Topic_qusetion;
 import com.example.gproject.Models.TopicModel;
 import com.example.gproject.R;
 
-import com.example.gproject.Speaking_questionAdd;
-import com.example.gproject.fragment.AiTeacherFragment;
+import com.example.gproject.Speaking.Speaking_questionAdd;
 
 import java.util.ArrayList;
 

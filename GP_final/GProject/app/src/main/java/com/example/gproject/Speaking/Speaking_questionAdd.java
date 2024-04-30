@@ -1,4 +1,4 @@
-package com.example.gproject;
+package com.example.gproject.Speaking;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,15 +6,19 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gproject.Adapters.QuestionAdapter;
 import com.example.gproject.Models.QuestionModel;
+import com.example.gproject.R;
 import com.example.gproject.Writing.Writing_T2answer1;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +42,7 @@ public class Speaking_questionAdd extends AppCompatActivity {
 
     FirebaseAuth auth;
     String[] dataArray;
+    ImageButton back;
 
 
 
@@ -54,7 +59,14 @@ public class Speaking_questionAdd extends AppCompatActivity {
 
         list = new ArrayList<>();
         recyclerView = findViewById(R.id.questionRecy);
+        back = findViewById(R.id.back2);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Speaking_questionAdd.this, Speaking_part1.class));
+            }
+        });
 
 
         String topic=getIntent().getStringExtra("topic");

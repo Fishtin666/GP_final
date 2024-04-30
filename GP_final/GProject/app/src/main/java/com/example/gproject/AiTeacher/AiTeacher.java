@@ -1,6 +1,8 @@
 package com.example.gproject.AiTeacher;
 
 
+import static com.example.gproject.MainActivity.apiKey;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -238,7 +240,7 @@ String cross_question="Describe a beautiful city." + " Describe a memorable trip
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer "+apiKey)
                 .post(body)
                 .build();
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#DDDADA"
-    tools:context=".Speaking_questionAdd">
+    tools:context=".Speaking.Speaking_questionAdd">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1"

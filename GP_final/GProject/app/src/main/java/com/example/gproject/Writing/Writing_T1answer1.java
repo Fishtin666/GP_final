@@ -11,17 +11,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,10 +44,13 @@ public class Writing_T1answer1 extends AppCompatActivity {
     TextView question;
     int QuesNum;
     FirebaseAuth auth;
-
+    private DatabaseReference databaseReference;
     StorageReference storageRef;
 
     ImageView pic;
+
+    ImageButton back;
+
 
 
     @Override
@@ -49,6 +59,17 @@ public class Writing_T1answer1 extends AppCompatActivity {
         setContentView(R.layout.writing_t1answer1);
         //FirebaseApp.initializeApp(this);
         auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -119,8 +140,15 @@ public class Writing_T1answer1 extends AppCompatActivity {
         });
     }
     public void nextClick(View v){
-        Intent intent=new Intent(this,Writing_T1answer2.class);
-        intent.putExtra("Ans",Writing_T1answer2.PassAns);
+//        Intent intent=new Intent(Writing_T1answer1.this,Writing_T1answer2.class);
+//        intent.putExtra("Ans",Writing_T1answer2.PassAns);
+//        startActivity(intent);
+
+        Intent intent = new Intent(Writing_T1answer1.this, Writing_T1answer2.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("Ans", Writing_T1answer2.PassAns);
+        bundle.putInt("num",QuesNum);
+        intent.putExtras(bundle);
         startActivity(intent);
 
     }

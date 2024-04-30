@@ -5,9 +5,12 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 
 import com.example.gproject.Adapters.TopicAdapter;
 import com.example.gproject.Models.TopicModel;
@@ -20,11 +23,14 @@ public class Speaking_part1 extends AppCompatActivity {
     RecyclerView recyclerView;
     ArrayList<TopicModel>list;
     TopicAdapter adapter;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaking_part1);
+
+        back = findViewById(R.id.back2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -49,6 +55,13 @@ public class Speaking_part1 extends AppCompatActivity {
 
         adapter =new TopicAdapter(this,list);
         recyclerView.setAdapter(adapter);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Speaking_part1.this,Speaking.class));
+            }
+        });
     }
 
 

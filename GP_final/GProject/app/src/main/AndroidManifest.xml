@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -11,54 +11,56 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GProject"
-        tools:targetApi="31" >
-
+        tools:targetApi="31">
+        <activity
+            android:name=".profile"
+            android:exported="false" />
         <activity
             android:name=".login.regist"
-            android:exported="true"/>
+            android:exported="true" />
+        <activity
+            android:name=".login.login"
+            android:exported="true" />
         <activity
             android:name=".reading.R_judge"
-            android:exported="true"/>
-        <!--        <activity-->
-        <!--            android:name=".WordQuizActivity"-->
-        <!--            android:exported="true"/>-->
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".WordQuizActivity" -->
+        <!-- android:exported="true"/> -->
         <activity
             android:name=".meaning.ShowMeaning"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".WordListActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".reading.R_blank"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".reading.R_chose"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".reading.R_match"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".ChoseTestActivity"
-            android:exported="true"/>
-        <!--        <activity-->
-        <!--            android:name=".reading.R_topic"-->
-        <!--            android:exported="true"/>-->
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".reading.R_topic" -->
+        <!-- android:exported="true"/> -->
         <activity
             android:name=".WordCard.WordCardActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".WordQuiz.LevelCQuizActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".WordQuiz.LevelBQuizActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".WordQuiz.LevelAQuizActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".reading.R_topic"
-            android:exported="true"/>
-<!---->
+            android:exported="true" /> <!--  -->
         <activity
             android:name=".Listening.listen_TTest1_Section4"
             android:exported="false" />
@@ -94,9 +96,7 @@
             android:exported="false" />
         <activity
             android:name=".Listening.listen"
-            android:exported="true"/>
-
-
+            android:exported="true" />
         <activity
             android:name=".Review.RReview"
             android:exported="false" />
@@ -105,11 +105,7 @@
             android:exported="false" />
         <activity
             android:name=".Review.Review_main"
-            android:exported="true"/>
-
-
-
-<!---->
+            android:exported="true" /> <!--  -->
         <activity
             android:name=".Cross_Topic_qusetion"
             android:exported="false" />
@@ -134,11 +130,9 @@
         <activity
             android:name=".AiTeacher.AiTeacher2"
             android:exported="false" />
-
         <activity
             android:name=".Writing.W_topic"
             android:exported="false" />
-
         <activity
             android:name=".Writing.W_Judge_P1"
             android:exported="false" />
@@ -169,7 +163,6 @@
         <activity
             android:name=".Speaking.Speaking_part1_answer"
             android:exported="true" />
-
         <activity
             android:name=".Learning"
             android:exported="true" />
@@ -177,7 +170,7 @@
             android:name=".Speaking.Speaking_part2"
             android:exported="true" />
         <activity
-            android:name=".Speaking_questionAdd"
+            android:name=".Speaking.Speaking_questionAdd"
             android:exported="true" />
         <activity
             android:name=".Speaking.Speaking_part1"
@@ -193,7 +186,7 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

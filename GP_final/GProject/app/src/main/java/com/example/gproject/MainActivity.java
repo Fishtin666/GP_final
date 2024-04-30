@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -23,12 +24,14 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     int[] originalImages = {R.drawable.learn, R.drawable.aiteacher, R.drawable.test, R.drawable.wrong};
-
+    public static String apiKey= BuildConfig.apikey;
+    //public static String apiKey="sk-proj-E6Mgp9OuYuxgaEorTY8LT3BlbkFJ6p00fXKD944OuPJse2sn";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         ViewPager2 viewPager2 =findViewById(R.id.viewPager);
         viewPager2.setAdapter(new PagesAdapter(this));
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         tab.setCustomView(TabView_test);
-                        tabText_test.setText("考古題");
+                        tabText_test.setText("單字學習");
                         tab.setTag(R.drawable.test2); // 设置test对应的图片资源
                         break;
                     case 3:
@@ -149,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void profileClick(View view){
+        startActivity(new Intent(MainActivity.this,profile.class));
     }
 
     private void updateTabItemAppearance(TabLayout.Tab tab, boolean isSelected) {

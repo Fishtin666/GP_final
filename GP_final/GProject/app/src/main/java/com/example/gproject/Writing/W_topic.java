@@ -8,12 +8,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.QuesNumAdd;
 import com.example.gproject.R;
 
 public class W_topic extends AppCompatActivity {
+
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,16 @@ public class W_topic extends AppCompatActivity {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
+
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
     }
 
     Bundle bundle=new Bundle();

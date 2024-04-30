@@ -1,25 +1,20 @@
 package com.example.gproject;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-import static com.google.android.material.internal.ViewUtils.dpToPx;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.speech.tts.TextToSpeech;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -31,11 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gproject.AiTeacher.Cross_Topic;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
@@ -44,17 +37,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class JustifyTextView extends AppCompatTextView {
+public class JustifyTextView3 extends AppCompatTextView {
     private Layout mLayout;
     private int mLineY;
     private int mViewWidth;
     public static final String TWO_CHINESE_BLANK = " ";
-    Boolean indic=true;
+    Boolean indic=false;
 
     MeaningAdapter adapter;
 
 
-    public JustifyTextView(Context context, AttributeSet attrs) {
+    public JustifyTextView3(Context context, AttributeSet attrs) {
         super(context, attrs);
         int paddingPx = dpToPx(context, 40); // Convert dp to pixels
         setPadding(0, 0, 0, paddingPx);
@@ -79,6 +72,7 @@ public class JustifyTextView extends AppCompatTextView {
         mLayout = getLayout();
         if (mLayout == null) return;
         TextPaint paint = getPaint();
+        paint.setColor(getCurrentTextColor());
         paint.drawableState = getDrawableState();
         //mViewWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight(); // 計算可用於繪製文本的寬度，扣除了左右的內邊距
         mViewWidth=getMeasuredWidth()-76;
@@ -108,37 +102,32 @@ public class JustifyTextView extends AppCompatTextView {
 
             int customColor = Color.rgb(120, 59, 55);
 
-            try {
-                retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(line_new);
-                retrofit2.Response<List<WordResult>> response = call.execute();
-                if (response.body() == null) {
-                    indic = false;
-                }else indic = true;
+//            if(InDic(line_new)){
+//                paint.setColor(customColor);
+//                paint.setFakeBoldText(true);  // 设置为粗体
+//            }else{
+//                paint.setColor(Color.BLACK);
+//                paint.setFakeBoldText(true);
+//            }
 
-            } catch (Exception e) {
-                //Toast.makeText(getApplicationContext(), "錯誤:"+e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            if(indic){
-                paint.setColor(customColor);
-                paint.setFakeBoldText(true);  // 设置为粗体
-
-            }else{
-                paint.setColor(Color.BLACK);
-            }
-            System.out.println(paint.getColor());
 
 
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
-                    drawScaledText(canvas, lineStart, line, width,paint);
+                    Paint p=getPaint();
+//                    if(InDic(line)){
+//                        p.setColor(customColor);
+//                    }else
+                        p.setColor(Color.BLACK);
+                    drawScaledText(canvas, lineStart, line, width,p);
                 } else {
                     canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
 
+
                 }
             } else {
-
                 canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
+
 
             }
             mLineY += textHeight;
@@ -221,7 +210,7 @@ public class JustifyTextView extends AppCompatTextView {
 
                         // 使用正则表达式匹配只含有英文字母的部分
                         word = word.replaceAll("[^a-zA-Z]", "");
-                        showToast(word.toString());
+                        showToast(selectedWord.toString());
 
 
 
@@ -232,15 +221,14 @@ public class JustifyTextView extends AppCompatTextView {
                         int height = 1200;
                         boolean focusable = true; // 让PopupWindow在失去焦点时自动关闭
                         PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-                        //popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
+                        popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
 
                         // 设置PopupWindow的内容
                         TextView voc = popupView.findViewById(R.id.Voc);
                         TextView phonetic = popupView.findViewById(R.id.phonetics);
                         voc.setText(word);
-                        if(InDic(word)) {
-                            getMeaning(word, phonetic);
-                        }
+                        getMeaning(word,phonetic);
+
                         //dic adapter
                         RecyclerView meaningRecyclerView=popupView.findViewById(R.id.meaningRecyclerView);
                         adapter = new MeaningAdapter(Collections.emptyList());
@@ -264,8 +252,7 @@ public class JustifyTextView extends AppCompatTextView {
 
                             }
                         });
-                        if(InDic(word))
-                            popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
+                        popupWindow.showAsDropDown(this, 0, 0);
 
                         return true;
                     }
@@ -301,7 +288,32 @@ public class JustifyTextView extends AppCompatTextView {
         }
     }
 
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        super.setText(text, type);
 
+        // Apply custom formatting after setting the text
+        if (text instanceof String) {
+            String cross_answer = (String) text;
+            SpannableString spannableString = new SpannableString(cross_answer);
+            String[] words = getWordsList(cross_answer);
+
+            for (String word : words) {
+                if (!InDic(word)) {
+                    int startIndex = cross_answer.indexOf(word);
+                    int endIndex = startIndex + word.length();
+                    int customColor = Color.rgb(120, 59, 55);
+
+                    // Apply custom spans
+                    spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(customColor), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            // Set the formatted text to the view
+            super.setText(spannableString, type);
+        }
+    }
 
     private String[] getWordsList(String text) {
         StringTokenizer tokenizer = new StringTokenizer(text, " \t\n\r\f,.?!;:\"");
@@ -321,8 +333,6 @@ public class JustifyTextView extends AppCompatTextView {
                 try {
                     retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(word);
                     retrofit2.Response<List<WordResult>> response = call.execute();
-
-
 
                     if (response.body() == null) {
                         indic = false;

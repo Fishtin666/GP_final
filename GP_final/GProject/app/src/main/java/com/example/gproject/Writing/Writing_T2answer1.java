@@ -11,14 +11,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,19 +40,33 @@ public class Writing_T2answer1 extends AppCompatActivity {
     TextView Ques,Ans;
     TextView question;
     FirebaseAuth auth;
+    private DatabaseReference databaseReference;
     int QuesNum;
 
+    ImageButton back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.writing_t2answer1);
         auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
         question = findViewById(R.id.question);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
+
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -95,14 +115,46 @@ public class Writing_T2answer1 extends AppCompatActivity {
                 "individuals and have a global impact. It is unfair to willingly dispossess people of this\n" +
                 "ability in order to preserve tradition.\n");
     }
-    public void finishClick(View v){
-        Intent intent = new Intent(this, W_Judge_P1.class);
-        bundle.putString("Ques",Ques.getText().toString());
-        bundle.putString("Ans",Ans.getText().toString());
-        bundle.putString("Part","2");
-        intent.putExtras(bundle);
-        startActivity(intent);
+    public void finishClick(View view) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = Ans.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Writing")
+                    .child("W_T2_Q" + QuesNum + "_answers")
+                    .push(); // 使用 push() 生成唯一键
+
+            userAnswersRef.setValue(answerText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                // 存储成功
+                                Intent intent = new Intent(Writing_T2answer1.this, W_Judge_P1.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("Ques", Ques.getText().toString());
+                                bundle.putString("Ans", Ans.getText().toString());
+                                bundle.putString("Part", "2");
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
+        }
     }
+
+
+
 
     public void homeClick(View v){
         Intent intent = new Intent(this, MainActivity.class);
