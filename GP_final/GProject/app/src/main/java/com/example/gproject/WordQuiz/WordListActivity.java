@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,7 +41,8 @@ public class WordListActivity extends AppCompatActivity {
 
         Button send = findViewById(R.id.wordSend);
         send.setVisibility(View.INVISIBLE);
-
+//        TextView testWord=findViewById(R.id.testWord);
+//        testWord.setVisibility(View.INVISIBLE);
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

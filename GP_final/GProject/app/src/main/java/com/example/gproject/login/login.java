@@ -66,7 +66,6 @@ public class login extends AppCompatActivity {
             public void onClick(View view) {
                 // 在此處調用登錄方法
                 loginUser();
-
             }
         });
 
@@ -82,7 +81,6 @@ public class login extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-
         // 使用 Firebase Authentication 進行登錄
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -93,22 +91,28 @@ public class login extends AppCompatActivity {
                             Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
                             // 获取当前登录用户的用户 ID
                             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            // 检查用户是否具有 "wordlevel" 字段
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
-                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            DatabaseReference levelRef = FirebaseDatabase.getInstance().getReference().child("word_Level").child(userId);
+                            levelRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()&& snapshot.hasChild("wordLevel")) {
-                                        String WordLevelValue = snapshot.child("wordLevel").getValue(String.class);
-                                        if (WordLevelValue == "B" || WordLevelValue == "C") {
+                                    if (snapshot.exists()) {
+//                                        String wordLevelValue = snapshot.child("wordLevel").getValue(String.class);
+//                                        if ("B".equals(wordLevelValue) || "C".equals(wordLevelValue)) {
+                                            // 如果 word_Level 为 B 或 C，则跳转到 MainActivity
                                             Intent intent = new Intent(login.this, MainActivity.class);
                                             startActivity(intent);
                                             finish();
-                                        } else {
-                                            CheckWordLevel();
-                                        }
+//                                        } else {
+                                            // 否则执行 CheckWordLevel() 方法
+//                                            CheckWordLevel();
+//                                        }
+                                    } else {
+                                        Log.e("login", "User node or word_Level does not exist");
+                                        CheckWordLevel();
                                     }
                                 }
+
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
                                     // 读取数据时出现错误
@@ -122,16 +126,23 @@ public class login extends AppCompatActivity {
                         }
                     }
                 });
-
     }
+
     private void CheckWordLevel() {
+        // 启动 LevelAQuizActivity
         Intent intent = new Intent(this, LevelAQuizActivity.class);
-        intent.putExtra("word", "Login");
-//        SharedPreferences sharedPreferences = getSharedPreferences("word", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString("word", "Login");
-//        editor.apply();
         startActivity(intent);
-        Log.d("loging","---"+ "login");
+        finish();
+        //获取SharedPreferences实例
+        SharedPreferences sharedPreferences = getSharedPreferences("WordLevel", MODE_PRIVATE);
+
+        // 从SharedPreferences中获取当前单词级别，默认值为"未知"
+        String wordLevel = sharedPreferences.getString("word_level", "unKnow");
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // 将单词级别设置为"Login"
+        editor.putString("word_level", "Login");
+        // 提交编辑
+        editor.apply();
     }
 }

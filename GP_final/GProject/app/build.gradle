@@ -7,6 +7,11 @@ android {
     namespace 'com.example.gproject'
     compileSdk 33
 
+    // Load properties file containing our API key
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def apikey = properties.getProperty('apikey')
+
     defaultConfig {
         applicationId "com.example.gproject"
         minSdk 24
@@ -15,10 +20,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "API_KEY", "\"$apikey\""
+
     }
+
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
+
     }
 
     buildTypes {
@@ -31,9 +41,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-
-
 }
 
 dependencies {
