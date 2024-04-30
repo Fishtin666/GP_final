@@ -6,9 +6,6 @@ plugins {
 android {
     namespace 'com.example.gproject'
     compileSdk 33
-//    Properties properties = new Properties()
-//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//    def apikey = properties.getProperty('apikey')
 
     defaultConfig {
         applicationId "com.example.gproject"

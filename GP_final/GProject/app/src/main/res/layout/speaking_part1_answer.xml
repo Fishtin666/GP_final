@@ -186,7 +186,7 @@
         android:background="#00000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Answer"
-        app:srcCompat="@drawable/dic" />
+        app:srcCompat="@drawable/dic2" />
 
     <ImageButton
         android:id="@+id/back2"

@@ -30,14 +30,21 @@
         <ImageButton
             android:id="@+id/back"
             android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:src="@drawable/back"
-            android:contentDescription=""
+            android:layout_height="60dp"
             android:background="?android:attr/selectableItemBackground"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:contentDescription=" "
+            android:src="@drawable/back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="homeClick"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/home2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/top"

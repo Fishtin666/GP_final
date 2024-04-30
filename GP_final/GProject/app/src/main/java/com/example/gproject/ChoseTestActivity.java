@@ -17,6 +17,8 @@ import com.example.gproject.reading.R_topic;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChoseTestActivity extends AppCompatActivity {
+    //test Api
+   String apiKey = BuildConfig.API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class ChoseTestActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //get number from R_topic

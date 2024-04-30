@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         tab.setCustomView(TabView_test);
-                        tabText_test.setText("單字學習");
+                        tabText_test.setText("單字");
                         tab.setTag(R.drawable.test2); // 设置test对应的图片资源
                         break;
                     case 3:

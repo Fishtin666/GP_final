@@ -1,11 +1,15 @@
 package com.example.gproject.WordQuiz;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -18,12 +22,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.Adapters.WordQuizAdapter;
 import com.example.gproject.Adapters.WordQuizData;
+import com.example.gproject.fragment.WordFragment;
 import com.example.gproject.reading.R_topic;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -43,7 +56,11 @@ public class LevelBQuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pra_word);
+
         collectionName = "R_wordB";
+        TextView testWord = findViewById(R.id.testWord);
+        testWord.setText("Level_B");
+
         try {
             RecyclerView QuizRecycler = findViewById(R.id.rcyQ);
             List<WordQuizData> questionsList = new ArrayList<>();
@@ -54,16 +71,29 @@ public class LevelBQuizActivity extends AppCompatActivity {
 
             db = FirebaseFirestore.getInstance();
 
+            // Back button
             ImageButton backButton = findViewById(R.id.back);
-            backButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(LevelBQuizActivity.this, R_topic.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
 
+            //identify whether "word" EXIST
+            SharedPreferences sharedPreferences = getSharedPreferences("WordLevel", MODE_PRIVATE);
+            String wordLog = sharedPreferences.getString("word_level", "unKnow");
+
+            if (!"unKnow".equals(wordLog)) {
+                backButton.setVisibility(View.GONE);
+                Log.i("dia11", "Gone 15");
+            } else {
+                Log.i("dia11", "Gone 16");
+                backButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+
+            // Send Answer button
             Button wordSendButton = findViewById(R.id.wordSend);
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,68 +125,240 @@ public class LevelBQuizActivity extends AppCompatActivity {
                                             Log.e("Correct Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
                                         } else
 //                                            radioButton.setTextColor(Color.RED);
-                                            Log.e("Incorrect AAA", QueWord.getText().toString());
-                                            Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
-                                    }else {
+                                            Log.e("Incorrect B", QueWord.getText().toString());
+                                        Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
+                                    } else {
                                         radioButton.setTextColor(Color.RED);
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Log.e("FireStore A2 ", "error: " + e.getMessage());
+                                Log.e("FireStore B2 ", "error: " + e.getMessage());
                             }
                         }
-                        showScoreDialog(score);
+
+                        ShowScoreDialog(score, "B");
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("FireStore B1 ", "error: " + e.getMessage());
                     }
                 }
-
             });
+
             // Get random questions and options from Firestore
             getRandomQuestionAndOptions(collectionName);
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("FireStore B1 ", "error: " + e.getMessage());
         }
     }
 
-    public void showScoreDialog(int score) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LevelBQuizActivity.this);
-        builder.setTitle("Your Score");
-        builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size());
+    //show dialog
+    public void ShowScoreDialog(int Score, String Level) {
+        try {
 
-        // 根据得分确定按钮文本和点击事件
-        if (score > 1) {
-            builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size()+"\nGood! Let's go to Level C.");
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.word_dialog);
+            Window window = dialog.getWindow();
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); // 设置宽高为全屏
+            dialog.show();
 
-            builder.setPositiveButton("Go", new DialogInterface.OnClickListener() {
+            // get Extra Word from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("WordLevel", MODE_PRIVATE);
+            String wordLog = sharedPreferences.getString("word_level", "unKnow");
+
+            // put Score
+            TextView scoreTextView = dialog.findViewById(R.id.ShowScore);
+            scoreTextView.setText(String.valueOf(Score));
+
+            // Cancel button
+            Button cancelButton = dialog.findViewById(R.id.ButCancel);
+            cancelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // 跳转到 LevelBActivity
-                    Intent intent = new Intent(LevelBQuizActivity.this, LevelCQuizActivity.class);
+                public void onClick(View view) {
+                    Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
                     startActivity(intent);
-                    finish();
                 }
             });
-        } else {
-            builder.setMessage("You scored " + score + " out of " + adapter.getQuestions().size()+"\nYou have to Retry!");
 
-            builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+            //identify whether "word" EXIST
+            if (!"unKnow".equals(wordLog)) {
+                cancelButton.setVisibility(View.GONE);
+                Log.i("dia22", "Gone 11");
+            } else {
+                Log.i("dia22", "Gone 13");
+            }
+
+//            Log.i("dia11", "show4 " + wordLog);
+
+            //set Hint
+            setHint(dialog,Level, wordLog);
+
+            //enter to next part
+            Button okButton = dialog.findViewById(R.id.ButOK);
+            okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // 用户选择重试，可以在这里执行重新开始游戏的逻辑
-                    dialog.dismiss();
+                public void onClick(View view) {
+                    if (!"unKnow".equals(wordLog)) {
+
+                        if (Score < 2) {
+                            StayOriginalLevel(Level);
+
+                        } else {
+                            GoToNextLevel(Level);
+                            // 移除SharedPreferences中的值
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.remove("word_level");
+//                            editor.apply();
+//                            getIntent().removeExtra("word");
+//                            Log.i("dia11", "exist " + wordLog);
+                        }
+                    } else {
+                        if (Score > 2) {
+                            GoToNextLevel(Level);
+                        }
+                    }
                 }
             });
-        }
 
-        builder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i("dia22", "error: " + e.getMessage());
+        }
     }
 
-    public void getRandomQuestionAndOptions(String collectionName) {
+    //Stay in Original Level
+    public void StayOriginalLevel(String LevelValue) {
+        switch (LevelValue) {
+            case "A":
+                Intent intentA = new Intent(this, LevelAQuizActivity.class);
+                startActivity(intentA);
+                break;
 
+            case "B":
+                Intent intentB = new Intent(this, LevelBQuizActivity.class);
+                startActivity(intentB);
+                break;
+
+            case "C":
+                Intent intentC = new Intent(this, MainActivity.class);
+                startActivity(intentC);
+                break;
+        }
+    }
+
+    //Go To Next Level
+    public void GoToNextLevel(String LevelValue) {
+        switch (LevelValue) {
+            case "A":
+                Intent intentA = new Intent(this, LevelBQuizActivity.class);
+                startActivity(intentA);
+                break;
+
+            case "B":
+                Intent intentB = new Intent(this, LevelCQuizActivity.class);
+                startActivity(intentB);
+                SaveWordLevel(LevelValue);
+                break;
+
+            case "C":
+                Intent intentC = new Intent(this, MainActivity.class);
+                startActivity(intentC);
+                SaveWordLevel(LevelValue);
+                break;
+
+        }
+    }
+
+    //set hint
+    public void setHint(Dialog dialog, String LevelValue, String LevelWord) {
+        TextView Hint = dialog.findViewById(R.id.ScoreHint);
+        String combine = LevelValue + LevelWord;
+
+        Log.e("setHint", "show B " + combine);
+
+        if (LevelWord.equals("Login")) {
+            if (LevelValue == "A") {
+                Hint.setText("再接再厲，要先提升單字能力才能繼續下一個等級");
+
+            } else if (LevelValue == "B") {
+                Hint.setText("加油，單字部分還有進步空間");
+
+            } else {
+                Hint.setText("很棒，你已認識大部分單字\n開始使用！");
+
+            }
+        } else {
+            if (LevelValue == "A") {
+                Hint.setText("再接再厲，需要加強單字練習！");
+
+            } else if (LevelValue == "B") {
+                Hint.setText("加油，單字部分還有進步空間喔！\n");
+
+            } else {
+                Hint.setText("很棒，你的詞彙量非常豐富\n");
+
+            }
+        }
+//        switch (combine) {
+//            case "ALogin":
+//                Hint.setText("再接再厲，要先提升單字能力才能繼續下一個等級");
+//                break;
+//            case "BLogin":
+//                Hint.setText("加油，單字部分還有進步空間");
+//                break;
+//            case "CLogin":
+//                Hint.setText("很棒，你已認識大部分單字\n開始使用！");
+//                break;
+//            case "Anull":
+//                Hint.setText("再接再厲，需要加強單字練習！");
+//                break;
+//            case "Bnull":
+//                Hint.setText("加油，單字部分還有進步空間喔！\n");
+//                break;
+//            case "Cnull":
+//                Hint.setText("很棒，你的詞彙量非常豐富\n");
+//                break;
+//            default:
+//                Hint.setText("No hint available.");
+//                break;
+//        }
+    }
+
+    //save data into firebase
+    public void SaveWordLevel(String WordLevel) {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference root = db.getReference("word_Level");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference levelRef = FirebaseDatabase.getInstance().getReference().child("word_Level").child(WordLevel);
+        String userId = user.getUid();
+        levelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.hasChild("WordLevel") && !"A".equals(WordLevel)) {
+                    DataSnapshot LevelTextSnapshot = snapshot.child("WordLevel");
+                    String WordLevel1 = LevelTextSnapshot.getValue(String.class);
+                    if (WordLevel1 == "C") {
+                        root.child(userId).child("WordLevel").setValue("C");
+
+                    }else{
+                        Log.i("SaveData", "show B fail");
+                    }
+                }else {
+                    root.child(userId).child("WordLevel").setValue(WordLevel);
+                    Log.i("SaveData", "show B fail2");
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    //getQuestion
+    public void getRandomQuestionAndOptions(String collectionName) {
         db.collection(collectionName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -171,7 +373,7 @@ public class LevelBQuizActivity extends AppCompatActivity {
                                     String meaning = document.getString("meaning");
                                     String pos = document.getString("pos");
                                     wordList.add(new WordQuizData(meaning, pos, word, word, word));
-                                    Log.e("Show A", meaning);
+//                                    Log.e("Show A", meaning);
                                 }
                                 setRandomQuestionAndOptions(wordList);
                             } else {
@@ -184,10 +386,12 @@ public class LevelBQuizActivity extends AppCompatActivity {
                 });
     }
 
+    //setQuestion
     public void setRandomQuestionAndOptions(List<WordQuizData> wordList) {
+        int TestNum = 3;
         try {
-            if (wordList.size() >= 3) {
-                int numberOfQuestions = 3;
+            if (wordList.size() >= TestNum) {
+                int numberOfQuestions = TestNum;
                 for (int i = 0; i < numberOfQuestions; i++) {
                     // Select a random word as the question
                     WordQuizData questionWord = wordList.get(new Random().nextInt(wordList.size()));
@@ -211,7 +415,7 @@ public class LevelBQuizActivity extends AppCompatActivity {
                     }
                     String pos = questionWord.getPartOfSpeech();
                     // 設置題目和選項
-                    String questionText2 = questionWord.getDefinition() + " " + pos;
+                    String questionText2 = questionWord.getDefinition();
 
                     adapter.addWordId(questionText2, questionWord.getWord());
                     adapter.getQuestions().add(new WordQuizData(questionText2, pos, correctOption, incorrectOption, questionWord.getDocumentId()));
@@ -224,5 +428,19 @@ public class LevelBQuizActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("FireStore2", "Failed with error: " + e.getMessage());
         }
+    }
+
+    //save Score and Level
+    public void GetScore(int Score, String Level) {
+        //save Score
+        SharedPreferences sharedPreferences = getSharedPreferences("Score", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("Score", Score);
+        editor.apply();
+        //save level
+        SharedPreferences level = getSharedPreferences("level", MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = level.edit();
+        editor2.putString("level", Level);
+        editor2.apply();
     }
 }
