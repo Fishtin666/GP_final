@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 
 import com.example.gproject.Adapters.TopicAdapter;
 import com.example.gproject.Models.TopicModel;
@@ -21,6 +23,8 @@ public class Cross_Topic_topic extends AppCompatActivity {
     FirebaseAuth auth;
     ArrayList<TopicModel>list;
 
+    ImageButton back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,7 @@ public class Cross_Topic_topic extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
+        back=findViewById(R.id.back2);
         recyclerView = findViewById(R.id.recy);
         list = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -48,6 +53,13 @@ public class Cross_Topic_topic extends AppCompatActivity {
 
         adapter = new TopicAdapter(this, list);
         recyclerView.setAdapter(adapter);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 }

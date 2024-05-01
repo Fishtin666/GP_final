@@ -103,7 +103,7 @@ import okhttp3.Response;
 
 public class Speaking_part1_answer extends AppCompatActivity {
 
-    private static String speechSubscriptionKey = "f8d71f0e97f6438db956ebf642eabf78";
+    private static String speechSubscriptionKey = "031b6e9e93ed4df69bd33327b1daf1d1";
     private static String serviceRegion = "eastus";
 
     public static boolean star_show;
@@ -115,9 +115,9 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     String hint_answer,help_answer,selectedWord,judge,ROf_ques;  //hint_answer是一串,help_answer某個提示回答(一個)
 
-    ImageView mic,voice,hint;
+    ImageView mic,voice,hint,home;
 
-    ImageButton dic,back;
+    ImageButton back;
     TextView answer,question;
     ProgressBar progressBar;
 
@@ -192,7 +192,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         send = findViewById(R.id.Finish);
         retry = findViewById(R.id.Retry);
-        dic = findViewById(R.id.dic);
+//        dic = findViewById(R.id.dic);
 
         progressBar.setVisibility(View.INVISIBLE);
         answer.setMovementMethod(new ScrollingMovementMethod());
@@ -207,13 +207,12 @@ public class Speaking_part1_answer extends AppCompatActivity {
         });
 
 
-        String Question=getIntent().getStringExtra("question");
+        String Question = getIntent().getStringExtra("question");
 
         try {
             int permissionRequestId = 5;
             ActivityCompat.requestPermissions(Speaking_part1_answer.this, new String[]{RECORD_AUDIO, INTERNET, READ_EXTERNAL_STORAGE}, permissionRequestId);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             Log.e("SpeechSDK", "could not init sdk, " + ex);
         }
 
@@ -224,7 +223,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
             speechConfig = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
 
         } catch (Exception ex) {
-            System.out.println("失敗原因:"+ex.getMessage());
+            System.out.println("失敗原因:" + ex.getMessage());
             return;
         }
 
@@ -298,30 +297,18 @@ public class Speaking_part1_answer extends AppCompatActivity {
             star.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   if(star_yellow){
-                       star.setImageResource(R.drawable.star_black);
-                       star_yellow=false;
-                   }else{
-                       star.setImageResource(R.drawable.star_yellow);
-                       star_yellow=true;
-                   }
+                    if (star_yellow) {
+                        star.setImageResource(R.drawable.star_black);
+                        star_yellow = false;
+                    } else {
+                        star.setImageResource(R.drawable.star_yellow);
+                        star_yellow = true;
+                    }
 
 
                 }
             });
 
-        });
-
-        dic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(spanning==false)
-                    spanning=true;
-                else
-                    spanning=false;
-                SpanningString();
-
-            }
         });
     }
     Bundle bundle=new Bundle();

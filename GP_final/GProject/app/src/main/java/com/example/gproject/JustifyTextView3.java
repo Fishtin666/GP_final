@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.speech.tts.TextToSpeech;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -15,6 +16,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,6 +37,7 @@ import com.example.gproject.dictionary.WordResult;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class JustifyTextView3 extends AppCompatTextView {
@@ -45,15 +48,31 @@ public class JustifyTextView3 extends AppCompatTextView {
     Boolean indic=false;
 
     MeaningAdapter adapter;
+    TextToSpeech tts;
+
+
+
 
 
     public JustifyTextView3(Context context, AttributeSet attrs) {
         super(context, attrs);
         int paddingPx = dpToPx(context, 40); // Convert dp to pixels
         setPadding(0, 0, 0, paddingPx);
+        initializeTextToSpeech(context);
     }
 
-
+    private void initializeTextToSpeech(Context context) {
+        tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.UK);
+                } else {
+                    Log.e("TTS", "TextToSpeech initialization failed");
+                }
+            }
+        });
+    }
 
 
     public static int dpToPx(Context context, float dpValue) {
@@ -102,13 +121,13 @@ public class JustifyTextView3 extends AppCompatTextView {
 
             int customColor = Color.rgb(120, 59, 55);
 
-//            if(InDic(line_new)){
-//                paint.setColor(customColor);
-//                paint.setFakeBoldText(true);  // 设置为粗体
-//            }else{
-//                paint.setColor(Color.BLACK);
-//                paint.setFakeBoldText(true);
-//            }
+            if(InDic(line_new)){
+                //paint.setColor(customColor);
+                paint.setFakeBoldText(true);  // 设置为粗体
+            }else{
+                //paint.setColor(Color.BLACK);
+                paint.setFakeBoldText(false);
+            }
 
 
 
@@ -206,11 +225,11 @@ public class JustifyTextView3 extends AppCompatTextView {
 
                     if (wordStart != -1 && wordEnd != -1) {
                         CharSequence selectedWord = text.subSequence(wordStart, wordEnd);
-                        String word = selectedWord.toString();
+                        String Word = selectedWord.toString();
 
                         // 使用正则表达式匹配只含有英文字母的部分
-                        word = word.replaceAll("[^a-zA-Z]", "");
-                        showToast(selectedWord.toString());
+                        String word = Word.replaceAll("[^a-zA-Z]", "");
+                        //showToast(selectedWord.toString());
 
 
 
@@ -240,7 +259,7 @@ public class JustifyTextView3 extends AppCompatTextView {
                         voice.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //tts.speak(selectedWord, TextToSpeech.QUEUE_FLUSH, null);
+                                tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
 
                             }
                         });

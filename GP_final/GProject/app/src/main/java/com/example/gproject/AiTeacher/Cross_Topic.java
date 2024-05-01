@@ -73,6 +73,7 @@ public class Cross_Topic extends AppCompatActivity {
     String selectedWord;
     String[] words;
     Boolean indic=false;
+    ImageButton back;
 
     TextToSpeech tts;
     private PopupWindow popupWindow;
@@ -97,6 +98,7 @@ public class Cross_Topic extends AppCompatActivity {
         //voice = findViewById(R.id.voice);
         start = findViewById(R.id.start_CrossTopic);
         cross_result = findViewById(R.id.result);
+        back = findViewById(R.id.back2);
 
         cross_result.setMovementMethod(new ScrollingMovementMethod());
 
@@ -128,7 +130,12 @@ public class Cross_Topic extends AppCompatActivity {
         messages.put(systemMessage);
 
 
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
 
@@ -320,6 +327,8 @@ public class Cross_Topic extends AppCompatActivity {
         phonetic.setText(response.getPhonetic());
         adapter.updateNewData(response.getMeanings());
     }
+
+
 
 
     public void homeClick(View v){

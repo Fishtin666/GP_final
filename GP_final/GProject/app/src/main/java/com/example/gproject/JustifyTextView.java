@@ -42,6 +42,7 @@ import com.example.gproject.dictionary.WordResult;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class JustifyTextView extends AppCompatTextView {
@@ -50,6 +51,7 @@ public class JustifyTextView extends AppCompatTextView {
     private int mViewWidth;
     public static final String TWO_CHINESE_BLANK = " ";
     Boolean indic=true;
+    TextToSpeech tts;
 
     MeaningAdapter adapter;
 
@@ -58,8 +60,21 @@ public class JustifyTextView extends AppCompatTextView {
         super(context, attrs);
         int paddingPx = dpToPx(context, 40); // Convert dp to pixels
         setPadding(0, 0, 0, paddingPx);
+        initializeTextToSpeech(context);
     }
 
+    private void initializeTextToSpeech(Context context) {
+        tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.UK);
+                } else {
+                    Log.e("TTS", "TextToSpeech initialization failed");
+                }
+            }
+        });
+    }
 
 
 
@@ -217,10 +232,10 @@ public class JustifyTextView extends AppCompatTextView {
 
                     if (wordStart != -1 && wordEnd != -1) {
                         CharSequence selectedWord = text.subSequence(wordStart, wordEnd);
-                        String word = selectedWord.toString();
+                        String Word = selectedWord.toString();
 
                         // 使用正则表达式匹配只含有英文字母的部分
-                        word = word.replaceAll("[^a-zA-Z]", "");
+                        String word = Word.replaceAll("[^a-zA-Z]", "");
                         showToast(word.toString());
 
 
@@ -252,7 +267,7 @@ public class JustifyTextView extends AppCompatTextView {
                         voice.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //tts.speak(selectedWord, TextToSpeech.QUEUE_FLUSH, null);
+                                tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
 
                             }
                         });
