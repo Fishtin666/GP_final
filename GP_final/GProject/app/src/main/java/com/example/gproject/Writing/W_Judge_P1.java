@@ -16,6 +16,10 @@ import android.widget.TextView;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +39,9 @@ import okhttp3.Response;
 public class W_Judge_P1 extends AppCompatActivity {
 
     TextView judge;
-    String Ans,Ques,Part;
+    String Ans,Ques,Part,Key;
+    FirebaseAuth auth;
+    private DatabaseReference databaseReference;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -51,13 +57,15 @@ public class W_Judge_P1 extends AppCompatActivity {
         setContentView(R.layout.w_judge_p1);
         judge = findViewById(R.id.judge);
         judge.setMovementMethod(new ScrollingMovementMethod());
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             Ques= extras.getString("Ques");
             Ans= extras.getString("Ans");
-            Part =  extras.getString("Part");
+            Part =  extras.getString("part");
+            Key = extras.getString("pushKey");
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -86,6 +94,26 @@ public class W_Judge_P1 extends AppCompatActivity {
     public void homeClick(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void push(){
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String judgeText = judge.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Writing")
+                    .child(Part)
+                    //.child("W_T1_Q" + QuesNum + "_answers")
+                    .push(); // 使用 push() 生成唯一键
+
+            String answerKey = userAnswersRef.getKey();
+        }
     }
 
     public void callAPI(String question){
@@ -133,6 +161,7 @@ public class W_Judge_P1 extends AppCompatActivity {
                             public void run() {
 
                                 judge.setText(result.trim());
+
                             }
                         });
 

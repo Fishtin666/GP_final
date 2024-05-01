@@ -109,6 +109,8 @@ public class Writing_T1answer2 extends AppCompatActivity {
                     .child("W_T1_Q" + QuesNum + "_answers")
                     .push(); // 使用 push() 生成唯一键
 
+            String answerKey = userAnswersRef.getKey();
+
             userAnswersRef.setValue(answerText)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -116,6 +118,8 @@ public class Writing_T1answer2 extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // 存储成功
                                 bundle.putString("Ans",Ans.getText().toString());
+                                bundle.putString("pushKey",answerKey);
+                                bundle.putString("part","1");
                                 Intent intent =new Intent(Writing_T1answer2.this, W_Judge_P1.class);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
