@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -23,11 +21,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Writing_T2answer1 extends AppCompatActivity {
     Bundle bundle = new Bundle();
@@ -41,7 +34,7 @@ public class Writing_T2answer1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.writing_t2answer1);
         auth = FirebaseAuth.getInstance();
-        question = findViewById(R.id.question);
+        question = findViewById(R.id.Lquestion);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -81,7 +74,7 @@ public class Writing_T2answer1 extends AppCompatActivity {
         });
 
 
-        Ques = findViewById(R.id.question);
+        Ques = findViewById(R.id.Lquestion);
         Ans = findViewById(R.id.answer);
         Ans.setText("English is a gateway to the world and no one should be deprived of the opportunities that\n" +
                 "arise for those with a strong command of the English language. This does not mean that\n" +

@@ -137,7 +137,7 @@ public class listen_TTest1_Section1 extends AppCompatActivity {
 
 
         //show Question in firebase
-        questionTextView = findViewById(R.id.question);
+        questionTextView = findViewById(R.id.Lquestion);
         question2TextView = findViewById(R.id.question2);
         db = FirebaseFirestore.getInstance();
         // 指定 Firestore 中的文件路徑
