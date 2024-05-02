@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +60,7 @@ public class W_Judge_P1 extends AppCompatActivity {
         judge = findViewById(R.id.judge);
         judge.setMovementMethod(new ScrollingMovementMethod());
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
+        auth = FirebaseAuth.getInstance();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -89,6 +91,8 @@ public class W_Judge_P1 extends AppCompatActivity {
             callAPI("Please check the following article for spelling and grammar, And tell me where is wrong and why.DO NOT repeat my answer.:"+Ans);
         else
             callAPI("The question is:"+Ques+"And my answer is:"+Ans+"  Please check my answer for spelling and grammar and tell me where is wrong and why.If my answer is too short, tell me how to improve it and give me an example.");
+
+
     }
 
     public void homeClick(View v){
@@ -103,16 +107,26 @@ public class W_Judge_P1 extends AppCompatActivity {
             String judgeText = judge.getText().toString();
 
 
-            // 生成唯一的键，并存储答案
+
             DatabaseReference userAnswersRef = databaseReference
                     .child("users")
                     .child(userId)
-                    .child("Writing")
-                    .child(Part)
-                    //.child("W_T1_Q" + QuesNum + "_answers")
-                    .push(); // 使用 push() 生成唯一键
+                    .child("Judge")
+                    .child(Key);
 
-            String answerKey = userAnswersRef.getKey();
+            userAnswersRef.setValue(judgeText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
+
         }
     }
 
@@ -159,8 +173,8 @@ public class W_Judge_P1 extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 judge.setText(result.trim());
+                                push();
 
                             }
                         });

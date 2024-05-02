@@ -12,7 +12,9 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -106,7 +108,8 @@ public class Writing_T1answer2 extends AppCompatActivity {
                     .child("users")
                     .child(userId)
                     .child("Writing")
-                    .child("W_T1_Q" + QuesNum + "_answers")
+                    .child("1")
+                    .child(String.valueOf(QuesNum))
                     .push(); // 使用 push() 生成唯一键
 
             String answerKey = userAnswersRef.getKey();
@@ -117,6 +120,8 @@ public class Writing_T1answer2 extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 // 存储成功
+                                //Toast.makeText(Writing_T1answer2.this,answerKey , Toast.LENGTH_SHORT).show();
+
                                 bundle.putString("Ans",Ans.getText().toString());
                                 bundle.putString("pushKey",answerKey);
                                 bundle.putString("part","1");

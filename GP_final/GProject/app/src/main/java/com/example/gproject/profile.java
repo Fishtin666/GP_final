@@ -31,7 +31,7 @@ import com.google.protobuf.StringValue;
 import java.lang.reflect.Array;
 
 public class profile extends AppCompatActivity {
-    Button logout;
+    Button logout,jump;
     ImageButton back;
     TextView email,Uid,w_done;
     private ProgressBar w_progressBar,s_progressBar,l_progressBar,r_progressBar,voc_progressBar;
@@ -54,10 +54,16 @@ public class profile extends AppCompatActivity {
         l_progressBar=findViewById(R.id.progressBar4);
         r_progressBar = findViewById(R.id.progressBar5);
         voc_progressBar =findViewById(R.id.progressBar6);
+        jump = findViewById(R.id.button6);
+        jump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(profile.this, getDb.class));
+            }
+        });
 
         logout = findViewById(R.id.logOut);
         email = findViewById(R.id.email);
-        Uid = findViewById(R.id.uid);
         w_done= findViewById(R.id.writing_done);
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -87,21 +93,21 @@ public class profile extends AppCompatActivity {
         }
 
         db = FirebaseFirestore.getInstance();
-        getDocNum("Writing");
-        getDocNum("Writing2");
+        //getDocNum("Writing");
+        //getDocNum("Writing2");
 
         String[] topic = {"Speaking_Study","Speaking_Work","Speaking_Hometown","Speaking_Accommodation",
         "Speaking_Family","Speaking_Friend","Speaking_Entertainment","Speaking_Childhood"
         ,"Speaking_Daily life","Speaking_People","Speaking_Place","Speaking_Item","Speaking_Experience"};
 
         for(int i=0;i<topic.length;i++){
-            getDocNum(topic[i]);
+            //getDocNum(topic[i]);
         }
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getRealNum("Writing");
+                //getRealNum("Writing");
                 //getRealNum("Speaking");
             }
         }, 3000); // 延迟2秒执行，根据实际情况调整时间

@@ -51,17 +51,7 @@
         app:layout_constraintTop_toTopOf="@+id/title"
         android:background="@drawable/help" />
 
-    <ImageView
-        android:id="@+id/home"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="10dp"
-        android:onClick="homeClick"
-        android:src="@drawable/home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view15" />
+
 
     <TextView
         android:id="@+id/title"
@@ -98,6 +88,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/home"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="10dp"
+        android:onClick="homeClick"
+        android:src="@drawable/home2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view15" />
 
     <ImageView
         android:id="@+id/mic"
