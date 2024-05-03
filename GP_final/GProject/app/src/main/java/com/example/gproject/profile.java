@@ -42,18 +42,22 @@ public class profile extends AppCompatActivity {
     private DatabaseReference databaseReference;
 
     private FirebaseFirestore db;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
 
         w_progressBar = findViewById(R.id.progressBar);
         s_progressBar =findViewById(R.id.progressBar2);
         l_progressBar=findViewById(R.id.progressBar4);
         r_progressBar = findViewById(R.id.progressBar5);
         voc_progressBar =findViewById(R.id.progressBar6);
+
         jump = findViewById(R.id.button6);
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +92,6 @@ public class profile extends AppCompatActivity {
             String userEmail = currentUser.getEmail();
             String uid = currentUser.getUid();
             email.setText(userEmail);
-            Uid.setText(uid);
 
         }
 
@@ -110,7 +113,7 @@ public class profile extends AppCompatActivity {
                 //getRealNum("Writing");
                 //getRealNum("Speaking");
             }
-        }, 3000); // 延迟2秒执行，根据实际情况调整时间
+        }, 3000); //
 
 
 

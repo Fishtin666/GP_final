@@ -55,9 +55,17 @@ import com.example.gproject.Message;
 import com.example.gproject.MessageAdapter;
 import com.example.gproject.MicrophoneStream;
 import com.example.gproject.R;
+import com.example.gproject.Writing.W_Judge_P1;
+import com.example.gproject.Writing.Writing_T1answer2;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -106,6 +114,9 @@ public class Speaking_part1_answer extends AppCompatActivity {
     private static String speechSubscriptionKey = "031b6e9e93ed4df69bd33327b1daf1d1";
     private static String serviceRegion = "eastus";
 
+    private DatabaseReference databaseReference;
+    FirebaseAuth auth;
+
     public static boolean star_show;
 
     boolean speakover=false,indic=false,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
@@ -127,6 +138,8 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     TextToSpeech tts;
     private PopupWindow popupWindow,popup;
+
+    String Question,QuesNum,Topic;
 
     SpeechConfig speechConfig;
     public static final MediaType JSON
@@ -165,6 +178,9 @@ public class Speaking_part1_answer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaking_part1_answer);
+
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -207,7 +223,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         });
 
 
-        String Question = getIntent().getStringExtra("question");
+
 
         try {
             int permissionRequestId = 5;
@@ -227,12 +243,14 @@ public class Speaking_part1_answer extends AppCompatActivity {
             return;
         }
 
-//        Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            Question=extras.getString("question");
-//            Num =extras.getString("num");
-//
-//        }
+        //String Question = getIntent().getStringExtra("question");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Question=extras.getString("question");
+            QuesNum =extras.getString("num");
+            Topic=extras.getString("topic");
+
+        }
 
 
         int requestCode = 5;
@@ -578,13 +596,46 @@ public class Speaking_part1_answer extends AppCompatActivity {
     }
 
     public void finishClick(View v){
-//        bundle.putString("question",question.getText().toString());
-//        bundle.putString("answer",answer.getText().toString());
         send.setBackgroundColor(Color.BLACK);
         pass_answer=true;
-        callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+        //將答案存入db
+        FirebaseUser currentUser = auth.getCurrentUser();
 
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = answer.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Speaking")
+                    .child(Topic)
+                    .child(String.valueOf(QuesNum))
+                    .push(); // 使用 push() 生成隨機碼
+
+            String answerKey = userAnswersRef.getKey();
+
+            userAnswersRef.setValue(answerText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
         }
+
+    }
+
+
+
 
     //mic按下
 //    public void micClick(View view){

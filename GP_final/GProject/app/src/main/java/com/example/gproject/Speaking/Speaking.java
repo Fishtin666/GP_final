@@ -8,10 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.example.gproject.getDb;
+import com.example.gproject.profile;
 
 public class Speaking extends AppCompatActivity {
 
@@ -34,6 +37,8 @@ public class Speaking extends AppCompatActivity {
                 startActivity(new Intent(Speaking.this,MainActivity.class));
             }
         });
+
+
     }
 
 

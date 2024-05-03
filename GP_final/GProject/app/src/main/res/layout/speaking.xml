@@ -7,6 +7,8 @@
     tools:context=".Speaking.Speaking">
 
 
+
+
     <ImageView
         android:id="@+id/home3"
         android:layout_width="48dp"

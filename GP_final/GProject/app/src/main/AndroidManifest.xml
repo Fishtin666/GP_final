@@ -183,8 +183,14 @@
             android:name=".AiTeacher.AiTeacher"
             android:exported="true" />
         <activity
+            android:name=".profile"
+            android:exported="true" />
+        <activity
             android:name=".PronunciationAssessment"
             android:exported="true" />
+
+
+
         <activity
             android:name=".login.login"
             android:exported="true">
