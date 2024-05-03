@@ -112,6 +112,7 @@ public class W_Judge_P1 extends AppCompatActivity {
                     .child("users")
                     .child(userId)
                     .child("Judge")
+                    .child("Writing")
                     .child(Key);
 
             userAnswersRef.setValue(judgeText)

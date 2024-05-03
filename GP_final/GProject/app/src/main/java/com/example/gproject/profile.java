@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gproject.Models.QuestionNumberModel;
 import com.example.gproject.login.login;
@@ -33,7 +34,7 @@ import java.lang.reflect.Array;
 public class profile extends AppCompatActivity {
     Button logout,jump;
     ImageButton back;
-    TextView email,Uid,w_done;
+    TextView email,Uid,w_done,l_done,s_done,r_done;
     private ProgressBar w_progressBar,s_progressBar,l_progressBar,r_progressBar,voc_progressBar;
 
     int documentCount=0;
@@ -57,6 +58,9 @@ public class profile extends AppCompatActivity {
         l_progressBar=findViewById(R.id.progressBar4);
         r_progressBar = findViewById(R.id.progressBar5);
         voc_progressBar =findViewById(R.id.progressBar6);
+        l_done = findViewById(R.id.listening_done);
+        s_done = findViewById(R.id.speaking_done);
+        r_done = findViewById(R.id.reading_done);
 
         jump = findViewById(R.id.button6);
         jump.setOnClickListener(new View.OnClickListener() {
@@ -90,30 +94,37 @@ public class profile extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String userEmail = currentUser.getEmail();
-            String uid = currentUser.getUid();
             email.setText(userEmail);
 
         }
 
         db = FirebaseFirestore.getInstance();
-        //getDocNum("Writing");
-        //getDocNum("Writing2");
+        getDocNum("Writing");
+        getDocNum("Writing2");
 
         String[] topic = {"Speaking_Study","Speaking_Work","Speaking_Hometown","Speaking_Accommodation",
         "Speaking_Family","Speaking_Friend","Speaking_Entertainment","Speaking_Childhood"
         ,"Speaking_Daily life","Speaking_People","Speaking_Place","Speaking_Item","Speaking_Experience"};
 
         for(int i=0;i<topic.length;i++){
-            //getDocNum(topic[i]);
+            getDocNum(topic[i]);
         }
-        Handler handler = new Handler();
+
+        String[] topic_r ={"R_blank","R_chose", "R_judge", "R_match", "R_word,", "R_wordA", "R_wordB", "R_wordC"};
+        for(int i=0;i<topic_r.length;i++){
+            getDocNum(topic[i]);
+        }
+
+                Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //getRealNum("Writing");
-                //getRealNum("Speaking");
+                getRealNum("Writing","0");
+                getRealNum("Speaking","1");
+                //getRealNum("Listening","2");
+                //getRealNum("Reading","3");
             }
-        }, 3000); //
+        }, 2000); //
 
 
 
@@ -127,7 +138,7 @@ public class profile extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         switch (collectionName){
                             case "Writing":
-                            case  "Writing2":
+                            case "Writing2":
                                 w_num+=queryDocumentSnapshots.size();
                                 break;
                             case  "Speaking_Study":
@@ -143,8 +154,21 @@ public class profile extends AppCompatActivity {
                             case  "Speaking_Place":
                             case  "Speaking_Item":
                             case  "Speaking_Experience":
-                                l_num+=queryDocumentSnapshots.size();
+                                s_num+=queryDocumentSnapshots.size();
                                 break;
+                            case "R_blank":
+                            case "R_chose":
+                            case "R_judge":
+                            case "R_match":
+                            case "R_word,":
+                            case "R_wordA":
+                            case"R_wordB":
+                            case"R_wordC":
+                                r_num+=queryDocumentSnapshots.size();
+                                break;
+
+
+
                         }
                         //documentCount = queryDocumentSnapshots.size();
                         //System.out.println("數量:"+String.valueOf(documentCount));
@@ -153,11 +177,11 @@ public class profile extends AppCompatActivity {
                 });
 
 
-        //w_done.setText(String.valueOf(answerCount*100/w_num)+"% "+answerCount+","+" "+w_num);
+
 
     }
 
-    public void getRealNum(String doc){
+    public void getRealNum(String part,String partCode){
         // 获取当前用户的 ID
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -165,7 +189,7 @@ public class profile extends AppCompatActivity {
 
 
             // 构建路径以获取特定问题的答案数量
-            String answersPath = "users/" + userId +"/"+doc ;
+            String answersPath = "users/" + userId +"/"+part;
 
             // 添加 ValueEventListener 监听器以获取数据快照
             databaseReference.child(answersPath).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -173,11 +197,35 @@ public class profile extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     // 获取子节点数量
                     answerCount = dataSnapshot.getChildrenCount();
-                    w_done.setText(String.valueOf(answerCount)+"/"+w_num);
 
-                    progress=answerCount*100/w_num;
-                    // 设置 ProgressBar 的进度
-                    w_progressBar.setProgress((int)progress);
+                    switch (partCode){
+                        case "0": //Writing
+                            w_done.setText(String.valueOf(answerCount)+"/"+w_num);
+                            progress=answerCount*100/w_num;
+                            w_progressBar.setProgress((int)progress);
+                            break;
+                        case "1": //Speaking
+                            l_done.setText((answerCount)+"/"+s_num);
+                            progress=answerCount*100/s_num;
+                            s_progressBar.setProgress((int)progress);
+                            break;
+                        case "2" ://Listening
+                            l_done.setText((answerCount)+"/"+l_num);
+                            progress=answerCount*100/l_num;
+                            l_progressBar.setProgress((int)progress);
+                        case "3" ://Reading
+                            r_done.setText((answerCount)+"/"+r_num);
+                            progress=answerCount*100/r_num;
+                            r_progressBar.setProgress((int)progress);
+                    }
+
+
+
+
+
+
+
+
                 }
 
                 @Override

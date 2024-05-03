@@ -122,13 +122,12 @@ public class Writing_T2answer1 extends AppCompatActivity {
             String userId = currentUser.getUid();
             String answerText = Ans.getText().toString();
 
-
-            // 生成唯一的键，并存储答案
             DatabaseReference userAnswersRef = databaseReference
                     .child("users")
                     .child(userId)
                     .child("Writing")
-                    .child("W_T2_Q" + QuesNum + "_answers")
+                    .child("2")
+                    .child(String.valueOf(QuesNum))
                     .push(); // 使用 push() 生成唯一键
 
             userAnswersRef.setValue(answerText)
@@ -160,4 +159,6 @@ public class Writing_T2answer1 extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+
 }

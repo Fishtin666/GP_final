@@ -108,7 +108,9 @@ public class getDb extends AppCompatActivity {
        DatabaseReference targetRef = databaseReference
                     .child("users")
                     .child(userId)
-                    .child("Judge");
+                    .child("Judge")
+                    .child("Writing");
+
 
 
 
