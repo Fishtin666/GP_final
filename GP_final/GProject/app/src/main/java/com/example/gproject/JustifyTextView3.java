@@ -45,7 +45,7 @@ public class JustifyTextView3 extends AppCompatTextView {
     private int mLineY;
     private int mViewWidth;
     public static final String TWO_CHINESE_BLANK = " ";
-    Boolean indic=false;
+    Boolean indic=true;
 
     MeaningAdapter adapter;
     TextToSpeech tts;
@@ -121,7 +121,10 @@ public class JustifyTextView3 extends AppCompatTextView {
 
             int customColor = Color.rgb(120, 59, 55);
 
+
+            //if(indic){
             if(InDic(line_new)){
+
                 //paint.setColor(customColor);
                 paint.setFakeBoldText(true);  // 设置为粗体
             }else{

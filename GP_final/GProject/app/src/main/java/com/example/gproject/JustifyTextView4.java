@@ -1,8 +1,6 @@
 package com.example.gproject;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-import static com.google.android.material.internal.ViewUtils.dpToPx;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,20 +8,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.speech.tts.TextToSpeech;
 import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,11 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gproject.AiTeacher.Cross_Topic;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
@@ -46,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-public class JustifyTextView extends AppCompatTextView {
+public class JustifyTextView4 extends AppCompatTextView {
     private Layout mLayout;
     private int mLineY;
     private int mViewWidth;
@@ -55,9 +46,10 @@ public class JustifyTextView extends AppCompatTextView {
     TextToSpeech tts;
 
     MeaningAdapter adapter;
+    PopupWindow popupWindow;
 
 
-    public JustifyTextView(Context context, AttributeSet attrs) {
+    public JustifyTextView4(Context context, AttributeSet attrs) {
         super(context, attrs);
         int paddingPx = dpToPx(context, 40); // Convert dp to pixels
         setPadding(0, 0, 0, paddingPx);
@@ -136,11 +128,11 @@ public class JustifyTextView extends AppCompatTextView {
             }
 
             if(indic){
-                paint.setColor(customColor);
+                //paint.setColor(customColor);
                 paint.setFakeBoldText(true);  // 设置为粗体
 
             }else{
-                paint.setColor(Color.BLACK);
+                //paint.setColor(Color.BLACK);
             }
             System.out.println(paint.getColor());
 
@@ -247,25 +239,17 @@ public class JustifyTextView extends AppCompatTextView {
                         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
                         int height = 1200;
                         boolean focusable = true; // 让PopupWindow在失去焦点时自动关闭
-                        PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-                        //popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
+                        popupWindow = new PopupWindow(popupView, width, height, focusable);
+
 
                         // 设置PopupWindow的内容
                         TextView voc = popupView.findViewById(R.id.Voc);
-                        TextView phonetic = popupView.findViewById(R.id.phonetics);
                         voc.setText(word);
-                        if(InDic(word)) {
-                            getMeaning(word, phonetic);
-                        }
-                        //dic adapter
-                        RecyclerView meaningRecyclerView=popupView.findViewById(R.id.meaningRecyclerView);
-                        adapter = new MeaningAdapter(Collections.emptyList());
-                        meaningRecyclerView.setAdapter(adapter);
-                        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
-                        meaningRecyclerView.setLayoutManager(layoutManager);
+                        TextView phonetic = popupView.findViewById(R.id.phonetics);
                         //voice
                         ImageButton voice = popupView.findViewById(R.id.voice);
                         voice.setImageResource(R.drawable.voice2);
+
                         voice.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -273,6 +257,7 @@ public class JustifyTextView extends AppCompatTextView {
 
                             }
                         });
+                        //close
                         TextView close=popupView.findViewById(R.id.close);
                         close.setOnClickListener(new OnClickListener() {
                             @Override
@@ -281,7 +266,7 @@ public class JustifyTextView extends AppCompatTextView {
 
                             }
                         });
-
+                        //star
                         ImageView star = popupView.findViewById(R.id.star);
                         star.setImageResource(R.drawable.star_black);
                         star.setOnClickListener(new View.OnClickListener() {
@@ -299,8 +284,19 @@ public class JustifyTextView extends AppCompatTextView {
 
                             }
                         });
-                        if(InDic(word))
-                            popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
+                        //dic adapter
+                        RecyclerView meaningRecyclerView=popupView.findViewById(R.id.meaningRecyclerView);
+                        adapter = new MeaningAdapter(Collections.emptyList());
+                        meaningRecyclerView.setAdapter(adapter);
+                        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
+                        meaningRecyclerView.setLayoutManager(layoutManager);
+
+                        getMeaning(word, phonetic);
+                        //if(InDic(word))
+                            //popupWindow.showAtLocation(this, Gravity.CENTER, 0, 0);
+
+
+                        //if(InDic(word))
 
                         return true;
                     }
@@ -389,11 +385,10 @@ public class JustifyTextView extends AppCompatTextView {
                         public void run() {
                             if (response.body() != null && !response.body().isEmpty()) {
                                 setUI(response.body().get(0), phonetic);
-                                // Show a popup window or perform other UI updates
-                                // popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-                                // Log the phonetic information
-                                //Log.d("Phonetic", response.body().get(0).getPhonetic());
-                            } else {
+
+//                                popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+                                popupWindow.showAtLocation(JustifyTextView4.this, Gravity.CENTER, 0, 0);
+                                } else {
                                 Toast.makeText(getContext(), "Failed: response body is null or empty", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -417,8 +412,28 @@ public class JustifyTextView extends AppCompatTextView {
     private void setUI(WordResult response, TextView phonetic) {
         phonetic.setText(response.getPhonetic());
         adapter.updateNewData(response.getMeanings());
+//        popupWindow.showAtLocation(this, Gravity.CENTER, 0, 0);
     }
 
+    // 转换为普通的TextView
+    public void  convertToNormalTextView() {
+        // 获取当前TextView的内容和属性
+        CharSequence originalText = getText();
+        int originalGravity = getGravity();
+
+        // 创建一个新的TextView，将原始内容和属性应用到新的TextView上
+        TextView normalTextView = new TextView(getContext());
+        normalTextView.setText(originalText);
+        normalTextView.setGravity(originalGravity);
+
+        // 将新的TextView替换当前的JustifyTextView4
+        ViewGroup parentView = (ViewGroup) getParent();
+        if (parentView != null) {
+            int index = parentView.indexOfChild(this);
+            parentView.removeView(this);
+            parentView.addView(normalTextView, index);
+        }
+    }
 
 
 }

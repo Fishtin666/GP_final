@@ -6,19 +6,27 @@ import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+import static java.security.AccessController.getContext;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,22 +63,32 @@ public class PronunciationAssessment extends Activity {
 
     // create config
     SpeechConfig speechConfig;
+    SpannableString spannableString;
 
-
-    TextView article;
+    ImageView mic;
+    JustifyTextView4 article;
 
     Button clear,change;
 
-
+    ImageButton back;
     ImageView help,home,pronunciationAssessmentFromStreamButton;
 
     String total_score,accuracy_score,completeness_score,fluency_score;
 
-    String[] question={"We had a great time taking a long walk outside in the morning."
+    private int selectedOptionIndex = -1; // 初始值設為-1，表示未選擇任何選項
+    private EditText customEditText;
+
+    String[] short_question={"We had a great time taking a long walk outside in the morning."
                         ,"It took me a long time to learn where he came from.",
                         "There was no possibility of taking a walk that day."};
 
+    String[] long_question={"The early bird catches the worm. This proverb means that success comes to those who wake up and act early. It's a reminder to be proactive and seize opportunities when they arise."
+    ,"Learning a new language can be both challenging and rewarding. It opens doors to new cultures and ways of thinking. By practicing regularly and staying committed, you can make significant progress. Immersing yourself in the language through conversations and media is key to improving fluency."
+    ,"Reading is a powerful tool for expanding knowledge and sparking imagination. Whether delving into fiction or non-fiction, books offer insights and provoke thought. They transport us to different eras and places, enriching our understanding of the world and ourselves."
+    ,"Traveling allows us to broaden our perspectives and appreciate diversity. Exploring new destinations introduces us to unique traditions and lifestyles. It's a chance to break out of our routine and embrace the unknown, creating lasting memories and fostering personal growth."};
 
+
+    String[] chosen_question;
 
     String referenceText;
     public static double Score;
@@ -79,6 +97,7 @@ public class PronunciationAssessment extends Activity {
     private MicrophoneStream createMicrophoneStream() {
         this.releaseMicrophoneStream();
         microphoneStream = new MicrophoneStream();
+
         //MicrophoneStream microphoneStream = new MicrophoneStream(this);
 
         return microphoneStream;
@@ -89,6 +108,10 @@ public class PronunciationAssessment extends Activity {
             microphoneStream = null;
         }
     }
+
+
+
+
 
 
 
@@ -104,14 +127,24 @@ public class PronunciationAssessment extends Activity {
         clear = findViewById(R.id.retry);
         change = findViewById(R.id.finish2);
         home = findViewById(R.id.home);
+        back = findViewById(R.id.back2);
+        mic = findViewById(R.id.mic);
+        showOptionDialog();
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
-        setQuestion();
+
 
 
 
@@ -143,7 +176,8 @@ public class PronunciationAssessment extends Activity {
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setQuestion();
+                //setQuestion(chosen_question);
+                showOptionDialog();
             }
         });
 
@@ -154,17 +188,85 @@ public class PronunciationAssessment extends Activity {
             }
         });
 
+        mic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mic.setImageResource(R.drawable.mic_gray);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        micClick();
+                    }
+                }, 100); //
+            }
+        });
 
 
 
-        ///////////////////////////////////////////////////
-        // pronunciation assessment from stream
-        ///////////////////////////////////////////////////
+    }
 
+    private void showOptionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("選擇文章類型");
 
+        final String[] options = {"短篇文章", "長篇文章", "自訂文章"};
 
+        builder.setSingleChoiceItems(options, selectedOptionIndex, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedOptionIndex = which; // 更新選擇的選項索引
+            }
+        });
 
+        builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (selectedOptionIndex != -1) {
+                    String selectedOption = options[selectedOptionIndex];
+                    if (selectedOption.equals("自訂文章")) {
+                        showCustomDialog();
+                    } else if (selectedOption.equals("短篇文章")) {
+                        chosen_question=short_question;
+                    }else
+                        chosen_question=long_question;
 
+                    setQuestion(chosen_question);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("輸入您的文章");
+
+        customEditText = new EditText(this);
+        builder.setView(customEditText);
+
+        builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String customText = customEditText.getText().toString();
+                article.setText(customText);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void helpClick(View view){
@@ -184,14 +286,16 @@ public class PronunciationAssessment extends Activity {
         score_show.show();
     }
 
-    public void  setQuestion(){
+    public void  setQuestion(String[] question){
         Random random = new Random();
         int randomIndex = random.nextInt(question.length);
         referenceText = question[randomIndex];
         article.setText(referenceText);
     }
 
-    public void micClick(View view){
+    public void micClick(){
+
+
         final String logTag = "pron";
 
         if (this.microphoneStream != null) {
@@ -214,7 +318,7 @@ public class PronunciationAssessment extends Activity {
 
 
             String[] words = referenceText.split(" "); // 拆分文本成單詞
-            SpannableString spannableString = new SpannableString(referenceText);
+            spannableString = new SpannableString(referenceText);
 
 
             PronunciationAssessmentConfig pronConfig =
@@ -239,6 +343,7 @@ public class PronunciationAssessment extends Activity {
 
 
             reco.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
+
                 //PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResultEventArgs.getResult());
 //                    AppendTextLine("Accuracy score: " + pronResult.getAccuracyScore() +
 //                            ";  pronunciation score: " +  pronResult.getPronunciationScore() +
@@ -292,7 +397,10 @@ public class PronunciationAssessment extends Activity {
 
                         }
 
-                    }article.setText(spannableString);
+                    }
+
+                    convertToRegularTextView(getApplicationContext(),article);
+                    //article.setText(spannableString);
                 }
 
             });
@@ -315,6 +423,7 @@ public class PronunciationAssessment extends Activity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // 確定按鈕的點擊處理
+                                mic.setImageResource(R.drawable.mic);
                             }
                         });
                         score_show.show();
@@ -356,6 +465,32 @@ public class PronunciationAssessment extends Activity {
 
 
     }
+    public  void convertToRegularTextView(Context context, JustifyTextView4 justifyTextView4) {
+        // 取得 JustifyTextView4 的資訊
+        ViewGroup parent = (ViewGroup) justifyTextView4.getParent();
+        int index = parent.indexOfChild(justifyTextView4);
+        String text = justifyTextView4.getText().toString();
+
+
+        // 創建一個新的 TextView
+        TextView regularTextView = new TextView(context);
+        regularTextView.setLayoutParams(justifyTextView4.getLayoutParams());
+        System.out.println("結果:"+spannableString);
+        regularTextView.setText(spannableString);
+        regularTextView.setTextSize(40);
+        regularTextView.setBackgroundColor(getResources().getColor(R.color.gray));
+        regularTextView.setTextColor(justifyTextView4.getCurrentTextColor());
+        regularTextView.setTypeface(justifyTextView4.getTypeface());
+        regularTextView.setPadding(10,10,10,10);
+        regularTextView.setGravity(justifyTextView4.getGravity());
+
+        // 移除 JustifyTextView4 並加入新的 TextView 到相同的位置
+        parent.removeViewAt(index);
+        parent.addView(regularTextView, index);
+
+        // 如果有需要，你也可以設定相同的監聽器或其他屬性到 regularTextView
+    }
+
 
 
 

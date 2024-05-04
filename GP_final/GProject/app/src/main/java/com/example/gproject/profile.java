@@ -115,7 +115,7 @@ public class profile extends AppCompatActivity {
             getDocNum(topic[i]);
         }
 
-                Handler handler = new Handler();
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

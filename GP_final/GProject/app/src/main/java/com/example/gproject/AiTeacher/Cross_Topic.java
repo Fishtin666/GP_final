@@ -219,6 +219,8 @@ public class Cross_Topic extends AppCompatActivity {
 
     }
 
+
+
      //找到點擊的單字
     private String findSelectedWord(String[] words, int index) {
         for (String word : words) {

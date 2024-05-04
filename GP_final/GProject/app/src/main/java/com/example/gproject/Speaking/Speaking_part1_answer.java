@@ -664,6 +664,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 //    }
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     public void micClick(View view) {
+        mic.setImageResource(R.drawable.mic_gray);
         if(PA_mic){
 
 
@@ -776,7 +777,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
                     System.out.println("Session stopped.");
                     reco.stopContinuousRecognitionAsync();
-
+                    mic.setImageResource(R.drawable.mic);
                     this.releaseMicrophoneStream();
 
                 });
@@ -806,6 +807,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
                 if (result.getReason() == ResultReason.RecognizedSpeech) {
                     answer.setText(result.getText());
+                    mic.setImageResource(R.drawable.mic);
                 } else {
                     System.out.println("錯誤:" + System.lineSeparator() + result.toString());
                 }
