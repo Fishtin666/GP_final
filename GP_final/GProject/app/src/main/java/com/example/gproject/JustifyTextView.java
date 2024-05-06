@@ -31,6 +31,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,16 @@ import com.example.gproject.AiTeacher.Cross_Topic;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.example.gproject.meaning.DataHolder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +66,9 @@ public class JustifyTextView extends AppCompatTextView {
     TextToSpeech tts;
 
     MeaningAdapter adapter;
+    private DatabaseReference databaseReference;
+
+    FirebaseAuth auth;
 
 
     public JustifyTextView(Context context, AttributeSet attrs) {
@@ -283,17 +297,19 @@ public class JustifyTextView extends AppCompatTextView {
                         });
 
                         ImageView star = popupView.findViewById(R.id.star);
-                        star.setImageResource(R.drawable.star_black);
+                        boolean star_yellow=in_db(word,star);
                         star.setOnClickListener(new View.OnClickListener() {
-                            boolean star_yellow=false;
+                            boolean star_yellow=in_db(word,star);
                             @Override
                             public void onClick(View v) {
                                 if (star_yellow) {
                                     star.setImageResource(R.drawable.star_black);
                                     star_yellow = false;
+                                    voc_delete_db(word);
                                 } else {
                                     star.setImageResource(R.drawable.star_yellow);
                                     star_yellow = true;
+                                    voc_insert_db(word,adapter,phonetic.getText().toString(),0);
                                 }
 
 
@@ -419,6 +435,103 @@ public class JustifyTextView extends AppCompatTextView {
         adapter.updateNewData(response.getMeanings());
     }
 
+    public void voc_insert_db(String word, MeaningAdapter adapter,String phonetic,int count){
+        String definitionsText="";
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
 
+
+        definitionsText=adapter.getDefinitionsText();
+        DataHolder obj = new DataHolder(definitionsText, phonetic, 0);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.setValue(obj)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(JustifyTextView.this.getContext(), "成功新增", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(JustifyTextView.this.getContext(), "新增失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void voc_delete_db(String word){
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(JustifyTextView.this.getContext(), "成功刪除", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(JustifyTextView.this.getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public boolean in_db(String word,ImageView star){
+        final boolean[] InDb = {false};
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference root = db.getReference("word_collect");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = user.getUid();
+        root.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    boolean isCollected = dataSnapshot.hasChild(word);
+                    if (isCollected) {
+                        InDb[0] =true;
+                        star.setImageResource(R.drawable.star_yellow);
+
+                    } else {
+                        InDb[0] =false;
+                        star.setImageResource(R.drawable.star_black);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(JustifyTextView.this.getContext(), "失敗", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                    Log.e("WordListActivity", "Failed with error: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Read data error: " + databaseError.getMessage());
+            }
+        });
+        return InDb[0];
+
+    }
 
 }

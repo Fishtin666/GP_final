@@ -14,11 +14,22 @@ import java.util.stream.IntStream;
 
 public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningViewHolder> {
 
+    public String getDefinitionsText;
     private List<WordResult.Meaning> meaningList;
+    public static String definitionsText;
 
     public MeaningAdapter(List<WordResult.Meaning> meaningList) {
         this.meaningList = meaningList;
     }
+
+    public String getDefinitionsText() {
+        return definitionsText;
+    }
+
+    public void setDefinitionsText(String definitionsText) {
+        this.definitionsText = definitionsText;
+    }
+
 
     public static class MeaningViewHolder extends RecyclerView.ViewHolder {
 
@@ -31,7 +42,8 @@ public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningV
 
         public void bind(WordResult.Meaning meaning) {
             binding.partOfSpeechTextview.setText(meaning.partOfSpeech);
-           // binding.definitionsTextview.setText(joinDefinitions(meaning.definitions);
+            //binding.definitionsTextview.setText(joinDefinitions(meaning.definitions);
+            //List<Definition> definitionsList = Definition.;
             binding.definitionsTextview.setText(
                     TextUtils.join("\n\n",
                             IntStream.range(0, meaning.definitions.size())
@@ -39,6 +51,7 @@ public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningV
                                     .toArray(String[]::new)
                     )
             );
+            definitionsText=binding.definitionsTextview.getText().toString();
             if (meaning.synonyms.isEmpty()) {
                 binding.synonymsTitleTextview.setVisibility(View.GONE);
                 binding.synonymsTextview.setVisibility(View.GONE);
@@ -77,6 +90,10 @@ public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningV
             }
             return builder.toString();
         }
+
+        public String getDefinitionsText() {
+            return definitionsText;
+        }
     }
 
     public void updateNewData(List<WordResult.Meaning> newMeaningList) {
@@ -98,5 +115,13 @@ public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningV
     @Override
     public int getItemCount() {
         return meaningList.size();
+    }
+
+    public List<WordResult.Meaning> getMeaningList() {
+        return meaningList;
+    }
+
+    public void setMeaningList(List<WordResult.Meaning> meaningList) {
+        this.meaningList = meaningList;
     }
 }

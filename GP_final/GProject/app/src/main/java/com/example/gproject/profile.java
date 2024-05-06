@@ -34,7 +34,7 @@ import java.lang.reflect.Array;
 public class profile extends AppCompatActivity {
     Button logout,jump;
     ImageButton back;
-    TextView email,Uid,w_done,l_done,s_done,r_done;
+    TextView email,Uid,w_done,l_done,s_done,r_done,voc;
     private ProgressBar w_progressBar,s_progressBar,l_progressBar,r_progressBar,voc_progressBar;
 
     int documentCount=0;
@@ -61,6 +61,7 @@ public class profile extends AppCompatActivity {
         l_done = findViewById(R.id.listening_done);
         s_done = findViewById(R.id.speaking_done);
         r_done = findViewById(R.id.reading_done);
+        voc = findViewById(R.id.voc);
 
         jump = findViewById(R.id.button6);
         jump.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +100,7 @@ public class profile extends AppCompatActivity {
         }
 
         db = FirebaseFirestore.getInstance();
+        getWordLevel();
         getDocNum("Writing");
         getDocNum("Writing2");
 
@@ -236,4 +238,53 @@ public class profile extends AppCompatActivity {
         }
     }
 
+    public void getWordLevel(){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            DatabaseReference targetRef = databaseReference
+                    .child("word_Level")
+                    .child(userId);
+            //String answersPath = "word_Level/" + userId;
+
+            targetRef.orderByKey().equalTo("WordLevel").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+
+
+                            Object value = childSnapshot.getValue();
+                            String word_level=String.valueOf(value);
+                            voc.setText(word_level);
+                            if(word_level.equals("A"))
+                                voc_progressBar.setProgress(33);
+                            else if (word_level.equals("B"))
+                                voc_progressBar.setProgress(66);
+                            else
+                                voc_progressBar.setProgress(100);
+
+
+
+
+                        }
+                    } else {
+                        Toast.makeText(profile.this, "未搜尋到db", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+
+            });
+
+        }
+        }
 }
+
