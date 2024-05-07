@@ -17,21 +17,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class R_judge extends AppCompatActivity {
     private static final String TAG = "R_judge"; // 用你的类名替代 YourClassName
+
+    String ReviewName = "R_judge";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_judge);
 
-        int number = getIntent().getIntExtra("ChoseNumber", 0);
+        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference documentRef = db.collection("R_judge").document(String.valueOf(number));
+        DocumentReference documentRef = db.collection("R_judge").document(String.valueOf(Dnumber));
+
         // 假設要抓取的欄位數量
         int numberOfFields = 5;
 
@@ -64,14 +78,15 @@ public class R_judge extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-
+                                long currentTime = System.currentTimeMillis();
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                                    EditText editText = findViewById(ansId);
+                                    String editTextValue = editText.getText().toString().trim();
 
+                                    saveReviewData(Dnumber, currentTime, ansName, editTextValue);
                                     if (document.contains(ansName)) {
-                                        EditText editText = findViewById(ansId);
-                                        String editTextValue = editText.getText().toString().trim();
 
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
@@ -187,5 +202,38 @@ public class R_judge extends AppCompatActivity {
         } else {
             Log.e(TAG, "OptTextView is null for cul: " + cul);
         }
+    }
+    // save Review data
+    public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference root = db.getReference("R_Review");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review").child(ReviewName);
+        String userId = user.getUid();
+        String D_ID = String.valueOf(documentID);
+//        String A_cul = String.valueOf(cul);
+        R_ReviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                long currentTime = System.currentTimeMillis();
+
+                if (user != null) {
+                    Date date = new Date(currentTime);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String formattedDate = sdf.format(date);
+                    root.child(ReviewName).child(userId).child(D_ID).child(formattedDate).child(cul).setValue(ans);
+                } else {
+                    Log.e(ReviewName, "review save data failed");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("R_match", "review save data failed 2");
+            }
+        });
+
     }
 }

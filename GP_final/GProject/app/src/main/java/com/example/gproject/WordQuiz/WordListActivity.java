@@ -40,9 +40,11 @@ public class WordListActivity extends AppCompatActivity {
         setContentView(R.layout.pra_word);
 
         Button send = findViewById(R.id.wordSend);
-        send.setVisibility(View.INVISIBLE);
-//        TextView testWord=findViewById(R.id.testWord);
-//        testWord.setVisibility(View.INVISIBLE);
+        send.setVisibility(View.GONE);
+
+        TextView testWord = findViewById(R.id.testWord);
+        testWord.setVisibility(View.GONE);
+
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +77,7 @@ public class WordListActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setCollectWordData() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("word_collect");
@@ -103,6 +106,7 @@ public class WordListActivity extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged(); // refresh RecyclerView
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read data error: " + databaseError.getMessage());
