@@ -6,12 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/test3"
+        android:layout_width="385dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/red"
+        android:onClick="test3Click"
+        android:text="Test 3"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.615"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test2" />
+
+    <Button
+        android:id="@+id/test4"
+        android:layout_width="385dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/red"
+        android:onClick="test4Click"
+        android:text="Test 4"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.615"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test3" />
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=" "
+        android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +73,7 @@
         android:id="@+id/test2"
         android:layout_width="385dp"
         android:layout_height="75dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/red"
         android:onClick="test2Click"
         android:text="Test 2"
@@ -41,6 +81,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.615"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/test1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
