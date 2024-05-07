@@ -25,7 +25,10 @@ public class listen extends AppCompatActivity {
     public void testClick(int buttonIdentifier, Class<?> activityClass) {
         Bundle bundle = new Bundle();
         bundle.putInt("L_test",buttonIdentifier);
-        Log.d("TAG", "L_test value: " + buttonIdentifier);
+        bundle.putInt("L_section",1);
+        bundle.putInt("Qcount",1);
+
+        Log.d("TAG", "choose L_test value: " + buttonIdentifier);
         // 创建一个 Intent 对象，用于启动新的 Activity
         Intent intent = new Intent(this, activityClass);
         intent.putExtras(bundle);

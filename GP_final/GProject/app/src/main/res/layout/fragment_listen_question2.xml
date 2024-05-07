@@ -15,56 +15,160 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/ans"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                tools:layout_editor_absoluteX="66dp"
+                tools:layout_editor_absoluteY="872dp" />
+
+            <EditText
+                android:id="@+id/ans41"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                tools:layout_editor_absoluteX="66dp"
+                tools:layout_editor_absoluteY="990dp" />
+
             <TextView
-                android:id="@+id/q5"
+                android:id="@+id/q"
                 android:layout_width="30dp"
                 android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="30dp"
+                android:text="10 ."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="996dp" />
+
+            <EditText
+                android:id="@+id/ans42"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                tools:layout_editor_absoluteX="62dp"
+                tools:layout_editor_absoluteY="924dp" />
+
+            <TextView
+                android:id="@+id/q41"
+                android:layout_width="30dp"
+                android:layout_height="23dp"
+                android:text="9 ."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="946dp" />
+
+            <EditText
+                android:id="@+id/ans43"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                tools:layout_editor_absoluteX="80dp"
+                tools:layout_editor_absoluteY="801dp" />
+
+            <TextView
+                android:id="@+id/q42"
+                android:layout_width="30dp"
+                android:layout_height="23dp"
+                android:text="7 ."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="802dp" />
+
+            <EditText
+                android:id="@+id/ans44"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                tools:layout_editor_absoluteX="70dp"
+                tools:layout_editor_absoluteY="746dp" />
+
+            <TextView
+                android:id="@+id/q43"
+                android:layout_width="30dp"
+                android:layout_height="23dp"
+                android:text="6 ."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="746dp" />
+
+            <TextView
+                android:id="@+id/q44"
+                android:layout_width="30dp"
+                android:layout_height="23dp"
+                android:text="8 ."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="872dp" />
+
+            <TextView
+                android:id="@+id/q45"
+                android:layout_width="30dp"
+                android:layout_height="23dp"
                 android:text="5 ."
                 android:textAlignment="center"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="695dp" />
 
             <EditText
-                android:id="@+id/ans5"
+                android:id="@+id/ans45"
                 android:layout_width="106dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
                 android:ems="10"
                 android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="@+id/q5"
-                app:layout_constraintStart_toEndOf="@+id/q5"
-                app:layout_constraintTop_toTopOf="@+id/q5"
-                app:layout_constraintVertical_bias="0.607" />
+                tools:layout_editor_absoluteX="70dp"
+                tools:layout_editor_absoluteY="681dp" />
 
             <TextView
-                android:id="@+id/q4"
+                android:id="@+id/q46"
                 android:layout_width="30dp"
                 android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="40dp"
                 android:text="4 ."
                 android:textAlignment="center"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/q5"
-                app:layout_constraintStart_toStartOf="parent" />
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="632dp" />
 
             <EditText
-                android:id="@+id/ans4"
+                android:id="@+id/ans46"
                 android:layout_width="106dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:ems="10"
                 android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="@+id/q4"
-                app:layout_constraintStart_toEndOf="@+id/q4"
-                app:layout_constraintTop_toTopOf="@+id/q4"
-                app:layout_constraintVertical_bias="0.636" />
+                tools:layout_editor_absoluteX="66dp"
+                tools:layout_editor_absoluteY="618dp" />
 
             <TextView
-                android:id="@+id/textView38"
+                android:id="@+id/q47"
+                android:layout_width="30dp"
+                android:layout_height="23dp"
+                android:text="3 ."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="569dp" />
+
+            <EditText
+                android:id="@+id/ans47"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                tools:layout_editor_absoluteX="66dp"
+                tools:layout_editor_absoluteY="553dp" />
+
+            <TextView
+                android:id="@+id/title2"
                 android:layout_width="113dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
@@ -77,21 +181,20 @@
             <com.example.gproject.JustifyTextView2
                 android:id="@+id/Lquestion"
                 android:layout_width="369dp"
-                android:layout_height="106dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="18dp"
                 android:background="@color/gray"
                 android:text="Question"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView38" />
+                app:layout_constraintTop_toBottomOf="@+id/title2" />
 
             <ImageView
                 android:id="@+id/pic"
                 android:layout_width="410dp"
                 android:layout_height="250dp"
                 android:layout_marginTop="12dp"
-                app:layout_constraintBottom_toTopOf="@+id/q"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,79 +202,6 @@
 
             </ImageView>
 
-            <TextView
-                android:id="@+id/q3"
-                android:layout_width="30dp"
-                android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="40dp"
-                android:text="3 ."
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/q4"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <EditText
-                android:id="@+id/ans3"
-                android:layout_width="106dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:ems="10"
-                android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="@+id/q3"
-                app:layout_constraintStart_toEndOf="@+id/q3"
-                app:layout_constraintTop_toTopOf="@+id/q3"
-                app:layout_constraintVertical_bias="0.727" />
-
-            <TextView
-                android:id="@+id/q2"
-                android:layout_width="30dp"
-                android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="40dp"
-                android:text="2 ."
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/q3"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <EditText
-                android:id="@+id/ans2"
-                android:layout_width="106dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:ems="10"
-                android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="@+id/q2"
-                app:layout_constraintStart_toEndOf="@+id/q2"
-                app:layout_constraintTop_toTopOf="@+id/q2"
-                app:layout_constraintVertical_bias="0.454" />
-
-            <TextView
-                android:id="@+id/q"
-                android:layout_width="30dp"
-                android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp"
-                android:text="1 ."
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/q2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pic" />
-
-            <EditText
-                android:id="@+id/ans"
-                android:layout_width="106dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:ems="10"
-                android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="@+id/q"
-                app:layout_constraintStart_toEndOf="@+id/q"
-                app:layout_constraintTop_toTopOf="@+id/q"
-                app:layout_constraintVertical_bias="0.409" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

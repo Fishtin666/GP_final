@@ -16,6 +16,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=" "
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="leaveClick"/>
+
     <TextView
         android:id="@+id/timer1"
         android:layout_width="wrap_content"
@@ -25,7 +38,7 @@
         android:layout_marginBottom="10dp"
         android:text="30:00"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView21"
+        app:layout_constraintBottom_toTopOf="@+id/title"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toBottomOf="@+id/view18" />
 
@@ -33,19 +46,20 @@
         android:id="@+id/imageView5"
         android:layout_width="25dp"
         android:layout_height="22dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toEndOf="@+id/play_Btn"
         app:layout_constraintTop_toBottomOf="@+id/view18"
         app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="40dp"
         android:text="Test1 Section1"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/pre"
         app:layout_constraintTop_toBottomOf="@+id/timer1" />
 
@@ -53,7 +67,7 @@
         android:id="@+id/play_Btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:onClick="audioPlay"
         android:src="@drawable/voice"
@@ -68,7 +82,8 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view18"
-        app:srcCompat="@drawable/arrow" />
+        app:srcCompat="@drawable/arrow"
+        android:onClick="nextClick"/>
 
     <ImageView
         android:id="@+id/pre"
@@ -78,7 +93,8 @@
         android:layout_marginEnd="7dp"
         app:layout_constraintEnd_toStartOf="@+id/next"
         app:layout_constraintTop_toBottomOf="@+id/view18"
-        app:srcCompat="@drawable/arrow_circle_left" />
+        app:srcCompat="@drawable/arrow_circle_left"
+        android:onClick="preClick"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
@@ -97,9 +113,10 @@
         android:id="@+id/button1"
         android:layout_width="57dp"
         android:layout_height="55dp"
-        android:layout_marginStart="125dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/pink"
+        android:backgroundTint="#932D2D"
+        android:onClick="s1Click"
         android:text="1"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -111,9 +128,10 @@
         android:id="@+id/button2"
         android:layout_width="57dp"
         android:layout_height="55dp"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#932D2D"
+        android:onClick="s2Click"
         android:text="2"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -125,9 +143,10 @@
         android:id="@+id/button3"
         android:layout_width="57dp"
         android:layout_height="55dp"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#932D2D"
+        android:onClick="s3Click"
         android:text="3"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -139,9 +158,10 @@
         android:id="@+id/button4"
         android:layout_width="57dp"
         android:layout_height="55dp"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#932D2D"
+        android:onClick="s4Click"
         android:text="4"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -151,14 +171,17 @@
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="25dp"
-        android:backgroundTint="#932D2D"
-        android:onClick="leaveClick"
-        android:text="Leave"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="98dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/pink"
+        android:onClick="finishClick"
+        android:text="DONE"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
