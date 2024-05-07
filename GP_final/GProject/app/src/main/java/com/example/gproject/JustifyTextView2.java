@@ -81,16 +81,6 @@ public class JustifyTextView2 extends AppCompatTextView {
                 //Toast.makeText(getApplicationContext(), "錯誤:"+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
-            if(indic){
-                paint.setColor(customColor);
-                paint.setFakeBoldText(true);  // 设置为粗体
-
-            }else{
-                paint.setColor(Color.BLACK);
-            }
-            System.out.println(paint.getColor());
-
-
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
                     drawScaledText(canvas, lineStart, line, width,paint);
@@ -108,13 +98,6 @@ public class JustifyTextView2 extends AppCompatTextView {
         }
 
     }
-
-
-
-
-
-
-
 
     private void drawScaledText(Canvas canvas, int lineStart, String line, float lineWidth,Paint paint) {
         float x = 38;
@@ -146,8 +129,6 @@ public class JustifyTextView2 extends AppCompatTextView {
             x += cw + d;
         }
     }
-
-
 
     private boolean isFirstLineOfParagraph(int lineStart, String line) {
         return line.length() > 3 && line.charAt(0) == ' '
