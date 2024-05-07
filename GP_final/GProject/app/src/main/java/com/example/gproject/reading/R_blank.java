@@ -64,8 +64,8 @@ public class R_blank extends AppCompatActivity {
 
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
-                                        Log.e("mattttt", firestoreValue);
-                                        Log.e("mattttt2", editTextValue);
+                                        Log.e("blank", firestoreValue);
+                                        Log.e("blank", editTextValue);
                                         // compare the value of EditText and Firestore's colum
                                         if (!editTextValue.equals(firestoreValue)) {
                                             //mark incorrect answer
@@ -85,6 +85,7 @@ public class R_blank extends AppCompatActivity {
 
             }
         });
+
         ScrollView scrollView = findViewById(R.id.scrollView);
         scrollView.post(new Runnable() {
             @Override
@@ -92,6 +93,7 @@ public class R_blank extends AppCompatActivity {
                 scrollView.fullScroll(View.FOCUS_UP);
             }
         });
+
         try {
             scrollView.fullScroll(ScrollView.FOCUS_UP);
             //set value

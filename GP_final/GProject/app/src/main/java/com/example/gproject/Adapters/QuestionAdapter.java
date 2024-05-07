@@ -47,9 +47,17 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
             @Override
             public void onClick(View view) {
                 if(model.getPart()==1){
+                    //Intent intent =new Intent(context, Speaking_part1_answer.class);
+                    int position = holder.getAdapterPosition();
+                    Bundle bundle=new Bundle();
                     Intent intent =new Intent(context, Speaking_part1_answer.class);
-                    intent.putExtra("question",model.getQuestion());
+                    bundle.putString("question",model.getQuestion());
+                    bundle.putString("num",String.valueOf(position+1));
+                    bundle.putString("topic",model.getTopic());
+                    intent.putExtras(bundle);
                     context.startActivity(intent);
+                    //intent.putExtra("question",model.getQuestion());
+
                 } else if (model.getPart()==2) {
                     int position = holder.getAdapterPosition();
                     Bundle bundle=new Bundle();

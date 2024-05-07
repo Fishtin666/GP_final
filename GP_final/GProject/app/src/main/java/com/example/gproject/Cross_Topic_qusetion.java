@@ -2,12 +2,15 @@ package com.example.gproject;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.gproject.MainActivity.apiKey;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -16,6 +19,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,8 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
     FirebaseAuth auth;
     Button start;
     JustifyTextView Result;
+    ImageButton back;
+    ImageView home;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -71,6 +78,8 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
         start = findViewById(R.id.start_CrossTopic);
         Result = findViewById(R.id.result);
         Result.setMovementMethod(new ScrollingMovementMethod());
+        back = findViewById(R.id.back2);
+        home = findViewById(R.id.home2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -121,6 +130,14 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
                     }
                 });
 
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,6 +157,10 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void homeClick(View view){
+        startActivity(new Intent(Cross_Topic_qusetion.this,MainActivity.class));
     }
 
     public void callAPI(String question) {
@@ -170,7 +191,7 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer "+apiKey)
                 .post(body)
                 .build();
 

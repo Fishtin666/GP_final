@@ -2,6 +2,7 @@ package com.example.gproject.WordCard;
 
 import static java.util.Collections.emptyList;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -21,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gproject.R;
-import com.example.gproject.WordListActivity;
+import com.example.gproject.WordQuiz.WordListActivity;
 import com.example.gproject.Adapters.WordListData;
 import com.example.gproject.databinding.AddCardActivityBinding;
 import com.example.gproject.meaning.DictionaryApi;
@@ -109,13 +110,14 @@ public class WordCardActivity extends AppCompatActivity implements TextToSpeech.
 
         // word TouchListener
         flashcardQuestion.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
             }
         });
 
-        // User can tap on question to see answer
+        // User can tap on word to see meaning
         flashcardQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +148,7 @@ public class WordCardActivity extends AppCompatActivity implements TextToSpeech.
             }
         });
 
-        // User can tap on answer to toggle back to question
+        // User can tap on meaning to toggle back to word
         MeaningAdapter.setOnItemClickListener(new MeaningAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -190,7 +192,6 @@ public class WordCardActivity extends AppCompatActivity implements TextToSpeech.
             Log.e("TextToSpeech", "Initialization failed");
         }
     }
-
     @Override
     protected void onDestroy() {
         // release TextToSpeech resource

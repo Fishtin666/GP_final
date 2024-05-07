@@ -17,7 +17,6 @@ import com.example.gproject.reading.R_topic;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChoseTestActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

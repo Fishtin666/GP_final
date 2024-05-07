@@ -1,5 +1,7 @@
 package com.example.gproject.reading;
 
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,35 +10,57 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.gproject.JustifyTextView;
+import com.example.gproject.JustifyTextView2;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 public class R_match extends AppCompatActivity {
     private static final String TAG = "R_match";
+    private String ReviewName = "R_match";
+    // 假設要抓取的欄位數量
+    int numberOfFields = 5;
 
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_match);
+        HideCorrectAns();
 
-        int number = getIntent().getIntExtra("ChoseNumber", 0);
+        //get Document ID
+        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference documentRef = db.collection("R_match").document(String.valueOf(number));
-        // 假設要抓取的欄位數量
-        int numberOfFields = 5;
+        DocumentReference documentRef = db.collection("R_match").document(String.valueOf(Dnumber));
 
+
+        //back button
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +70,8 @@ public class R_match extends AppCompatActivity {
                 finish();
             }
         });
+
+        // send n correct answer
         Button send = findViewById(R.id.sendAns);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,28 +82,42 @@ public class R_match extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                long currentTime = System.currentTimeMillis();
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                                    EditText editText = findViewById(ansId);
+                                    String editTextValue = editText.getText().toString().trim();
 
+                                    saveReviewData(Dnumber, currentTime, ansName, editTextValue);
+                                    List<String> incorrectAnswers = new ArrayList<>();
                                     if (document.contains(ansName)) {
-                                        EditText editText = findViewById(ansId);
-                                        String editTextValue = editText.getText().toString().trim();
-
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
-                                        Log.e("mattttt", firestoreValue);
-                                        Log.e("mattttt2", editTextValue);
+                                        Log.e("correct", "A：" + firestoreValue);
+
                                         // compare the value of EditText and Firestore's colum
                                         if (!editTextValue.equals(firestoreValue)) {
                                             //mark incorrect answer
                                             editText.setTextColor(Color.RED);
+                                            // add the incorrect answer to the list
+                                            incorrectAnswers.add(firestoreValue);
+
+                                        }else {
+                                            incorrectAnswers.add("");
                                         }
                                     }
+                                    for (String incorrectAnswer : incorrectAnswers) {
+                                        // only call SetCorrectAns if the answer is incorrect
+                                        Log.e("correct", "A：" + incorrectAnswer);
+                                    }
+                                    if (!incorrectAnswers.isEmpty()) {
+                                        SetCorrectAns(incorrectAnswers);
+                                    }
                                 }
+
                             } else {
                                 Log.d(TAG, "No such document");
-                                // Firestore 中不存在文档时，您可以在此处进行其他操作，比如显示一条消息
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -114,6 +154,7 @@ public class R_match extends AppCompatActivity {
                                 }
                                 TextView ContentTextView = findViewById(R.id.Content);
                                 ContentTextView.setText(combinedContent.toString());
+
                                 //set section
                                 String section1 = document.getString("section1");
                                 String[] splitSec = section1.split("\\.");
@@ -123,6 +164,7 @@ public class R_match extends AppCompatActivity {
                                 }
                                 TextView SecTextView = findViewById(R.id.section1);
                                 SecTextView.setText(combinedSec.toString());
+
                                 //set match
                                 String match = document.getString("match");
                                 String[] splitMatch = match.split("\\.");
@@ -238,6 +280,63 @@ public class R_match extends AppCompatActivity {
             titleTextview.setText(que);
         } else {
             Log.e(TAG, "OptTextView is null for cul: " + cul);
+        }
+    }
+
+    // save Review data
+    public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference root = db.getReference("R_Review");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review").child(ReviewName);
+        String userId = user.getUid();
+        String D_ID = String.valueOf(documentID);
+//        String A_cul = String.valueOf(cul);
+        R_ReviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                long currentTime = System.currentTimeMillis();
+
+                if (user != null) {
+                    Date date = new Date(currentTime);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String formattedDate = sdf.format(date);
+                    root.child(ReviewName).child(userId).child(D_ID).child(formattedDate).child(cul).setValue(ans);
+                } else {
+                    Log.e(ReviewName, "review save data failed");
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("R_match", "review save data failed 2");
+            }
+        });
+
+    }
+
+    public void HideCorrectAns() {
+        for (int i = 0; i < numberOfFields; i++) {
+            String correctName = "c" + (i + 1);
+            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+            TextView textC = findViewById(correctID);
+            textC.setVisibility(View.GONE);
+        }
+    }
+
+    public void SetCorrectAns(List<String> correctList) {
+        for (int i = 0; i < numberOfFields; i++) {
+            String correct = correctList.get(i);
+            String correctName = "c" + (i + 1);
+            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+            TextView textC = findViewById(correctID);
+            textC.setVisibility(View.VISIBLE);
+
+            if (correct != null) {
+                textC.setText(correct);
+            } else {
+                textC.setText(""); // 如果答案正确，将文本设置为空
+            }
         }
     }
 }

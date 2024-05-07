@@ -25,11 +25,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,9 +41,20 @@ import com.example.gproject.AiTeacher.Cross_Topic;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.example.gproject.meaning.DataHolder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class JustifyTextView extends AppCompatTextView {
@@ -49,17 +62,34 @@ public class JustifyTextView extends AppCompatTextView {
     private int mLineY;
     private int mViewWidth;
     public static final String TWO_CHINESE_BLANK = " ";
-    Boolean indic=false;
+    Boolean indic=true;
+    TextToSpeech tts;
 
     MeaningAdapter adapter;
+    private DatabaseReference databaseReference;
+
+    FirebaseAuth auth;
 
 
     public JustifyTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         int paddingPx = dpToPx(context, 40); // Convert dp to pixels
         setPadding(0, 0, 0, paddingPx);
+        initializeTextToSpeech(context);
     }
 
+    private void initializeTextToSpeech(Context context) {
+        tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.UK);
+                } else {
+                    Log.e("TTS", "TextToSpeech initialization failed");
+                }
+            }
+        });
+    }
 
 
 
@@ -79,7 +109,6 @@ public class JustifyTextView extends AppCompatTextView {
         mLayout = getLayout();
         if (mLayout == null) return;
         TextPaint paint = getPaint();
-        paint.setColor(getCurrentTextColor());
         paint.drawableState = getDrawableState();
         //mViewWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight(); // 計算可用於繪製文本的寬度，扣除了左右的內邊距
         mViewWidth=getMeasuredWidth()-76;
@@ -109,32 +138,37 @@ public class JustifyTextView extends AppCompatTextView {
 
             int customColor = Color.rgb(120, 59, 55);
 
-            if(InDic(line_new)){
-                paint.setColor(customColor);
-                paint.setFakeBoldText(true);  // 设置为粗体
-            }else{
-                paint.setColor(Color.GREEN);
-                paint.setFakeBoldText(true);
+            try {
+                retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(line_new);
+                retrofit2.Response<List<WordResult>> response = call.execute();
+                if (response.body() == null) {
+                    indic = false;
+                }else indic = true;
+
+            } catch (Exception e) {
+                //Toast.makeText(getApplicationContext(), "錯誤:"+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
+            if(indic){
+                paint.setColor(customColor);
+                paint.setFakeBoldText(true);  // 设置为粗体
+
+            }else{
+                paint.setColor(Color.BLACK);
+            }
+            System.out.println(paint.getColor());
 
 
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
-                    Paint p=getPaint();
-                    if(InDic(line)){
-                        p.setColor(customColor);
-                    }else
-                        p.setColor(Color.BLACK);
-                    drawScaledText(canvas, lineStart, line, width,p);
+                    drawScaledText(canvas, lineStart, line, width,paint);
                 } else {
                     canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
 
-
                 }
             } else {
-                canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
 
+                canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
 
             }
             mLineY += textHeight;
@@ -213,11 +247,11 @@ public class JustifyTextView extends AppCompatTextView {
 
                     if (wordStart != -1 && wordEnd != -1) {
                         CharSequence selectedWord = text.subSequence(wordStart, wordEnd);
-                        String word = selectedWord.toString();
+                        String Word = selectedWord.toString();
 
                         // 使用正则表达式匹配只含有英文字母的部分
-                        word = word.replaceAll("[^a-zA-Z]", "");
-                        showToast(selectedWord.toString());
+                        String word = Word.replaceAll("[^a-zA-Z]", "");
+                        showToast(word.toString());
 
 
 
@@ -228,14 +262,15 @@ public class JustifyTextView extends AppCompatTextView {
                         int height = 1200;
                         boolean focusable = true; // 让PopupWindow在失去焦点时自动关闭
                         PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-                        popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
+                        //popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
 
                         // 设置PopupWindow的内容
                         TextView voc = popupView.findViewById(R.id.Voc);
                         TextView phonetic = popupView.findViewById(R.id.phonetics);
                         voc.setText(word);
-                        getMeaning(word,phonetic);
-
+                        if(InDic(word)) {
+                            getMeaning(word, phonetic);
+                        }
                         //dic adapter
                         RecyclerView meaningRecyclerView=popupView.findViewById(R.id.meaningRecyclerView);
                         adapter = new MeaningAdapter(Collections.emptyList());
@@ -244,10 +279,11 @@ public class JustifyTextView extends AppCompatTextView {
                         meaningRecyclerView.setLayoutManager(layoutManager);
                         //voice
                         ImageButton voice = popupView.findViewById(R.id.voice);
+                        voice.setImageResource(R.drawable.voice2);
                         voice.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //tts.speak(selectedWord, TextToSpeech.QUEUE_FLUSH, null);
+                                tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
 
                             }
                         });
@@ -259,7 +295,28 @@ public class JustifyTextView extends AppCompatTextView {
 
                             }
                         });
-                        popupWindow.showAsDropDown(this, 0, 0);
+
+                        ImageView star = popupView.findViewById(R.id.star);
+                        boolean star_yellow=in_db(word,star);
+                        star.setOnClickListener(new View.OnClickListener() {
+                            boolean star_yellow=in_db(word,star);
+                            @Override
+                            public void onClick(View v) {
+                                if (star_yellow) {
+                                    star.setImageResource(R.drawable.star_black);
+                                    star_yellow = false;
+                                    voc_delete_db(word);
+                                } else {
+                                    star.setImageResource(R.drawable.star_yellow);
+                                    star_yellow = true;
+                                    voc_insert_db(word,adapter,phonetic.getText().toString(),0);
+                                }
+
+
+                            }
+                        });
+                        if(InDic(word))
+                            popupWindow.showAtLocation(this,  Gravity.CENTER, 0, 0);
 
                         return true;
                     }
@@ -295,32 +352,7 @@ public class JustifyTextView extends AppCompatTextView {
         }
     }
 
-    @Override
-    public void setText(CharSequence text, BufferType type) {
-        super.setText(text, type);
 
-        // Apply custom formatting after setting the text
-        if (text instanceof String) {
-            String cross_answer = (String) text;
-            SpannableString spannableString = new SpannableString(cross_answer);
-            String[] words = getWordsList(cross_answer);
-
-            for (String word : words) {
-                if (!InDic(word)) {
-                    int startIndex = cross_answer.indexOf(word);
-                    int endIndex = startIndex + word.length();
-                    int customColor = Color.rgb(120, 59, 55);
-
-                    // Apply custom spans
-                    spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    spannableString.setSpan(new ForegroundColorSpan(customColor), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
-            // Set the formatted text to the view
-            super.setText(spannableString, type);
-        }
-    }
 
     private String[] getWordsList(String text) {
         StringTokenizer tokenizer = new StringTokenizer(text, " \t\n\r\f,.?!;:\"");
@@ -340,6 +372,8 @@ public class JustifyTextView extends AppCompatTextView {
                 try {
                     retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(word);
                     retrofit2.Response<List<WordResult>> response = call.execute();
+
+
 
                     if (response.body() == null) {
                         indic = false;
@@ -401,6 +435,103 @@ public class JustifyTextView extends AppCompatTextView {
         adapter.updateNewData(response.getMeanings());
     }
 
+    public void voc_insert_db(String word, MeaningAdapter adapter,String phonetic,int count){
+        String definitionsText="";
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
 
+
+        definitionsText=adapter.getDefinitionsText();
+        DataHolder obj = new DataHolder(definitionsText, phonetic, 0);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.setValue(obj)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(JustifyTextView.this.getContext(), "成功新增", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(JustifyTextView.this.getContext(), "新增失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void voc_delete_db(String word){
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(JustifyTextView.this.getContext(), "成功刪除", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(JustifyTextView.this.getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public boolean in_db(String word,ImageView star){
+        final boolean[] InDb = {false};
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference root = db.getReference("word_collect");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = user.getUid();
+        root.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    boolean isCollected = dataSnapshot.hasChild(word);
+                    if (isCollected) {
+                        InDb[0] =true;
+                        star.setImageResource(R.drawable.star_yellow);
+
+                    } else {
+                        InDb[0] =false;
+                        star.setImageResource(R.drawable.star_black);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(JustifyTextView.this.getContext(), "失敗", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                    Log.e("WordListActivity", "Failed with error: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Read data error: " + databaseError.getMessage());
+            }
+        });
+        return InDb[0];
+
+    }
 
 }

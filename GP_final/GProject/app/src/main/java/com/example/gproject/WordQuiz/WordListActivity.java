@@ -1,4 +1,4 @@
-package com.example.gproject;
+package com.example.gproject.WordQuiz;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,15 +6,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gproject.R;
 import com.example.gproject.WordCard.WordCardActivity;
 import com.example.gproject.Adapters.WordListAdapter;
 import com.example.gproject.Adapters.WordListData;
-import com.example.gproject.reading.R_topic;
+import com.example.gproject.WordCard.WordTopicActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,13 +40,16 @@ public class WordListActivity extends AppCompatActivity {
         setContentView(R.layout.pra_word);
 
         Button send = findViewById(R.id.wordSend);
-        send.setVisibility(View.INVISIBLE);
+        send.setVisibility(View.GONE);
+
+        TextView testWord = findViewById(R.id.testWord);
+        testWord.setVisibility(View.GONE);
 
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WordListActivity.this, R_topic.class);
+                Intent intent = new Intent(WordListActivity.this, WordTopicActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -72,6 +77,7 @@ public class WordListActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setCollectWordData() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("word_collect");
@@ -100,6 +106,7 @@ public class WordListActivity extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged(); // refresh RecyclerView
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read data error: " + databaseError.getMessage());

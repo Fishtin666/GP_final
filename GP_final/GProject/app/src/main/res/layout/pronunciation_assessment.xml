@@ -40,6 +40,8 @@
 
 
 
+
+
     <ImageView
         android:id="@+id/help"
         android:layout_width="30dp"
@@ -51,17 +53,7 @@
         app:layout_constraintTop_toTopOf="@+id/title"
         android:background="@drawable/help" />
 
-    <ImageView
-        android:id="@+id/home"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="10dp"
-        android:onClick="homeClick"
-        android:src="@drawable/home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view15" />
+
 
     <TextView
         android:id="@+id/title"
@@ -75,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view15" />
 
-    <TextView
+    <com.example.gproject.JustifyTextView4
         android:id="@+id/article1"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -84,7 +76,7 @@
         android:layout_marginEnd="8dp"
         android:background="@color/gray"
         android:padding="10dp"
-        android:text="What course or major are you currently studying?"
+        android:text="It took me a long time to learn where he came from."
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,6 +88,30 @@
         android:layout_height="60dp"
         android:background="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/home"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="10dp"
+        android:onClick="homeClick"
+        android:src="@drawable/home2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view15" />
+
+    <ImageButton
+        android:id="@+id/back2"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=""
+        android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

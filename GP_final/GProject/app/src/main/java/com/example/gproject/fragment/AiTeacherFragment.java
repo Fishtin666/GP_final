@@ -77,19 +77,11 @@ public class AiTeacherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_ai_teacher2, container, false);
-        TextView speaking = rootView.findViewById(R.id.speaking);
         TextView crossTopic = rootView.findViewById(R.id.CrossTopic);
         TextView aiChat = rootView.findViewById(R.id.AiChat);
 
 
-        speaking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getContext(), AiSpeakingTest.class);
-                startActivity(intent);
 
-            }
-        });
 
         crossTopic.setOnClickListener(new View.OnClickListener() {
             @Override

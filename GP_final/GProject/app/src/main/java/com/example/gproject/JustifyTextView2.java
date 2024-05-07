@@ -2,6 +2,7 @@ package com.example.gproject;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -9,13 +10,17 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
-/**
- * 解决文字排版混乱参差不齐的问题
- */
-public class JustifyTextView2 extends AppCompatTextView {
 
+import com.example.gproject.dictionary.RetrofitInstance;
+import com.example.gproject.dictionary.WordResult;
+
+import java.util.List;
+
+public class JustifyTextView2 extends AppCompatTextView {
+    private Layout mLayout;
     private int mLineY;
     private int mViewWidth;
+    Boolean indic=true;
     public static final String TWO_CHINESE_BLANK = " ";
 
     public JustifyTextView2(Context context, AttributeSet attrs) {
@@ -27,18 +32,24 @@ public class JustifyTextView2 extends AppCompatTextView {
         super.onLayout(changed, left, top, right, bottom);
     }
 
+    public static int dpToPx(Context context, float dpValue) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * density + 0.5f); // Cast the result to int
+    }
     @Override
     protected void onDraw(Canvas canvas) {
+        mLayout = getLayout();
+        if (mLayout == null) return;
         TextPaint paint = getPaint();
-        paint.setColor(getCurrentTextColor());
         paint.drawableState = getDrawableState();
-        mViewWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight(); // 考虑到左右的 padding
+        //mViewWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight(); // 計算可用於繪製文本的寬度，扣除了左右的內邊距
+        mViewWidth=getMeasuredWidth()-76;
         String text = getText().toString();
         mLineY = 0;
-        mLineY += getTextSize();
+        mLineY += getTextSize() + 38;
         Layout layout = getLayout();
 
-        // layout.getLayout()在4.4.3出现NullPointerException
+
         if (layout == null) {
             return;
         }
@@ -55,25 +66,61 @@ public class JustifyTextView2 extends AppCompatTextView {
             float width = StaticLayout.getDesiredWidth(text, lineStart,
                     lineEnd, getPaint());
             String line = text.substring(lineStart, lineEnd);
+            String line_new=line.replaceAll("[^a-zA-Z]", "");
+
+            int customColor = Color.rgb(120, 59, 55);
+
+            try {
+                retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(line_new);
+                retrofit2.Response<List<WordResult>> response = call.execute();
+//                if (response.body() == null) {
+//                    indic = false;
+//                }else indic = true;
+
+            } catch (Exception e) {
+                //Toast.makeText(getApplicationContext(), "錯誤:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+//            if(indic){
+//                //paint.setColor(customColor);
+//                paint.setFakeBoldText(true);  // 设置为粗体
+//
+//            }else{
+//                paint.setColor(Color.BLACK);
+//            }
+//            System.out.println(paint.getColor());
+
 
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
-                    drawScaledText(canvas, lineStart, line, width);
+                    drawScaledText(canvas, lineStart, line, width,paint);
                 } else {
-                    canvas.drawText(line, getPaddingLeft(), mLineY, paint);
+                    canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
+
                 }
             } else {
-                canvas.drawText(line, getPaddingLeft(), mLineY, paint);
+
+                canvas.drawText(line, getPaddingLeft()+38, mLineY, paint);
+
             }
             mLineY += textHeight;
+
         }
+
     }
 
-    private void drawScaledText(Canvas canvas, int lineStart, String line, float lineWidth) {
-        float x = 0;
+
+
+
+
+
+
+
+    private void drawScaledText(Canvas canvas, int lineStart, String line, float lineWidth,Paint paint) {
+        float x = 38;
         if (isFirstLineOfParagraph(lineStart, line)) {
             String blanks = " ";
-            canvas.drawText(blanks, x, mLineY, getPaint());
+            canvas.drawText(blanks, x, mLineY, paint);
             float bw = StaticLayout.getDesiredWidth(blanks, getPaint());
             x += bw;
 
@@ -99,6 +146,8 @@ public class JustifyTextView2 extends AppCompatTextView {
             x += cw + d;
         }
     }
+
+
 
     private boolean isFirstLineOfParagraph(int lineStart, String line) {
         return line.length() > 3 && line.charAt(0) == ' '

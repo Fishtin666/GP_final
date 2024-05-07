@@ -133,7 +133,7 @@
         android:id="@+id/title8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="按下後會跳出回答範例\n點選範例句子即可使用\n(*如欲使用範例，需發\n音評定分數超過70分)"
+        android:text="按下後會跳出回答範例\n點選範例句子即可使用\n(* 如欲使用範例，需發\n音評定分數超過70分)"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/lightbulb"
         app:layout_constraintEnd_toEndOf="parent"

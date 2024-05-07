@@ -2,6 +2,8 @@ package com.example.gproject.AiTeacher;
 
 import static android.content.ContentValues.TAG;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -71,6 +73,7 @@ public class Cross_Topic extends AppCompatActivity {
     String selectedWord;
     String[] words;
     Boolean indic=false;
+    ImageButton back;
 
     TextToSpeech tts;
     private PopupWindow popupWindow;
@@ -95,6 +98,7 @@ public class Cross_Topic extends AppCompatActivity {
         //voice = findViewById(R.id.voice);
         start = findViewById(R.id.start_CrossTopic);
         cross_result = findViewById(R.id.result);
+        back = findViewById(R.id.back2);
 
         cross_result.setMovementMethod(new ScrollingMovementMethod());
 
@@ -126,7 +130,12 @@ public class Cross_Topic extends AppCompatActivity {
         messages.put(systemMessage);
 
 
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
 
@@ -209,6 +218,8 @@ public class Cross_Topic extends AppCompatActivity {
 
 
     }
+
+
 
      //找到點擊的單字
     private String findSelectedWord(String[] words, int index) {
@@ -320,6 +331,8 @@ public class Cross_Topic extends AppCompatActivity {
     }
 
 
+
+
     public void homeClick(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -362,7 +375,7 @@ public class Cross_Topic extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer ")
                 .post(body)
                 .build();
 

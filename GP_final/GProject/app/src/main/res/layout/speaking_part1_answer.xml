@@ -7,16 +7,7 @@
     app:circularflow_radiusInDP="10"
     tools:context=".Speaking.Speaking_part1_answer">
 
-    <ImageView
-        android:id="@+id/home"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
-        android:onClick="homeClick"
-        android:src="@drawable/home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
@@ -177,15 +168,30 @@
         app:layout_constraintTop_toTopOf="@+id/Voice"
         android:progressTint="@color/red"/>
 
+
+
+    <ImageView
+        android:id="@+id/home"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:onClick="homeClick"
+        android:src="@drawable/home2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
-        android:id="@+id/dic"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:background="#00000000"
+        android:id="@+id/back2"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=""
+        android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Answer"
-        app:srcCompat="@drawable/dic" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

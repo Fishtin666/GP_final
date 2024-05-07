@@ -6,6 +6,7 @@ import static android.Manifest.permission.RECORD_AUDIO;
 import static android.content.ContentValues.TAG;
 
 import static com.example.gproject.Adapters.QuestionNumberAdapter.sharedString;
+import static com.example.gproject.MainActivity.apiKey;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -54,9 +55,17 @@ import com.example.gproject.Message;
 import com.example.gproject.MessageAdapter;
 import com.example.gproject.MicrophoneStream;
 import com.example.gproject.R;
+import com.example.gproject.Writing.W_Judge_P1;
+import com.example.gproject.Writing.Writing_T1answer2;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -102,8 +111,11 @@ import okhttp3.Response;
 
 public class Speaking_part1_answer extends AppCompatActivity {
 
-    private static String speechSubscriptionKey = "f8d71f0e97f6438db956ebf642eabf78";
+    private static String speechSubscriptionKey = "031b6e9e93ed4df69bd33327b1daf1d1";
     private static String serviceRegion = "eastus";
+
+    private DatabaseReference databaseReference;
+    FirebaseAuth auth;
 
     public static boolean star_show;
 
@@ -114,9 +126,9 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     String hint_answer,help_answer,selectedWord,judge,ROf_ques;  //hint_answer是一串,help_answer某個提示回答(一個)
 
-    ImageView mic,voice,hint;
+    ImageView mic,voice,hint,home;
 
-    ImageButton dic;
+    ImageButton back;
     TextView answer,question;
     ProgressBar progressBar;
 
@@ -126,6 +138,8 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     TextToSpeech tts;
     private PopupWindow popupWindow,popup;
+
+    String Question,QuesNum,Topic;
 
     SpeechConfig speechConfig;
     public static final MediaType JSON
@@ -165,6 +179,9 @@ public class Speaking_part1_answer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaking_part1_answer);
 
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
@@ -191,19 +208,27 @@ public class Speaking_part1_answer extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         send = findViewById(R.id.Finish);
         retry = findViewById(R.id.Retry);
-        dic = findViewById(R.id.dic);
+//        dic = findViewById(R.id.dic);
 
         progressBar.setVisibility(View.INVISIBLE);
         answer.setMovementMethod(new ScrollingMovementMethod());
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
 
 
-        String Question=getIntent().getStringExtra("question");
+
 
         try {
             int permissionRequestId = 5;
             ActivityCompat.requestPermissions(Speaking_part1_answer.this, new String[]{RECORD_AUDIO, INTERNET, READ_EXTERNAL_STORAGE}, permissionRequestId);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             Log.e("SpeechSDK", "could not init sdk, " + ex);
         }
 
@@ -214,16 +239,18 @@ public class Speaking_part1_answer extends AppCompatActivity {
             speechConfig = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
 
         } catch (Exception ex) {
-            System.out.println("失敗原因:"+ex.getMessage());
+            System.out.println("失敗原因:" + ex.getMessage());
             return;
         }
 
-//        Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            Question=extras.getString("question");
-//            Num =extras.getString("num");
-//
-//        }
+        //String Question = getIntent().getStringExtra("question");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Question=extras.getString("question");
+            QuesNum =extras.getString("num");
+            Topic=extras.getString("topic");
+
+        }
 
 
         int requestCode = 5;
@@ -288,30 +315,18 @@ public class Speaking_part1_answer extends AppCompatActivity {
             star.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   if(star_yellow){
-                       star.setImageResource(R.drawable.star_black);
-                       star_yellow=false;
-                   }else{
-                       star.setImageResource(R.drawable.star_yellow);
-                       star_yellow=true;
-                   }
+                    if (star_yellow) {
+                        star.setImageResource(R.drawable.star_black);
+                        star_yellow = false;
+                    } else {
+                        star.setImageResource(R.drawable.star_yellow);
+                        star_yellow = true;
+                    }
 
 
                 }
             });
 
-        });
-
-        dic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(spanning==false)
-                    spanning=true;
-                else
-                    spanning=false;
-                SpanningString();
-
-            }
         });
     }
     Bundle bundle=new Bundle();
@@ -516,7 +531,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer "+apiKey)
                 .post(body)
                 .build();
 
@@ -581,13 +596,47 @@ public class Speaking_part1_answer extends AppCompatActivity {
     }
 
     public void finishClick(View v){
-//        bundle.putString("question",question.getText().toString());
-//        bundle.putString("answer",answer.getText().toString());
         send.setBackgroundColor(Color.BLACK);
         pass_answer=true;
-        callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+        //將答案存入db
+        FirebaseUser currentUser = auth.getCurrentUser();
 
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = answer.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Speaking")
+                    .child(Topic)
+                    .child(String.valueOf(QuesNum))
+                    .push(); // 使用 push() 生成隨機碼
+
+            String answerKey = userAnswersRef.getKey();
+
+            userAnswersRef.setValue(answerText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                bundle.putString("key",answerKey);
+                                callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
         }
+
+    }
+
+
+
 
     //mic按下
 //    public void micClick(View view){
@@ -615,6 +664,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 //    }
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     public void micClick(View view) {
+        mic.setImageResource(R.drawable.mic_gray);
         if(PA_mic){
 
 
@@ -727,7 +777,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
                     System.out.println("Session stopped.");
                     reco.stopContinuousRecognitionAsync();
-
+                    mic.setImageResource(R.drawable.mic);
                     this.releaseMicrophoneStream();
 
                 });
@@ -757,6 +807,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
                 if (result.getReason() == ResultReason.RecognizedSpeech) {
                     answer.setText(result.getText());
+                    mic.setImageResource(R.drawable.mic);
                 } else {
                     System.out.println("錯誤:" + System.lineSeparator() + result.toString());
                 }

@@ -20,7 +20,7 @@
         android:id="@+id/editText"
         android:layout_width="350dp"
         android:layout_height="150dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rounded_corner"
         android:ems="10"
         android:gravity="top"
@@ -36,12 +36,12 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="請將想串題之題目打於下方方框"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="請將想串題之題目打於下方方框\n或點選右方燈泡選擇題目"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home2" />
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <ImageView
         android:id="@+id/home2"
@@ -50,9 +50,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:onClick="homeClick"
-        android:src="@drawable/home"
+        android:src="@drawable/home2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view" />
+        app:layout_constraintTop_toTopOf="@+id/view" />
 
     <Button
         android:id="@+id/start_CrossTopic"
@@ -72,12 +72,24 @@
         android:id="@+id/hint"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
         android:onClick="hintCLick"
-        app:layout_constraintBottom_toBottomOf="@+id/home2"
-        app:layout_constraintEnd_toStartOf="@+id/home2"
-        app:layout_constraintTop_toTopOf="@+id/home2"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="@+id/title"
         app:srcCompat="@drawable/light_bulb" />
+
+    <ImageButton
+        android:id="@+id/back2"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=""
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="350dp"

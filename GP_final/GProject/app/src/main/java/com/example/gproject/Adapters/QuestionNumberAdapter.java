@@ -88,6 +88,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
                         String numberString = matcher.group();
                         int number = Integer.parseInt(numberString);
                         intent.putExtra("num",number);
+
                     }
                     context.startActivity(intent);
                 } else if (model.getTask()==-1) {

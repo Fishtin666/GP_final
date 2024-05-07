@@ -1,5 +1,7 @@
 package com.example.gproject.Writing;
 
+import static com.example.gproject.MainActivity.apiKey;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,6 +16,12 @@ import android.widget.TextView;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +41,9 @@ import okhttp3.Response;
 public class W_Judge_P1 extends AppCompatActivity {
 
     TextView judge;
-    String Ans,Ques,Part;
+    String Ans,Ques,Part,Key;
+    FirebaseAuth auth;
+    private DatabaseReference databaseReference;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -49,13 +59,15 @@ public class W_Judge_P1 extends AppCompatActivity {
         setContentView(R.layout.w_judge_p1);
         judge = findViewById(R.id.judge);
         judge.setMovementMethod(new ScrollingMovementMethod());
-
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             Ques= extras.getString("Ques");
             Ans= extras.getString("Ans");
-            Part =  extras.getString("Part");
+            Part =  extras.getString("part");
+            Key = extras.getString("pushKey");
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -79,11 +91,44 @@ public class W_Judge_P1 extends AppCompatActivity {
             callAPI("Please check the following article for spelling and grammar, And tell me where is wrong and why.DO NOT repeat my answer.:"+Ans);
         else
             callAPI("The question is:"+Ques+"And my answer is:"+Ans+"  Please check my answer for spelling and grammar and tell me where is wrong and why.If my answer is too short, tell me how to improve it and give me an example.");
+
+
     }
 
     public void homeClick(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void push(){
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String judgeText = judge.getText().toString();
+
+
+
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Judge")
+                    .child("Writing")
+                    .child(Key);
+
+            userAnswersRef.setValue(judgeText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
+
+        }
     }
 
     public void callAPI(String question){
@@ -106,7 +151,7 @@ public class W_Judge_P1 extends AppCompatActivity {
         RequestBody body=RequestBody.create(jsonBody.toString(),JSON);
         Request request =new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer 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")
+                .header("Authorization","Bearer "+apiKey)
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -129,8 +174,9 @@ public class W_Judge_P1 extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 judge.setText(result.trim());
+                                push();
+
                             }
                         });
 
