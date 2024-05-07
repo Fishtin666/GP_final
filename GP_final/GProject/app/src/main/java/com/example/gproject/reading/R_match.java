@@ -306,9 +306,7 @@ public class R_match extends AppCompatActivity {
                 } else {
                     Log.e(ReviewName, "review save data failed");
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("R_match", "review save data failed 2");
