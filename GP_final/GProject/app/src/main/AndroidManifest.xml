@@ -66,39 +66,13 @@
             android:name=".reading.R_topic"
             android:exported="true"/>
 <!---->
-        <activity
-            android:name=".Listening.listen_TTest1_Section4"
-            android:exported="false" />
-        <activity
-            android:name=".Listening.listen_TTest1_Section3"
-            android:exported="false" />
-        <activity
-            android:name=".Listening.listen_TTest1_Section2"
-            android:exported="false" />
 
-        <service
-            android:name=".Listening.TimerService"
-            android:enabled="true"
-            android:exported="true" />
 
-        <activity
-            android:name=".Listening.listen_TTest1_Section1"
-            android:exported="false" />
-        <activity
-            android:name=".Listening.listent_test1_section4"
-            android:exported="false" />
-        <activity
-            android:name=".Listening.listent_test1_section3"
-            android:exported="false" />
-        <activity
-            android:name=".Listening.listent_test1_section2"
-            android:exported="false" />
+
         <activity
             android:name=".Listening.listen_Ans1"
             android:exported="false" />
-        <activity
-            android:name=".Listening.listen_test1_Section1"
-            android:exported="false" />
+
         <activity
             android:name=".Listening.listen"
             android:exported="true"/>
@@ -201,12 +175,10 @@
         <activity
             android:name=".PronunciationAssessment"
             android:exported="true" />
-        <activity
-            android:name=".Listening.listen_ftest1"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" />
         <activity
             android:name=".login.login"
             android:exported="true">
