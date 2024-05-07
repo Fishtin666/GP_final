@@ -98,19 +98,16 @@ public class login extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
-//                                        String wordLevelValue = snapshot.child("wordLevel").getValue(String.class);
-//                                        if ("B".equals(wordLevelValue) || "C".equals(wordLevelValue)) {
-                                            // 如果 word_Level 为 B 或 C，则跳转到 MainActivity
-                                            Intent intent = new Intent(login.this, MainActivity.class);
+
+                                        Intent intent = new Intent(login.this, MainActivity.class);
                                             startActivity(intent);
                                             finish();
-//                                        } else {
-                                            // 否则执行 CheckWordLevel() 方法
-//                                            CheckWordLevel();
-//                                        }
+//
                                     } else {
+
                                         Log.e("login", "User node or word_Level does not exist");
                                         CheckWordLevel();
+
                                     }
                                 }
 

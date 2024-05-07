@@ -26,6 +26,7 @@ import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.Adapters.WordQuizAdapter;
 import com.example.gproject.Adapters.WordQuizData;
+import com.example.gproject.WordCard.WordTopicActivity;
 import com.example.gproject.fragment.WordFragment;
 import com.example.gproject.reading.R_topic;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -85,7 +86,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(LevelAQuizActivity.this, WordFragment.class);
+                        Intent intent = new Intent(LevelAQuizActivity.this, WordTopicActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -154,7 +155,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
         }
     }
 
-    //show dialog
+    //show Level n Score dialog
     public void ShowScoreDialog(int Score, String Level) {
         try {
 
@@ -190,10 +191,12 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 Log.i("dia11", "Gone 13");
             }
 
-//            Log.i("dia11", "show4 " + wordLog);
-
             //set Hint
-            setHint(dialog,Level, wordLog);
+            if(Score<2){
+                setStayHint(dialog,Level);
+            }else {
+                setNextHint(dialog,Level);
+            }
 
             //enter to next part
             Button okButton = dialog.findViewById(R.id.ButOK);
@@ -270,59 +273,36 @@ public class LevelAQuizActivity extends AppCompatActivity {
         }
     }
 
-    //set hint
-    public void setHint(Dialog dialog, String LevelValue, String LevelWord) {
+    //set faild hint
+    public void setStayHint(Dialog dialog, String LevelValue) {
         TextView Hint = dialog.findViewById(R.id.ScoreHint);
-        String combine = LevelValue + LevelWord;
 
-        Log.e("setHint", "show " + combine);
+        if (LevelValue == "A") {
+            Hint.setText("未通過單字等級 A，你的單字能力需加強");
 
-        if (LevelWord.equals("Login")) {
-            if (LevelValue == "A") {
-                Hint.setText("再接再厲，要先提升單字能力才能繼續下一個等級");
+        } else if (LevelValue == "B") {
+            Hint.setText("未通過單字等級 B");
 
-            } else if (LevelValue == "B") {
-                Hint.setText("加油，單字部分還有進步空間");
-
-            } else {
-                Hint.setText("很棒，你已認識大部分單字\n開始使用！");
-
-            }
         } else {
-            if (LevelValue == "A") {
-                Hint.setText("再接再厲，需要加強單字練習！");
+            Hint.setText("未通過單字等級 C");
 
-            } else if (LevelValue == "B") {
-                Hint.setText("加油，單字部分還有進步空間喔！\n");
-
-            } else {
-                Hint.setText("很棒，你的詞彙量非常豐富\n");
-
-            }
         }
-//        switch (combine) {
-//            case "ALogin":
-//                Hint.setText("再接再厲，要先提升單字能力才能繼續下一個等級");
-//                break;
-//            case "BLogin":
-//                Hint.setText("加油，單字部分還有進步空間");
-//                break;
-//            case "CLogin":
-//                Hint.setText("很棒，你已認識大部分單字\n開始使用！");
-//                break;
-//            case "Anull":
-//                Hint.setText("再接再厲，需要加強單字練習！");
-//                break;
-//            case "Bnull":
-//                Hint.setText("加油，單字部分還有進步空間喔！\n");
-//                break;
-//            case "Cnull":
-//                Hint.setText("很棒，你的詞彙量非常豐富\n");
-//                break;
-//            default:
-//                Hint.setText("No hint available.");
-//                break;
-//        }
+
+    }
+    //set pass Hint
+    public void setNextHint(Dialog dialog, String LevelValue) {
+        TextView Hint = dialog.findViewById(R.id.ScoreHint);
+
+        if (LevelValue == "A") {
+            Hint.setText("恭喜通過單字等級 A");
+
+        } else if (LevelValue == "B") {
+            Hint.setText("恭喜通過單字等級 B");
+
+        } else {
+            Hint.setText("恭喜通過單字等級 C ");
+
+        }
     }
 
     //save data into firebase
@@ -330,15 +310,15 @@ public class LevelAQuizActivity extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("word_Level");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference levelRef = FirebaseDatabase.getInstance().getReference().child("word_collect").child(WordLevel);
+        DatabaseReference levelRef = FirebaseDatabase.getInstance().getReference().child("word_Level").child(WordLevel);
         String userId = user.getUid();
         levelRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChild("WordLevel") && !"A".equals(WordLevel)) {
+                if (snapshot.exists() && snapshot.child("WordLevel").exists() && !"A".equals(WordLevel)) {
                     DataSnapshot speechTextSnapshot = snapshot.child("WordLevel");
                     String WordLevel1 = speechTextSnapshot.getValue(String.class);
-                    if (WordLevel1 == "C") {
+                    if ("C".equals(WordLevel1)) {
                         root.child(userId).child("WordLevel").setValue("C");
 
                     }else{
@@ -373,7 +353,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
                                     wordList.add(new WordQuizData(meaning, pos, word, word, word));
 //                                    Log.e("Show A", meaning);
                                 }
-                                setRandomQuestionAndOptions(wordList);
+                                setRandomQuestionAndOptions(wordList,wordList);
                             } else {
                                 Toast.makeText(LevelAQuizActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
                             }
@@ -386,22 +366,26 @@ public class LevelAQuizActivity extends AppCompatActivity {
     }
 
     //setQuestion
-    public void setRandomQuestionAndOptions(List<WordQuizData> wordList) {
-        int TestNum = 5;
+    public void setRandomQuestionAndOptions(List<WordQuizData> questionList, List<WordQuizData> optionList) {
+        int TestNum = 10;
         try {
-            if (wordList.size() >= TestNum) {
+            if (questionList.size() >= TestNum) {
                 int numberOfQuestions = TestNum;
                 for (int i = 0; i < numberOfQuestions; i++) {
                     // Select a random word as the question
-                    WordQuizData questionWord = wordList.get(new Random().nextInt(wordList.size()));
+                    WordQuizData questionWord = questionList.get(new Random().nextInt(questionList.size()));
 
-                    // 從剩下的單詞中隨機選擇一個作為選項
-                    List<WordQuizData> optionWords = new ArrayList<>(wordList);
+                    // Remove the selected questionWord from questionList
+                    questionList.remove(questionWord);
+
+                    // Remove the selected questionWord from optionList
+                    List<WordQuizData> optionWords = new ArrayList<>(optionList);
                     optionWords.remove(questionWord);
+
                     Collections.shuffle(optionWords);
                     WordQuizData option = optionWords.get(0);
 
-                    // 隨機將正確答案和錯誤答案放入 A1 或 A2 中
+                    // Randomly assign correctOption and incorrectOptions
                     boolean isCorrectOptionFirst = new Random().nextBoolean();
                     String correctOption;
                     String incorrectOption;
@@ -413,7 +397,8 @@ public class LevelAQuizActivity extends AppCompatActivity {
                         incorrectOption = questionWord.getIncorrectWord();
                     }
                     String pos = questionWord.getPartOfSpeech();
-                    // 設置題目和選項
+
+                    // set Question n option
                     String questionText2 = questionWord.getDefinition();
 
                     adapter.addWordId(questionText2, questionWord.getWord());
@@ -425,7 +410,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("Level_A", "Failed with error: " + e.getMessage());
+            Log.e("Level B", "Failed with error: " + e.getMessage());
         }
     }
 

@@ -17,8 +17,6 @@ import com.example.gproject.reading.R_topic;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChoseTestActivity extends AppCompatActivity {
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +31,6 @@ public class ChoseTestActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //get number from R_topic
