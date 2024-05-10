@@ -117,7 +117,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
     private DatabaseReference databaseReference;
     FirebaseAuth auth;
 
-    public static boolean star_show;
+    public static boolean star_show=true;
 
     boolean speakover=false,indic=false,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
     Context context;
@@ -161,6 +161,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
             //answer.setText(sharedString);
             help_answer = sharedString;
+            star_show=true;
 
             // 清除 sharedstring，以免再次進入時重複顯示
             sharedString = null;
@@ -599,6 +600,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         send.setBackgroundColor(Color.BLACK);
         pass_answer=true;
         //將答案存入db
+
         FirebaseUser currentUser = auth.getCurrentUser();
 
         if (currentUser != null) {
@@ -634,7 +636,6 @@ public class Speaking_part1_answer extends AppCompatActivity {
         }
 
     }
-
 
 
 

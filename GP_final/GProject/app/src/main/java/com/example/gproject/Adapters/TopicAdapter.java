@@ -50,8 +50,11 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.viewholder>{
             @Override
             public void onClick(View view) {
                 if(model.getPart()==0){
+                    Bundle bundle=new Bundle();
                     Intent intent =new Intent(context, Speaking_questionAdd.class);
-                    intent.putExtra("topic",model.getName());
+                    bundle.putString("topic",model.getName());
+                    bundle.putString("part",String.valueOf(model.getPart()));
+                    intent.putExtras(bundle);
                     context.startActivity(intent);
                }  else if (model.getPart()==1) {
                     Bundle bundle=new Bundle();

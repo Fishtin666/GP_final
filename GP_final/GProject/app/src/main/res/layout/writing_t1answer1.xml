@@ -55,15 +55,15 @@
         app:layout_constraintVertical_bias="0.0"></FrameLayout>
 
     <ImageView
-            android:id="@+id/pic"
-            android:layout_width="0dp"
-            android:layout_height="330dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/question">
+        android:id="@+id/pic"
+        android:layout_width="0dp"
+        android:layout_height="330dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/question">
 
-        </ImageView>
+    </ImageView>
 
 
 

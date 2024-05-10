@@ -84,6 +84,8 @@ public class QuesNumAdd extends AppCompatActivity {
 
         adapter = new QuestionNumberAdapter(this,list);
         recyclerView.setAdapter(adapter);
+
+
     }
 
     public void getDocNum(String collectionName){

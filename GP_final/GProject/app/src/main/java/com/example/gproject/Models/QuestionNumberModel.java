@@ -3,6 +3,7 @@ package com.example.gproject.Models;
 public class QuestionNumberModel {
     String num;
     int task;
+    String topic;
 
     public int getTask() {
         return task;
@@ -15,6 +16,7 @@ public class QuestionNumberModel {
     public QuestionNumberModel(String num, int task) {
         this.num = num;
         this.task = task;
+
     }
 
 

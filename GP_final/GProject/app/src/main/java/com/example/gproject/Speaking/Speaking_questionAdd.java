@@ -43,7 +43,7 @@ public class Speaking_questionAdd extends AppCompatActivity {
     FirebaseAuth auth;
     String[] dataArray;
     ImageButton back;
-
+    String topic,part;
 
 
     @Override
@@ -61,15 +61,23 @@ public class Speaking_questionAdd extends AppCompatActivity {
         recyclerView = findViewById(R.id.questionRecy);
         back = findViewById(R.id.back2);
 
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            topic=getIntent().getStringExtra("topic");
+            part=getIntent().getStringExtra("part");
+
+        }
+
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Speaking_questionAdd.this, Speaking_part1.class));
+                finish();
+
             }
         });
 
-
-        String topic=getIntent().getStringExtra("topic");
 
         LinearLayoutManager layoutManager =new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

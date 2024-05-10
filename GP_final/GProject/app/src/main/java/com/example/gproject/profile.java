@@ -162,10 +162,7 @@ public class profile extends AppCompatActivity {
                             case "R_chose":
                             case "R_judge":
                             case "R_match":
-                            case "R_word,":
-                            case "R_wordA":
-                            case"R_wordB":
-                            case"R_wordC":
+                            case "R_word":
                                 r_num+=queryDocumentSnapshots.size();
                                 break;
 
