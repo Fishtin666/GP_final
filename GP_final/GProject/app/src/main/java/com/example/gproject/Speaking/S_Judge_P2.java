@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.gproject.R;
@@ -35,6 +36,7 @@ public class S_Judge_P2 extends AppCompatActivity {
 
     TextView Response,rof1,rof2;
     String Ques,Ans,Num,Topic;
+    ImageButton back;
 
     public static boolean ROf_ques=false;
 
@@ -57,6 +59,7 @@ public class S_Judge_P2 extends AppCompatActivity {
         Response = findViewById(R.id.Response);
         rof1 = findViewById(R.id.ROf_Q1);
         Response.setMovementMethod(new ScrollingMovementMethod());
+        back = findViewById(R.id.back2);
 
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
@@ -65,6 +68,12 @@ public class S_Judge_P2 extends AppCompatActivity {
             Num = extras.getString("num");
             Topic = extras.getString("topic");
         }
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

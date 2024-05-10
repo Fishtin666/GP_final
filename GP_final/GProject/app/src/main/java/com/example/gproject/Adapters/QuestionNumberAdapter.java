@@ -45,6 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,6 +88,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
 
         }else{
             holder.star.setVisibility(View.VISIBLE);
+
             InDb(new QuestionNumberAdapter.OnDataReadyListener() {
                 int position = holder.getAdapterPosition();
 
@@ -118,6 +120,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
                 if(star_yellow){
                     holder.star.setImageResource(R.drawable.star_black);
                     star_yellow=false;
+
                     //刪除資料庫
                     if (currentUser != null) {
                         String userId = currentUser.getUid();
@@ -131,6 +134,15 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
 
                         userAnswersRef.removeValue();
                     }
+                    Iterator<String> iterator = keyList.iterator();
+                    while (iterator.hasNext()) {
+                        String element = iterator.next();
+                        if (element.equals(String.valueOf(position+1))) {
+                            iterator.remove(); // 移除当前元素
+                        }
+                    }
+                    System.out.println("刪除後keylist"+keyList);
+                    //notifyDataSetChanged();
                 }else {
                     holder.star.setImageResource(R.drawable.star_yellow);
                     star_yellow=true;
@@ -244,7 +256,9 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         // 获取子节点的键值
                         String key= snapshot.getKey();
-                        keyList.add(key);
+                        if(!keyList.contains(key))
+                            keyList.add(key);
+                        System.out.println("keylist初次");
                     }
 
                 }

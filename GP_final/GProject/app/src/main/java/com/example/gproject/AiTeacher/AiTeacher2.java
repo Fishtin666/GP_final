@@ -57,6 +57,10 @@ import com.example.gproject.Speaking.Speaking_part1_answer;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -103,6 +107,9 @@ public class AiTeacher2 extends AppCompatActivity {
     String role="",content="",help_answer;
     String selectedWord;
     String[] words;
+    int num=0;
+
+    String pushKey="";
 
     Boolean write_or_speak=true,indic=false;
     public String public_result;
@@ -116,7 +123,7 @@ public class AiTeacher2 extends AppCompatActivity {
     MessageAdapter messageAdapter;
 
     ImageView mic, exit, hint,keyboard,voice;
-    ImageButton cancel,send,close;
+    ImageButton cancel,send,close,back;
     RecyclerView recy;
     LinearLayout linear_keyboard;
     EditText editText;
@@ -203,6 +210,7 @@ public class AiTeacher2 extends AppCompatActivity {
         close =findViewById(R.id.close);
         voice = findViewById(R.id.voice);
         progressBar = findViewById(R.id.progressBar);
+        back = findViewById(R.id.back2);
 
         progressBar.setVisibility(View.INVISIBLE);
         voice.setVisibility(View.INVISIBLE);
@@ -248,22 +256,7 @@ public class AiTeacher2 extends AppCompatActivity {
 
 
         }
-        //situation
-        else if (part.equals("2"))  {
-            if(topic.equals("Catch up with a friend")){
-                addToChat("You're catching up with a friend,Betty.Try sharing your recent experiences with her and ask her how she has been lately.",Message.SENT_BY_BOT);
-                role="user";
-                content="Hello, I'm Betty. I recently returned from a business trip, and work has been going smoothly. I've also developed a new hobby lately: painting. What about you?);";
-                defaultQuestion="Say hello to me first, then ask me how I've been lately.";
 
-            }
-
-        } else if (part.equals("3")){
-            role="You are an English teacher for oral and grammar enhancement.";
-            content="Try to help me have a English conversation";
-            defaultQuestion="now we are in a "+topic+"ask me one question to start the conversation.";
-
-        }
 
 
 
@@ -299,6 +292,13 @@ public class AiTeacher2 extends AppCompatActivity {
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -308,6 +308,49 @@ public class AiTeacher2 extends AppCompatActivity {
                 PA_title.setVisibility(View.INVISIBLE);
                 close.setVisibility(View.INVISIBLE);
                 voice.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        mic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mic.setImageResource(R.drawable.mic_gray);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        micClick();
+                    }
+                }, 100); //
+            }
+        });
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AiTeacher2.this);
+                builder.setTitle("結束對話，查看評論");
+                builder.setMessage("對話紀錄將會保存，確定已要結束對話了嗎?");
+                builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 在這裡處理確定按鈕的動作
+                        dialog.dismiss(); // 關閉對話框
+                        Toast.makeText(AiTeacher2.this, "結束對話", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(AiTeacher2.this, MainActivity.class);
+                        //startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 在這裡處理取消按鈕的動作
+                        dialog.dismiss(); // 關閉對話框
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -433,7 +476,8 @@ public class AiTeacher2 extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void micClick(View view) {
+    public void micClick() {
+        mic.setImageResource(R.drawable.mic_gray);
         if(PA_mic){
 
             try {
@@ -490,13 +534,14 @@ public class AiTeacher2 extends AppCompatActivity {
                 }else{
                     PA_title.setText("超棒的!你的發音分數為"+point+"分");
                     addToChat(help_answer,Message.SENT_BY_ME);
+
                     hintornot=false;
                     callAPI(help_answer);
 
                     PA_mic=false;
 
                 }
-
+                mic.setImageResource(R.drawable.mic);
 
 
 
@@ -587,14 +632,17 @@ public class AiTeacher2 extends AppCompatActivity {
 
                 if (result.getReason() == ResultReason.RecognizedSpeech) {
                     addToChat(result.getText(),Message.SENT_BY_ME);
+                    mic.setImageResource(R.drawable.mic);
                     callAPI(result.getText());
                 } else {
+                    mic.setImageResource(R.drawable.mic);
                     System.out.println("Error recognizing. Did you update the subscription info?" + System.lineSeparator() + result.toString());
                 }
 
             } catch (Exception ex) {
                 Log.e("SpeechSDKDemo", "unexpected " + ex.getMessage());
                 assert (false);
+
             }
         }
 
@@ -745,6 +793,7 @@ public class AiTeacher2 extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // 在這裡處理確定按鈕的動作
+                delete_db();
                 dialog.dismiss(); // 關閉對話框
                 Intent intent = new Intent(AiTeacher2.this, MainActivity.class);
                 startActivity(intent);
@@ -846,6 +895,8 @@ public class AiTeacher2 extends AppCompatActivity {
     }
 
     void addToChat(String message, String sentBy) {
+        add_to_db(message,num);
+        num++;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -863,6 +914,7 @@ public class AiTeacher2 extends AppCompatActivity {
     void addResponse(String response) {
 
         addToChat(response, Message.SENT_BY_BOT);
+
     }
 
     public void keyboardClick(View view){
@@ -897,6 +949,66 @@ public class AiTeacher2 extends AppCompatActivity {
         }
 
 
+    }
+
+    public  void add_to_db(String sentences,int num){
+        FirebaseAuth auth;
+        DatabaseReference databaseReference;
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+
+        if (currentUser != null) {
+
+            DatabaseReference userAnswersRef;
+            if(pushKey.equals("")){
+                pushKey = databaseReference
+                        .child("app_conversation")
+                        .child(userId)
+                        .child("Conversation")
+                        .push()
+                        .getKey(); // 获取新生成的 pushKey
+
+                userAnswersRef = databaseReference
+                        .child("app_conversation")
+                        .child(userId)
+                        .child("Conversation")
+                        .child(pushKey)
+                        .child(String.valueOf(num));
+            }else{
+                userAnswersRef = databaseReference
+                        .child("app_conversation")
+                        .child(userId)
+                        .child("Conversation")
+                        .child(pushKey)
+                        .child(String.valueOf(num));
+            }
+            userAnswersRef.setValue(sentences);
+
+
+        }
+    }
+
+    public void delete_db(){
+        FirebaseAuth auth;
+        DatabaseReference databaseReference;
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+
+        if (currentUser != null) {
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("app_conversation")
+                    .child(userId)
+                    .child("Conversation")
+                    .child(pushKey);
+
+
+
+            userAnswersRef.removeValue();
+        }
     }
 
 }

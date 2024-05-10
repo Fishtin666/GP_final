@@ -34,11 +34,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewholder> {
 
     Context context;
     ArrayList<QuestionModel>list;
+    ArrayList<String> keyList=new ArrayList<>();
 
     Boolean star_yellow=false;
     private DatabaseReference databaseReference;
@@ -130,6 +132,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
                         DatabaseReference userAnswersRef = databaseReference
                                 .child("empty_question")
                                 .child(userId)
+                                .child("Speaking")
                                 .child(String.valueOf(part))
                                 .child(topic)
                                 .child(String.valueOf(position+1));
@@ -138,6 +141,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
                         userAnswersRef.removeValue();
 
                     }
+
+                    Iterator<String> iterator = keyList.iterator();
+                    while (iterator.hasNext()) {
+                        String element = iterator.next();
+                        if (element.equals(String.valueOf(position+1))) {
+                            iterator.remove(); // 移除当前元素
+                        }
+                    }
+                    System.out.println("刪除後keylist"+keyList);
+
                 }else {
                     holder.star.setImageResource(R.drawable.star_yellow);
                     star_yellow=true;
@@ -148,6 +161,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
                         DatabaseReference userAnswersRef = databaseReference
                                 .child("empty_question")
                                 .child(userId)
+                                .child("Speaking")
                                 .child(String.valueOf(part))
                                 .child(topic)
                                 .child(String.valueOf(position+1));
@@ -187,10 +201,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userID = user.getUid();
-        ArrayList<String> keyList=new ArrayList<>();
+
         DatabaseReference Ref = databaseReference
                 .child("empty_question")
                 .child(userID)
+                .child("Speaking")
                 .child(String.valueOf(part))
                 .child(topic);
         //.child(String.valueOf(position+1))
@@ -201,8 +216,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // 获取子节点的键值
                     String key= snapshot.getKey();
-                    keyList.add(key);
+                    if(!keyList.contains(key))
+                        keyList.add(key);
                 }
+                System.out.println("初始keylist"+keyList);
                 listener.onDataReady(keyList);
             }
 
