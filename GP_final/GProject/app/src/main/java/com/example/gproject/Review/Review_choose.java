@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gproject.R;
+import com.example.gproject.fragment.WrongFragment;
 
 public class Review_choose extends AppCompatActivity {
 
@@ -33,14 +34,14 @@ public class Review_choose extends AppCompatActivity {
 
         ImageButton pencil = findViewById(R.id.pencil2);
 
-        pencil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Review_choose.this, Review_main.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+//        pencil.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(Review_choose.this, WrongFragment.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
 
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

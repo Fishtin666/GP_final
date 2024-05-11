@@ -200,68 +200,68 @@ public class Fragment_listen_question1 extends Fragment {
                     //查找此題組有幾題
                     if (document.exists()) {
                         // 获取文档中字段的数量
-                        int numberOfAnswer = 0;
+                        //int numberOfAnswer = 0;
                         // 假设 document 是您从 Firestore 中获取的文档
                         for (Map.Entry<String, Object> entry : document.getData().entrySet()) {
                             String fieldName = entry.getKey();
                             // 检查字段名称是否以 "" 开头
                             if (fieldName.startsWith("A")) {
-                                numberOfAnswer++;
+                                //numberOfAnswer++;
                                 // 使用正则表达式从字段名称中提取数字部分
                                 Pattern pattern = Pattern.compile("\\d+");
                                 Matcher matcher = pattern.matcher(fieldName);
                                 if (matcher.find()) {
                                     String number = matcher.group(); // 提取到的数字部分
+                                    int Anskey = Integer.parseInt(number);
                                     // 在TextView中显示数字部分
                                     // 根据提取到的数字动态添加 TextView 和 EditText 到 LinearLayout
                                     TextView textView = new TextView(getContext());
                                     textView.setText(number + " ."); // 设置 TextView 文本内容为提取到的数字
-                                    EditText editText = new EditText(getContext());
 
                                     // 创建一个新的水平 LinearLayout
                                     LinearLayout horizonLayout = new LinearLayout(getContext());
                                     horizonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-                                    // 创建并设置 EditText 的属性
-                                    editText.setLayoutParams(new LinearLayout.LayoutParams(
-                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                             LinearLayout.LayoutParams.WRAP_CONTENT
-                                    ));
-                                    // 添加 TextWatcher 监听器
-                                    editText.addTextChangedListener(new TextWatcher() {
-                                        @Override
-                                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                        }
-                                        @Override
-                                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                        }
-                                        @Override
-                                        public void afterTextChanged(Editable s) {
-                                            // 获取用户输入的文本
-                                            String userAnswer = s.toString();
-                                            // 调用方法保存编辑文本内容
-                                            setEditTextValue(Integer.parseInt(number), userAnswer);
-                                            //Log.d("TAG","edittext change");
-                                        }
-                                    });
                                     // 检查是否有对应的键值在 Activity 的 HashMap 中
                                     // 获取对 Activity 的引用并将其转换为 listen_ftest1 类型
                                     listen_ftest1 activity = (listen_ftest1) getActivity();
                                     if (activity != null) {
                                         HashMap<Integer, String> editTextValues = activity.getEditTextValues();
-                                        if (editTextMap.containsKey(number)) {
-                                            // 如果有对应的键值，则将其显示在 EditText 中
-                                            editText.setText(editTextValues.get(number));
+                                        for (Map.Entry<Integer, String> mapEntry : editTextValues.entrySet()) {
+                                            Integer key = mapEntry.getKey();
+                                            String value = mapEntry.getValue();
+                                            editTextMap.put(key,value);
+                                            Log.d("TAG", "editTextValues Key: " + key + ", Value: " + value);
+                                            Log.d("tag","number: "+number);
                                         }
+
+                                        //Log.d("TAG", "editText  Value: " + editTextValues.get(Anskey));
+
+                                        if (editTextValues.containsKey(Anskey)) {
+                                            // 如果有对应的键值，则将其显示在 EditText 中
+                                            String value = editTextValues.get(Anskey);
+                                            Log.d("TAG", "editText Key: " + Anskey + ", Value: " + value); // 打印键和对应的值
+
+                                            EditText editText = getEditText(value, number);
+
+
+                                            // 将 TextView 和 EditText 添加到水平 LinearLayout
+                                            horizonLayout.addView(textView);
+                                            horizonLayout.addView(editText);
+                                        }else {
+                                            EditText editText = getEditText(number);
+
+
+                                            // 将 TextView 和 EditText 添加到水平 LinearLayout
+                                            horizonLayout.addView(textView);
+                                            horizonLayout.addView(editText);
+                                        }
+
+                                        // 将水平 LinearLayout 添加到父 LinearLayout
+                                        LinearLayout answer = rootView.findViewById(R.id.Answer);
+                                        answer.addView(horizonLayout);
                                     }
 
-
-                                    // 将 TextView 和 EditText 添加到水平 LinearLayout
-                                    horizonLayout.addView(textView);
-                                    horizonLayout.addView(editText);
-                                    // 将水平 LinearLayout 添加到父 LinearLayout
-                                    LinearLayout answer = rootView.findViewById(R.id.Answer);
-                                    answer.addView(horizonLayout);
                                 }
                             }
                             //Log.d("TaG","numberOfAnswer: "+numberOfAnswer);
@@ -330,5 +330,70 @@ public class Fragment_listen_question1 extends Fragment {
 
         }
         return rootView;
+    }
+
+    @NonNull
+    private EditText getEditText(String number) {
+        EditText editText = new EditText(getContext());
+
+        // 创建并设置 EditText 的属性
+        editText.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        // 添加 TextWatcher 监听器
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                // 获取用户输入的文本
+                String userAnswer = s.toString();
+                // 调用方法保存编辑文本内容
+                setEditTextValue(Integer.parseInt(number), userAnswer);
+                //Log.d("TAG","edittext change");
+            }
+        });
+        return editText;
+    }
+
+    @NonNull
+    private EditText getEditText(String value, String number) {
+        EditText editText = new EditText(getContext());
+        if (value != null) {
+            // 确保值不为空再设置到 EditText 中
+            editText.setText(value);
+        } else {
+            // 如果值为空，则清空 EditText
+            editText.setText("");
+        }
+
+        // 创建并设置 EditText 的属性
+        editText.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        // 添加 TextWatcher 监听器
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                // 获取用户输入的文本
+                String userAnswer = s.toString();
+                // 调用方法保存编辑文本内容
+                setEditTextValue(Integer.parseInt(number), userAnswer);
+                //Log.d("TAG","edittext change");
+            }
+        });
+        return editText;
     }
 }
