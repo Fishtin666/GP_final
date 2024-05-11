@@ -19,16 +19,6 @@ public class WordTopicActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_topic);
 
-        ImageButton backButton = findViewById(R.id.back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WordTopicActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
     }
     public void dic_click(View view){
         Intent intent = new Intent(WordTopicActivity.this, ShowMeaning.class);

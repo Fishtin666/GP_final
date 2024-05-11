@@ -53,55 +53,53 @@
                 android:paddingBottom="30dp"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/top"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="30dp"
-                    android:text="選擇題"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textSize="36sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/cons" />
+            <TextView
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:text="多選題"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cons"/>
 
-                <com.example.gproject.JustifyTextView2
-                    android:id="@+id/Content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@color/grey"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="Question"
-                    android:paddingLeft="10dp"
-                    android:paddingBottom="10dp"
-                    android:textSize="22sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/top" />
+            <com.example.gproject.JustifyTextView2
+                android:id="@+id/Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/grey"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp"
+                android:hint="Question"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top"/>
 
-                <TextView
-                    android:id="@+id/Ques"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="30dp"
-                    android:text="Question"
-                    android:textSize="36sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/Content" />
+            <TextView
+                android:id="@+id/Ques"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:text="Question"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Content"/>
 
                 <TextView
                     android:id="@+id/c1"
@@ -139,18 +137,18 @@
                     app:layout_constraintStart_toEndOf="@+id/A1"
                     app:layout_constraintTop_toBottomOf="@id/Ques" />
 
-                <com.example.gproject.JustifyTextView2
-                    android:id="@+id/opt1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:layout_constraintWidth_default="wrap"
-                    android:hint="opt1"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/Q1"
-                    app:layout_constraintTop_toBottomOf="@+id/Q1" />
-                //
+            <com.example.gproject.JustifyTextView2
+                android:id="@+id/opt1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                app:layout_constraintWidth_default="wrap"
+                android:hint="opt1"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/Q1"
+                app:layout_constraintTop_toBottomOf="@+id/Q1" />
+            //
 
                 <TextView
                     android:id="@+id/c2"
@@ -187,17 +185,17 @@
                     app:layout_constraintStart_toEndOf="@+id/A2"
                     app:layout_constraintTop_toBottomOf="@id/opt1"/>
 
-                <com.example.gproject.JustifyTextView2
-                    android:id="@+id/opt2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:layout_constraintWidth_default="wrap"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/Q2"
-                    app:layout_constraintTop_toBottomOf="@+id/Q2" />
-                //
+            <com.example.gproject.JustifyTextView2
+                android:id="@+id/opt2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                app:layout_constraintWidth_default="wrap"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/Q2"
+                app:layout_constraintTop_toBottomOf="@+id/Q2" />
+            //
                 <TextView
                     android:id="@+id/c3"
                     android:layout_width="40dp"
@@ -233,16 +231,16 @@
                     app:layout_constraintStart_toEndOf="@+id/A3"
 
                     app:layout_constraintTop_toBottomOf="@+id/opt2"/>
-                <com.example.gproject.JustifyTextView2
-                    android:id="@+id/opt3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:layout_constraintWidth_default="wrap"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/Q3"
-                    app:layout_constraintTop_toBottomOf="@+id/Q3" />
+            <com.example.gproject.JustifyTextView2
+                android:id="@+id/opt3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                app:layout_constraintWidth_default="wrap"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/Q3"
+                app:layout_constraintTop_toBottomOf="@+id/Q3" />
 
                 //
                 <TextView
@@ -290,18 +288,18 @@
                     app:layout_constraintStart_toStartOf="@+id/Q4"
                     app:layout_constraintTop_toBottomOf="@+id/Q4" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/sendAns"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/red"
-                android:text="Send"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cons" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        <Button
+            android:id="@+id/sendAns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:layout_marginBottom="10dp"
+            android:text="Send"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cons"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

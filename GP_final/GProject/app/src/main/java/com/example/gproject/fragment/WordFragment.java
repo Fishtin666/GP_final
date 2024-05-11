@@ -79,14 +79,6 @@ public class WordFragment extends Fragment {
         CardView dic = rootView.findViewById(R.id.dictionary);
         CardView wordTest = rootView.findViewById(R.id.wordTest);
         CardView wordSelect = rootView.findViewById(R.id.wordCollect);
-        ImageButton backButton = rootView.findViewById(R.id.back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         dic.setOnClickListener(new View.OnClickListener() {
             @Override

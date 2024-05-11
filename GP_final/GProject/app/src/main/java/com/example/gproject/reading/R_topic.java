@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gproject.ChoseTestActivity;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 
@@ -22,8 +21,9 @@ public class R_topic extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.back);
         ImageButton ButBlank = findViewById(R.id.Q1);
         ImageButton ButJudge = findViewById(R.id.Q2);
-        ImageButton BUtChos = findViewById(R.id.Q3);
-        ImageButton BUtMatch = findViewById(R.id.Q4);
+        ImageButton ButChos = findViewById(R.id.Q3);
+        ImageButton ButMatch = findViewById(R.id.Q4);
+        ImageButton ButMultiple = findViewById(R.id.Q5);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,16 +45,22 @@ public class R_topic extends AppCompatActivity {
                 goToChoseTest(2);
             }
         });
-        BUtChos.setOnClickListener(new View.OnClickListener() {
+        ButChos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToChoseTest(3);
             }
         });
-        BUtMatch.setOnClickListener(new View.OnClickListener() {
+        ButMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToChoseTest(4);
+            }
+        });
+        ButMultiple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToChoseTest(5);
             }
         });
     }

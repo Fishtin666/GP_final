@@ -17,6 +17,7 @@ import com.example.gproject.WordCard.WordCardActivity;
 import com.example.gproject.Adapters.WordListAdapter;
 import com.example.gproject.Adapters.WordListData;
 import com.example.gproject.WordCard.WordTopicActivity;
+import com.example.gproject.fragment.WordFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,9 +50,8 @@ public class WordListActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WordListActivity.this, WordTopicActivity.class);
+                Intent intent = new Intent(WordListActivity.this, WordFragment.class);
                 startActivity(intent);
-                finish();
             }
         });
 

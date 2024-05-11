@@ -17,6 +17,7 @@ import com.example.gproject.R;
 import com.example.gproject.WordCard.WordResult2;
 import com.example.gproject.WordCard.WordTopicActivity;
 import com.example.gproject.databinding.WordDicSearchBinding;
+import com.example.gproject.fragment.WordFragment;
 import com.example.gproject.reading.R_topic;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,13 +48,14 @@ public class ShowMeaning extends AppCompatActivity {
         try {
             ImageView star = findViewById(R.id.starButton);
             star.setVisibility(View.INVISIBLE);
+
+            //Back button
             ImageButton backButton = findViewById(R.id.back);
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ShowMeaning.this, WordTopicActivity.class);
+                    Intent intent = new Intent(ShowMeaning.this, WordFragment.class);
                     startActivity(intent);
-                    finish();
                 }
             });
             //Search Word

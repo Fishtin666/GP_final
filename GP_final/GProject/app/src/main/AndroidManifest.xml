@@ -45,11 +45,11 @@
             android:name=".reading.R_match"
             android:exported="true"/>
         <activity
-            android:name=".ChoseTestActivity"
+            android:name=".reading.ChoseTestActivity"
             android:exported="true"/>
-        <!--        <activity-->
-        <!--            android:name=".reading.R_topic"-->
-        <!--            android:exported="true"/>-->
+                <activity
+                    android:name=".reading.R_multiple"
+                    android:exported="true"/>
         <activity
             android:name=".WordCard.WordCardActivity"
             android:exported="true"/>
