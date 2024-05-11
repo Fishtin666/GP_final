@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gproject.AiChat_Judge;
 import com.example.gproject.MainActivity;
 import com.example.gproject.Message;
 import com.example.gproject.MessageAdapter;
@@ -339,8 +340,9 @@ public class AiTeacher2 extends AppCompatActivity {
                         dialog.dismiss(); // 關閉對話框
                         Toast.makeText(AiTeacher2.this, "結束對話", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(AiTeacher2.this, MainActivity.class);
-                        //startActivity(intent);
+                        Intent intent = new Intent(AiTeacher2.this, AiChat_Judge.class);
+                        intent.putExtra("pushKey",pushKey);
+                        startActivity(intent);
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
