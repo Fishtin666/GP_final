@@ -182,7 +182,7 @@
         <activity
             android:name=".AiChat_Judge"
             android:exported="false" />
-        <activity
+
 
         <activity
             android:name=".login.login"
