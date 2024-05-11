@@ -5,6 +5,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static com.example.gproject.Adapters.QuestionNumberAdapter.sharedString;
 import static com.example.gproject.MainActivity.apiKey;
+import static com.example.gproject.Speaking.Speaking_part1_answer.star_show;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -154,7 +155,7 @@ public class AiTeacher2 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        star_show=true;
         // 檢查是否有新的 sharedstring
 
         if (sharedString != null && !sharedString.isEmpty()) {
@@ -453,6 +454,7 @@ public class AiTeacher2 extends AppCompatActivity {
     boolean hintornot=false;
     public void hintClick(View v) throws InterruptedException {
         hintornot=true;
+        star_show=false;
         callAPI("Give me two example responses,each less than 50 words  and numbered it with only number no dot(ex:1 Nice to meet you. 2 Good morning.), the question is:"+public_result);
         progressBar.setVisibility(View.VISIBLE);
         hint.setVisibility(View.INVISIBLE);

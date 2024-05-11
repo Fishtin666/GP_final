@@ -9,9 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +44,7 @@ public class AiChat_Judge extends AppCompatActivity {
     TextView judge;
     String pushKey;
     String judge_question,result;
+    ImageView home;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -54,14 +59,28 @@ public class AiChat_Judge extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ai_chat_judge);
         judge = findViewById(R.id.result);
+        home = findViewById(R.id.home);
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AiChat_Judge.this,MainActivity.class));
+            }
+        });
 
         Intent intent = getIntent();
         pushKey=intent.getStringExtra("pushKey");
+
+        judge_question="The following is a conversation between AI and a user. First,provide feedback about user's whole responses.YOU DON'T NEED to judge about AI responses.Then Check each response for grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.";
+
         // 调用示例
         getConversation(new ConversationListener() {
             @Override
             public void onConversationLoaded(String conversation) {
                 // 在对话加载完成后调用 API
+                System.out.println(judge_question + ":" + conversation);
+               Toast.makeText(AiChat_Judge.this, "呼叫gpt"+judge_question + ":" + conversation, Toast.LENGTH_SHORT).show();
+
                 callAPI(judge_question + ":" + conversation);
             }
         });
@@ -169,7 +188,8 @@ public class AiChat_Judge extends AppCompatActivity {
                             sb.setLength(sb.length() - 2);
                         }
                         String result = sb.toString();
-                        System.out.println("对话: " + result);
+                        System.out.println("對話string: " + result);
+                        Toast.makeText(AiChat_Judge.this, "對話string: " + result, Toast.LENGTH_SHORT).show();
 
                         // 将对话内容传递给回调函数
                         if (listener != null) {
@@ -183,6 +203,35 @@ public class AiChat_Judge extends AppCompatActivity {
                     Log.e("Firebase", "读取数据失败：" + databaseError.getMessage());
                 }
             });
+        }
+    }
+
+    public void push(String Judge){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("app_conversation")
+                    .child(userId)
+                    .child("Judge")
+                    .child(pushKey);
+
+            userAnswersRef.setValue(Judge)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
+
         }
     }
 
@@ -241,8 +290,10 @@ public class AiChat_Judge extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     judge.setText(result.trim());
+                                    push(result.trim());
                                 }
                             });
+
 
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
