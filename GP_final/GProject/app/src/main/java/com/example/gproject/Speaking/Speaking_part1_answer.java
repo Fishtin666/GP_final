@@ -625,7 +625,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 bundle.putString("key",answerKey);
-                                callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+                                callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please telxl me how to improve it and give me example.");
 
                             } else {
                                 // 存储失败

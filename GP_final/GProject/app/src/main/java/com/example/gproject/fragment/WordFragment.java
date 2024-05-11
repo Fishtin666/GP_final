@@ -10,10 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.example.gproject.Adapters.QuestionNumberAdapter;
-import com.example.gproject.MainActivity;
 import com.example.gproject.Models.QuestionNumberModel;
 import com.example.gproject.R;
 import com.example.gproject.WordQuiz.WordListActivity;
@@ -76,9 +74,9 @@ public class WordFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.word_topic, container, false);
-        CardView dic = rootView.findViewById(R.id.dictionary);
+        CardView dic = rootView.findViewById(R.id.Cross_Topic);
         CardView wordTest = rootView.findViewById(R.id.wordTest);
-        CardView wordSelect = rootView.findViewById(R.id.wordCollect);
+        CardView wordSelect = rootView.findViewById(R.id.AI_chat);
 
         dic.setOnClickListener(new View.OnClickListener() {
             @Override

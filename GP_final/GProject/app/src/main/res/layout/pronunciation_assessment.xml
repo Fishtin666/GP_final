@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view15" />
 
-    <com.example.gproject.JustifyTextView4
+    <TextView
         android:id="@+id/article1"
         android:layout_width="350dp"
         android:layout_height="wrap_content"

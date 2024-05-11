@@ -105,6 +105,7 @@ import okhttp3.Response;
 public class AiTeacher2 extends AppCompatActivity {
 
     public String user,topic,part;
+    boolean hintornot=false;
     String defaultQuestion="";
     String role="",content="",help_answer;
     String selectedWord;
@@ -113,7 +114,7 @@ public class AiTeacher2 extends AppCompatActivity {
 
     String pushKey="";
 
-    Boolean write_or_speak=true,indic=false;
+    Boolean write_or_speak=true,indic=true;
     public String public_result;
     boolean speak_or_not = true,PA_mic=false;
 
@@ -133,7 +134,7 @@ public class AiTeacher2 extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-   // private ActivityMainBinding binding;
+    // private ActivityMainBinding binding;
     MeaningAdapter adapter;
 
     public static final MediaType JSON
@@ -167,10 +168,11 @@ public class AiTeacher2 extends AppCompatActivity {
             help_answer=sharedString;
             //helpTextview.setText(help_answer);
             voice.setVisibility(View.VISIBLE);
-            SpanningString();
+            dic_highlight(sharedString);
             // 清除 sharedstring，以免再次進入時重複顯示
             sharedString = null;
             PA_mic=true;
+
 
         }
 
@@ -420,7 +422,7 @@ public class AiTeacher2 extends AppCompatActivity {
 
 
             // 在指定的位置显示PopupWindow
-           // popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+            // popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
 
 
@@ -451,7 +453,7 @@ public class AiTeacher2 extends AppCompatActivity {
                     Manifest.permission.RECORD_AUDIO}, RecordAudioRequestCode);
         }
     }
-    boolean hintornot=false;
+
     public void hintClick(View v) throws InterruptedException {
         hintornot=true;
         star_show=false;
@@ -613,7 +615,7 @@ public class AiTeacher2 extends AppCompatActivity {
 
 
 //                try {
-                    reco.recognizeOnceAsync();
+                reco.recognizeOnceAsync();
 //                } catch (Exception ex) {
 //                    Log.e(logTag, "辨識過程中發生錯誤: " + ex.getMessage());
 //                }
@@ -684,12 +686,12 @@ public class AiTeacher2 extends AppCompatActivity {
 
     ///////////////////voice/////////
     public void voiceClick(View v){
-        tts.speak(help_answer, TextToSpeech.QUEUE_FLUSH, null);
+        tts.speak(helpTextview.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
 
 
     }
 
-    private void SpanningString(){
+    private void dic_highlight(String help_answer){
         if(hintornot==true) {
 
             StringTokenizer tokenizer = new StringTokenizer(help_answer, " \t\n\r\f,.?!;:\"");
@@ -706,7 +708,7 @@ public class AiTeacher2 extends AppCompatActivity {
                 int endIndex = startIndex + words[i].length();
                 int customColor = Color.rgb(120, 59, 55);
                 //Toast.makeText(getApplicationContext(), words[i], Toast.LENGTH_LONG).show();
-                if (InDic(words[i])==false) {
+                if (InDic(words[i])==true) {
                     spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannableString.setSpan(new ForegroundColorSpan(customColor), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannableString.setSpan(new StyleSpan(Typeface.BOLD), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -716,7 +718,6 @@ public class AiTeacher2 extends AppCompatActivity {
             }
             helpTextview.setText(spannableString);
         }
-
     }
 
     private  boolean InDic(String word){
@@ -740,7 +741,7 @@ public class AiTeacher2 extends AppCompatActivity {
     }
 
 
-        private void getMeaning(String word, TextView phonetic) {
+    private void getMeaning(String word, TextView phonetic) {
         new Thread(new Runnable() {
             @Override
             public void run() {

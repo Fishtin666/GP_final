@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/dictionary"
+        android:id="@+id/Cross_Topic"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_margin="15dp"
@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/T7"
+                android:id="@+id/CrossTopic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="單詞字典"
@@ -73,7 +73,7 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dictionary">
+        app:layout_constraintTop_toBottomOf="@+id/Cross_Topic">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -123,7 +123,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/wordCollect"
+        android:id="@+id/AI_chat"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_margin="15dp"

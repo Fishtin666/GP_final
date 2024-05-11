@@ -66,7 +66,7 @@ public class PronunciationAssessment extends Activity {
     SpannableString spannableString;
 
     ImageView mic;
-    JustifyTextView4 article;
+    TextView article;
 
     Button clear,change;
 
@@ -398,8 +398,9 @@ public class PronunciationAssessment extends Activity {
                         }
 
                     }
+                    Toast.makeText(PronunciationAssessment.this, "結果:"+spannableString.toString(), Toast.LENGTH_SHORT).show();
 
-                    convertToRegularTextView(getApplicationContext(),article);
+                    //convertToRegularTextView(getApplicationContext(),article,spannableString);
                     //article.setText(spannableString);
                 }
 
@@ -424,6 +425,8 @@ public class PronunciationAssessment extends Activity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // 確定按鈕的點擊處理
                                 mic.setImageResource(R.drawable.mic);
+                                //Toast.makeText(PronunciationAssessment.this, "結果:"+spannableString.toString(), Toast.LENGTH_SHORT).show();
+
                             }
                         });
                         score_show.show();
@@ -465,7 +468,7 @@ public class PronunciationAssessment extends Activity {
 
 
     }
-    public  void convertToRegularTextView(Context context, JustifyTextView4 justifyTextView4) {
+    public  void convertToRegularTextView(Context context, JustifyTextView4 justifyTextView4, SpannableString spannableString) {
         // 取得 JustifyTextView4 的資訊
         ViewGroup parent = (ViewGroup) justifyTextView4.getParent();
         int index = parent.indexOfChild(justifyTextView4);
@@ -476,6 +479,7 @@ public class PronunciationAssessment extends Activity {
         TextView regularTextView = new TextView(context);
         regularTextView.setLayoutParams(justifyTextView4.getLayoutParams());
         System.out.println("結果:"+spannableString);
+
         regularTextView.setText(spannableString);
         regularTextView.setTextSize(40);
         regularTextView.setBackgroundColor(getResources().getColor(R.color.gray));

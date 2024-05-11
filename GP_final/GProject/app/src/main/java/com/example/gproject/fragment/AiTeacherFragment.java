@@ -1,8 +1,11 @@
 package com.example.gproject.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,8 +16,6 @@ import android.widget.TextView;
 
 import com.example.gproject.Adapters.TopicAdapter;
 import com.example.gproject.AiTeacher.AiChat;
-import com.example.gproject.AiTeacher.AiSpeakingTest;
-import com.example.gproject.AiTeacher.AiTeacher;
 import com.example.gproject.AiTeacher.Cross_Topic;
 import com.example.gproject.Models.TopicModel;
 import com.example.gproject.R;
@@ -77,10 +78,32 @@ public class AiTeacherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_ai_teacher2, container, false);
-        TextView crossTopic = rootView.findViewById(R.id.CrossTopic);
-        TextView aiChat = rootView.findViewById(R.id.AiChat);
+        CardView crossTopic = rootView.findViewById(R.id.Cross_Topic);
+        CardView aiChat = rootView.findViewById(R.id.AI_chat);
+        TextView tip=rootView.findViewById(R.id.tip);
 
+        tip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("什麼是串題?");
+                builder.setMessage("在雅思口說考試中，每個題庫加總起來有好幾百道題。 " +
+                        "串題法就是挖掘每個題目之間的聯繫，用一個回答盡可能串得足夠多的題目。" +
+                        "如此一來不僅效率提升，答案的內容豐富度也提高了!" +
+                        "現在就來使用看看我們的AI串題，讓AI幫你進行串題吧!");
 
+                builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
 
         crossTopic.setOnClickListener(new View.OnClickListener() {
