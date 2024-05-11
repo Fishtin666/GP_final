@@ -8,9 +8,9 @@
 
     <ImageButton
         android:id="@+id/pencil2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="22dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="31dp"
         android:background="#00FF0000"
         android:scaleType="fitCenter"
@@ -21,9 +21,22 @@
     <View
         android:id="@+id/view2"
         android:layout_width="413dp"
-        android:layout_height="52dp"
+        android:layout_height="60dp"
         android:background="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription=" "
+        android:onClick="leaveClick"
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -51,8 +64,8 @@
 
     <Spinner
         android:id="@+id/spinner2"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
+        android:layout_width="121dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/spinner_shape"
@@ -62,9 +75,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/center"
         android:layout_width="match_parent"
-        android:layout_height="503dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner2">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
