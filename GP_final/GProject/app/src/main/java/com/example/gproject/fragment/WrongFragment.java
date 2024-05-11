@@ -1,5 +1,6 @@
 package com.example.gproject.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.example.gproject.R;
+import com.example.gproject.Review.RReview;
+import com.example.gproject.Review.Review_choose;
+import com.example.gproject.Review.Review_main;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +69,27 @@ public class WrongFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wrong, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_wrong, container, false);
+        Spinner spinner1 = rootview.findViewById(R.id.spinner1);
+        ArrayAdapter adapter1 = ArrayAdapter.createFromResource(getContext(),R.array.Review_array, android.R.layout.simple_dropdown_item_1line);
+        spinner1.setAdapter(adapter1);
+
+        ImageButton pencil = rootview.findViewById(R.id.pencil1);
+        Button button = rootview.findViewById(R.id.button);
+
+        pencil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Review_choose.class);
+                startActivity(intent);
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener(){
+            public  void onClick(View v){
+                Intent intent = new Intent(getContext(), RReview.class);
+                startActivity(intent);
+            }
+        });
+    return rootview;
     }
 }

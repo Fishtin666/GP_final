@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,8 +20,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gproject.R;
+import com.example.gproject.Writing.W_Judge_P1;
+import com.example.gproject.Writing.Writing_T2answer1;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.core.Tag;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,6 +43,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -45,7 +56,9 @@ public class listen_ftest1 extends AppCompatActivity {
     ImageView pre;
     TextView timer;
     CountDownTimer countDownTimer;
-    long totalTime = 30 * 60 * 1000; // 30 minutes in milliseconds
+    FirebaseAuth auth;
+    private DatabaseReference databaseReference;
+    long totalTime = (30 * 60+10) * 1000; // 30 minutes in milliseconds
     boolean isTimerPlay = false;
     MediaPlayer mediaPlayer;
     boolean isAudioPlay = false;// 标志用于跟踪播放状态
@@ -65,6 +78,9 @@ public class listen_ftest1 extends AppCompatActivity {
         pre = findViewById(R.id.pre);
         next = findViewById(R.id.next);
         title = findViewById(R.id.title);
+
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // 获取传递的 Bundle 对象
         Bundle bundle = getIntent().getExtras();
@@ -307,7 +323,7 @@ public class listen_ftest1 extends AppCompatActivity {
     //音檔和倒數計時器
     public void audioPlay(View view) {
         // 检查是否正在播放音频
-        if (!isAudioPlay) {
+        if (isAudioPlay == false) {
             // 检查 MediaPlayer 是否已经初始化
             if (mediaPlayer != null) {
                 if (!mediaPlayer.isPlaying()) {
@@ -321,18 +337,67 @@ public class listen_ftest1 extends AppCompatActivity {
         }
     }
     public void leaveClick(View view){
-        if (mediaPlayer.isPlaying()) {
-            // 暫停播放
-            // 釋放音频
-            stopAudio();
-            Log.d("TAG","mediaPlayer leave stop");
+        if (isAudioPlay == true) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                // 暫停播放
+                // 釋放音频
+                stopAudio();
+                Log.d("TAG", "mediaPlayer leave stop");
+            }
         }
-        Intent intent = new Intent(this, listen.class);
-        // 启动新的 Activity
-        startActivity(intent);
-        finish();
+            Intent intent = new Intent(this, listen.class);
+            // 启动新的 Activity
+            startActivity(intent);
+            finish();
+
     }
 
+
+    public void finishClick(View view){
+        if (isAudioPlay == true) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                // 暫停播放
+                // 釋放音频
+                stopAudio();
+                Log.d("TAG", "mediaPlayer leave stop");
+            }
+        }
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            long currentTime = System.currentTimeMillis(); // 使用當前系統時間;
+            Date date = new Date(currentTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String formattedDate = sdf.format(date);
+            for(int ansKey=1 ; ansKey<=40 ; ansKey++){
+
+                String answerText = editTextMapFG.get(ansKey);
+                DatabaseReference listenAnswersRef = databaseReference
+                        .child("Listen")
+                        .child(userId)
+                        .child("test"+bundleValue)
+                        .child(formattedDate)
+                        .child(String.valueOf(ansKey));
+                        //.push(); // 使用 push() 生成唯一键
+                listenAnswersRef.setValue(answerText)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    // 存储成功
+                                    Intent intent = new Intent(listen_ftest1.this, listen_Ans1.class);
+                                    startActivity(intent);
+                                } else {
+                                    // 存储失败
+                                    // 处理存储失败的情况
+                                }
+                            }
+                        });
+            }
+        }
+
+    }
 
     //音頻撥放
     private void playAudio(){
@@ -347,7 +412,7 @@ public class listen_ftest1 extends AppCompatActivity {
                 storageRef.getFile(localFile)
                         .addOnSuccessListener(taskSnapshot -> {
                             // 下载成功，创建 MediaPlayer 并播放 mp3 文件
-                            MediaPlayer mediaPlayer = new MediaPlayer();
+                            //MediaPlayer mediaPlayer = new MediaPlayer();
                             try {
                                 mediaPlayer.setDataSource(localFile.getAbsolutePath());
                                 mediaPlayer.prepare();
@@ -369,6 +434,7 @@ public class listen_ftest1 extends AppCompatActivity {
         // 停止播放音频
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
+            Log.d("TAG","audio stop");
         }
     }
 
@@ -397,12 +463,14 @@ public class listen_ftest1 extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         editTextMapFG.clear();
         // 在 Activity 销毁时释放 MediaPlayer 资源
         if (mediaPlayer != null) {
+            stopAudio();
             mediaPlayer.release(); // 釋放MediaPlayer資源
             mediaPlayer = null;
             Log.d("TAG","mediaPlayer release");
