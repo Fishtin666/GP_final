@@ -1,4 +1,4 @@
-package com.example.gproject;
+package com.example.gproject.reading;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,7 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gproject.reading.R_blank;
-import com.example.gproject.reading.R_chose;
-import com.example.gproject.reading.R_judge;
-import com.example.gproject.reading.R_match;
-import com.example.gproject.reading.R_topic;
+import com.example.gproject.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChoseTestActivity extends AppCompatActivity {
@@ -37,6 +33,7 @@ public class ChoseTestActivity extends AppCompatActivity {
         int number = getIntent().getIntExtra("number", 0);
         Button test1 = findViewById(R.id.test1);
         Button test2 = findViewById(R.id.test2);
+        Button test3 = findViewById(R.id.test3);
         test1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,6 +44,12 @@ public class ChoseTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ChoseTestNum(number,2);
+            }
+        });
+        test3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChoseTestNum(number,3);
             }
         });
 
@@ -66,6 +69,9 @@ public class ChoseTestActivity extends AppCompatActivity {
                 break;
             case 4:
                 intent = new Intent(this, R_match.class);
+                break;
+            case 5:
+                intent = new Intent(this, R_multiple.class);
                 break;
             default:
                 Log.e("chose error", "Invalid number2: " + number2);

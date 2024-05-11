@@ -17,22 +17,37 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 public class R_blank extends AppCompatActivity {
     private static final String TAG = "R_blank";
+    String ReviewName = "R_blank" ;
+    int numberOfFields = 5;  // Set the Number of Question
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_blank);
+//        HideCorrectAns();
 
-        int number = getIntent().getIntExtra("ChoseNumber", 0);
+        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference documentRef = db.collection("R_blank").document(String.valueOf(number));
-        int numberOfFields = 5;
+        DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
 
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -54,14 +69,16 @@ public class R_blank extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                long currentTime = System.currentTimeMillis();
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                                    EditText editText = findViewById(ansId);
+                                    String editTextValue = editText.getText().toString().trim();
+                                    saveReviewData(Dnumber, currentTime, ansName, editTextValue);
 
+                                    List<String> incorrectAnswers = new ArrayList<>();
                                     if (document.contains(ansName)) {
-                                        EditText editText = findViewById(ansId);
-                                        String editTextValue = editText.getText().toString().trim();
-
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
                                         Log.e("blank", firestoreValue);
@@ -70,12 +87,15 @@ public class R_blank extends AppCompatActivity {
                                         if (!editTextValue.equals(firestoreValue)) {
                                             //mark incorrect answer
                                             editText.setTextColor(Color.RED);
+                                            incorrectAnswers.add(firestoreValue);
+
+                                        }else {
+                                            incorrectAnswers.add("");
                                         }
                                     }
                                 }
                             } else {
                                 Log.d(TAG, "No such document");
-                                // Firestore 中不存在文档时，您可以在此处进行其他操作，比如显示一条消息
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -163,5 +183,46 @@ public class R_blank extends AppCompatActivity {
 
         articleContentTextView.setText(content);
         Q1TextView.setText(Q1);
+    }
+
+    // save Review data
+    public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference root = db.getReference("R_Review");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review").child(ReviewName);
+        String userId = user.getUid();
+        String D_ID = String.valueOf(documentID);
+//        String A_cul = String.valueOf(cul);
+        R_ReviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                long currentTime = System.currentTimeMillis();
+
+                if (user != null) {
+                    Date date = new Date(currentTime);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String formattedDate = sdf.format(date);
+                    root.child(ReviewName).child(userId).child(D_ID).child(formattedDate).child(cul).setValue(ans);
+                } else {
+                    Log.e(ReviewName, "review save data failed");
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("R_match", "review save data failed 2");
+            }
+        });
+
+    }
+    //Hide correct ans cul
+    public void HideCorrectAns() {
+        for (int i = 0; i < numberOfFields; i++) {
+            String correctName = "c" + (i + 1);
+            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+            TextView textC = findViewById(correctID);
+            textC.setVisibility(View.GONE);
+        }
     }
 }

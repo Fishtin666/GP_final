@@ -166,18 +166,11 @@ public class profile extends AppCompatActivity {
                                 r_num+=queryDocumentSnapshots.size();
                                 break;
 
-
-
                         }
                         //documentCount = queryDocumentSnapshots.size();
                         //System.out.println("數量:"+String.valueOf(documentCount));
-
                     }
                 });
-
-
-
-
     }
 
     public void getRealNum(String part,String partCode){
@@ -185,7 +178,6 @@ public class profile extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
-
 
             // 构建路径以获取特定问题的答案数量
             String answersPath = "users/" + userId +"/"+part;

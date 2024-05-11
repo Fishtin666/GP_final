@@ -33,21 +33,20 @@ import java.util.Date;
 import java.util.Locale;
 
 public class R_judge extends AppCompatActivity {
-    private static final String TAG = "R_judge"; // 用你的类名替代 YourClassName
-
+    private static final String TAG = "R_judge";
     String ReviewName = "R_judge";
+    int numberOfFields = 5;  // Set the Number of Question
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_judge);
+        HideCorrectAns();
 
         int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference documentRef = db.collection("R_judge").document(String.valueOf(Dnumber));
+        DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
 
-        // 假設要抓取的欄位數量
-        int numberOfFields = 5;
 
         ScrollView scrollView = findViewById(R.id.scrollView);
         scrollView.post(new Runnable() {
@@ -235,5 +234,19 @@ public class R_judge extends AppCompatActivity {
             }
         });
 
+    }
+    //Hide correct ans cul
+    public void HideCorrectAns() {
+        for (int i = 0; i < numberOfFields; i++) {
+            String correctName = "c" + (i + 1);
+            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+            TextView textC = findViewById(correctID);
+            if(textC != null){
+                textC.setVisibility(View.GONE);
+            }else{
+                break;
+            }
+
+        }
     }
 }

@@ -96,7 +96,6 @@ public class LevelCQuizActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(LevelCQuizActivity.this, WordFragment.class);
                         startActivity(intent);
-                        finish();
                     }
                 });
             }
