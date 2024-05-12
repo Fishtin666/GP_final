@@ -119,7 +119,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     public static boolean star_show=true;
 
-    boolean speakover=false,indic=false,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
+    boolean speakover=false,indic=true,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
     Context context;
 
     String[] words;
@@ -162,11 +162,11 @@ public class Speaking_part1_answer extends AppCompatActivity {
             //answer.setText(sharedString);
             help_answer = sharedString;
             star_show=true;
-
+            SpanningString(sharedString);
             // 清除 sharedstring，以免再次進入時重複顯示
             sharedString = null;
             PA_mic=true;
-            SpanningString();
+
         }
 
         ROf_ques = getIntent().getStringExtra("ROf_ques");
@@ -223,7 +223,20 @@ public class Speaking_part1_answer extends AppCompatActivity {
             }
         });
 
+        mic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mic.setImageResource(R.drawable.mic_gray);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
+                        micClick();
+                    }
+                }, 100); //
+            }
+        });
 
 
         try {
@@ -333,6 +346,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
     Bundle bundle=new Bundle();
 
     public void hintClick(View v) throws InterruptedException {
+
         hint.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         star_show =false;
@@ -367,8 +381,8 @@ public class Speaking_part1_answer extends AppCompatActivity {
     }
 
 
-    private void SpanningString(){
-        //if(spanning==false){
+    private void SpanningString(String help_answer){
+
             StringTokenizer tokenizer = new StringTokenizer(help_answer, " \t\n\r\f,.?!;:\"");
             List<String> wordsList = new ArrayList<>();
             while (tokenizer.hasMoreTokens()) {
@@ -383,7 +397,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
                 int endIndex = startIndex + words[i].length();
                 int customColor = Color.rgb(120, 59, 55);
                 //Toast.makeText(getApplicationContext(), words[i], Toast.LENGTH_LONG).show();
-                if (InDic(words[i])==false) {
+                if (InDic(words[i]) == true) {
                     spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannableString.setSpan(new ForegroundColorSpan(customColor), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannableString.setSpan(new StyleSpan(Typeface.BOLD), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -392,10 +406,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
             }
             answer.setText(spannableString);
 
-        //}else{
-            //answer.setText(help_answer);
 
-        //}
 
 
     }
@@ -625,11 +636,10 @@ public class Speaking_part1_answer extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 bundle.putString("key",answerKey);
-                                callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please telxl me how to improve it and give me example.");
+                                callAPI("You are a IELTS examiner for speaking part 1.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
 
                             } else {
-                                // 存储失败
-                                // 处理存储失败的情况
+
                             }
                         }
                     });
@@ -664,7 +674,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 //
 //    }
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-    public void micClick(View view) {
+    public void micClick() {
         mic.setImageResource(R.drawable.mic_gray);
         if(PA_mic){
 

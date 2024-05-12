@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class Speaking_judge extends AppCompatActivity {
     TextView judge;
     ImageView home;
     String Judge,Num,Key;
+    ImageButton back;
 
     TextToSpeech tts;
 
@@ -56,6 +58,14 @@ public class Speaking_judge extends AppCompatActivity {
 
         judge = findViewById(R.id.judge);
         home = findViewById(R.id.home);
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

@@ -80,7 +80,10 @@ public class PronunciationAssessment extends Activity {
 
     String[] short_question={"We had a great time taking a long walk outside in the morning."
                         ,"It took me a long time to learn where he came from.",
-                        "There was no possibility of taking a walk that day."};
+                        "There was no possibility of taking a walk that day.",
+                        "She enjoyed spending a quiet afternoon reading by the river.",
+            "It's important to take some time to reflect on what happened.",
+            "They planned on going fishing early in the morning."};
 
     String[] long_question={"The early bird catches the worm. This proverb means that success comes to those who wake up and act early. It's a reminder to be proactive and seize opportunities when they arise."
     ,"Learning a new language can be both challenging and rewarding. It opens doors to new cultures and ways of thinking. By practicing regularly and staying committed, you can make significant progress. Immersing yourself in the language through conversations and media is key to improving fluency."
@@ -287,10 +290,13 @@ public class PronunciationAssessment extends Activity {
     }
 
     public void  setQuestion(String[] question){
+        String temp=article.getText().toString();
         Random random = new Random();
         int randomIndex = random.nextInt(question.length);
         referenceText = question[randomIndex];
-        article.setText(referenceText);
+        if(referenceText.equals(temp))
+            setQuestion(question);
+        else article.setText(referenceText);
     }
 
     public void micClick(){
@@ -397,11 +403,11 @@ public class PronunciationAssessment extends Activity {
 
                         }
 
-                    }
-                    Toast.makeText(PronunciationAssessment.this, "結果:"+spannableString.toString(), Toast.LENGTH_SHORT).show();
+                    }article.setText(spannableString);
+                    //Toast.makeText(PronunciationAssessment.this, "結果:"+spannableString.toString(), Toast.LENGTH_SHORT).show();
 
                     //convertToRegularTextView(getApplicationContext(),article,spannableString);
-                    //article.setText(spannableString);
+
                 }
 
             });
