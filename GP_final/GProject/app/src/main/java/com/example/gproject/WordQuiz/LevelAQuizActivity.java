@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private WordQuizAdapter adapter;
     private String collectionName;
+    Button wordSendButton;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,17 @@ public class LevelAQuizActivity extends AppCompatActivity {
         collectionName = "R_wordA";
         TextView testWord = findViewById(R.id.testWord);
         testWord.setText("Level_A");
+        // Send Answer button
+        wordSendButton = findViewById(R.id.wordSend);
+        wordSendButton.setVisibility(View.INVISIBLE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 處理完耗時操作後，將 ProgressBar 隱藏，並顯示 TextView
+                wordSendButton.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
 
         try {
             RecyclerView QuizRecycler = findViewById(R.id.rcyQ);
@@ -92,8 +105,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 });
             }
 
-            // Send Answer button
-            Button wordSendButton = findViewById(R.id.wordSend);
+
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -59,6 +59,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
     private Handler handler = new Handler(Looper.getMainLooper());
     LevelAQuizActivity levelAQuizActivity = new LevelAQuizActivity(); // Build LevelAQuizActivity
     private String collectionName;
+    Button wordSendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,16 @@ public class LevelCQuizActivity extends AppCompatActivity {
         collectionName= "R_wordC";
         TextView testWord = findViewById(R.id.testWord);
         testWord.setText("Level_C");
+
+        wordSendButton = findViewById(R.id.wordSend);
+        wordSendButton.setVisibility(View.INVISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 處理完耗時操作後，將 ProgressBar 隱藏，並顯示 TextView
+                wordSendButton.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
 
         try {
             RecyclerView QuizRecycler = findViewById(R.id.rcyQ);
@@ -101,7 +112,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
             }
 
             // Send Answer button
-            Button wordSendButton = findViewById(R.id.wordSend);
+            wordSendButton = findViewById(R.id.wordSend);
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -32,7 +32,7 @@ import com.google.protobuf.StringValue;
 import java.lang.reflect.Array;
 
 public class profile extends AppCompatActivity {
-    Button logout,jump;
+    Button logout;
     ImageButton back;
     TextView email,Uid,w_done,l_done,s_done,r_done,voc;
     private ProgressBar w_progressBar,s_progressBar,l_progressBar,r_progressBar,voc_progressBar;
@@ -63,13 +63,7 @@ public class profile extends AppCompatActivity {
         r_done = findViewById(R.id.reading_done);
         voc = findViewById(R.id.voc);
 
-        jump = findViewById(R.id.button6);
-        jump.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(profile.this, getDb.class));
-            }
-        });
+
 
         logout = findViewById(R.id.logOut);
         email = findViewById(R.id.email);
