@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.example.gproject.Listening.listen_Ans1;
 import com.example.gproject.R;
 import com.example.gproject.Review.RReview;
 import com.example.gproject.Review.Review_choose;
@@ -238,6 +239,20 @@ public class WrongFragment extends Fragment {
                                 button.setText("Listening "+key+" "+subKey);
                                 // 将按钮添加到布局中
                                 reviewLayout.addView(button);
+
+                                // 为按钮设置点击事件
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // 创建一个新的 Intent
+                                        Intent intent = new Intent(getContext(), listen_Ans1.class);
+                                        // 将 key 和 subKey 作为额外数据传递给下一个 Activity
+                                        intent.putExtra("key", key);
+                                        intent.putExtra("subKey", subKey);
+                                        // 启动新的 Activity
+                                        startActivity(intent);
+                                    }
+                                });
                             }
                         }
                     } else {
