@@ -222,8 +222,7 @@ public class LevelBQuizActivity extends AppCompatActivity {
                     if (!"unKnow".equals(wordLog)) {
 
                         if (Score < 2) {
-                            Intent intent = new Intent(LevelBQuizActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            GoToMain(Level);
 
                         } else {
                             GoToNextLevel(dialog, Level);
@@ -267,30 +266,13 @@ public class LevelBQuizActivity extends AppCompatActivity {
         ShowHelpDialog();
     }
     //Stay in Original Level
-    public void StayOriginalLevel(Dialog dialog, String LevelValue) {
+    public void GoToMain(String LevelValue) {
         //set hint
-        TextView Hint = dialog.findViewById(R.id.ScoreHint);
         Log.e("setHint", "show B ");
-
-        switch (LevelValue) {
-            case "A":
-                Hint.setText("未得級數，你的單字能力需加強");
-                Intent intentA = new Intent(this, LevelAQuizActivity.class);
+                Intent intentA = new Intent(this, MainActivity.class);
                 startActivity(intentA);
-                break;
+                SaveWordLevel(LevelValue);
 
-            case "B":
-                Hint.setText("你的單字等級為 A ");
-                Intent intentB = new Intent(this, LevelBQuizActivity.class);
-                startActivity(intentB);
-                break;
-
-            case "C":
-                Hint.setText("你的單字等級為 B ");
-                Intent intentC = new Intent(this, MainActivity.class);
-                startActivity(intentC);
-                break;
-        }
     }
     //Go To Next Level
     public void GoToNextLevel(Dialog dialog, String LevelValue) {
@@ -299,6 +281,7 @@ public class LevelBQuizActivity extends AppCompatActivity {
             case "A":
                 Intent intentA = new Intent(this, LevelBQuizActivity.class);
                 startActivity(intentA);
+                SaveWordLevel(LevelValue);
                 break;
 
             case "B":
