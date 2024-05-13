@@ -79,7 +79,6 @@ public class LevelAQuizActivity extends AppCompatActivity {
             RecyclerView QuizRecycler = findViewById(R.id.rcyQ);
             List<WordQuizData> questionsList = new ArrayList<>();
             QuizRecycler.setLayoutManager(new LinearLayoutManager(this));
-            QuizRecycler.setAdapter(adapter);
             adapter = new WordQuizAdapter(this, questionsList);
             QuizRecycler.setAdapter(adapter);
 
@@ -258,6 +257,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
             }
         });
     }
+
     public void getHelp(View view){
         ShowHelpDialog();
     }
