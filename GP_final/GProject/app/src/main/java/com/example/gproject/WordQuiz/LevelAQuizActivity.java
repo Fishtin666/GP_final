@@ -196,12 +196,12 @@ public class LevelAQuizActivity extends AppCompatActivity {
             });
 
             //identify whether "word" EXIST
-//            if (!"unKnow".equals(wordLog)) {
-//                cancelButton.setVisibility(View.GONE);
-//                Log.i("dia11", "Gone 11");
-//            } else {
-//                Log.i("dia11", "Gone 13");
-//            }
+            if (!"unKnow".equals(wordLog)) {
+                cancelButton.setVisibility(View.GONE);
+                Log.i("dia11", "Gone 11");
+            } else {
+                Log.i("dia11", "Gone 13");
+            }
 
             //set Hint
             if(Score<2){
@@ -217,9 +217,8 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (!"unKnow".equals(wordLog)) {
 
-                        if (Score < 3) {
-                            Intent intent = new Intent(LevelAQuizActivity.this, MainActivity.class);
-                            startActivity(intent);
+                        if (Score < 6) {
+                            GoToMain(Level);
 
                         } else {
                             GoToNextLevel(Level);
@@ -231,7 +230,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
 //                            Log.i("dia11", "exist " + wordLog);
                         }
                     } else {
-                        if (Score > 3) {
+                        if (Score > 6) {
                             GoToNextLevel(Level);
                         }
                     }
@@ -264,25 +263,13 @@ public class LevelAQuizActivity extends AppCompatActivity {
     }
 
     //Stay in Original Level
-    public void StayOriginalLevel(String LevelValue) {
-        switch (LevelValue) {
-            case "A":
-                Intent intentA = new Intent(this, LevelAQuizActivity.class);
-                startActivity(intentA);
-                break;
+    public void GoToMain(String LevelValue) {
+        //set hint
+        Log.e("setHint", "show B ");
+        Intent intentA = new Intent(this, MainActivity.class);
+        startActivity(intentA);
+        SaveWordLevel(LevelValue);
 
-            case "B":
-                SaveWordLevel(LevelValue);
-                Intent intentB = new Intent(this, LevelBQuizActivity.class);
-                startActivity(intentB);
-                break;
-
-            case "C":
-                SaveWordLevel(LevelValue);
-                Intent intentC = new Intent(this, MainActivity.class);
-                startActivity(intentC);
-                break;
-        }
     }
 
     //Go To Next Level

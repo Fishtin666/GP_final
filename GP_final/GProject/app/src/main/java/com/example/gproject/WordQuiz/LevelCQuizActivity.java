@@ -66,7 +66,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pra_word);
 
-        collectionName= "R_wordC";
+        collectionName = "R_wordC";
         TextView testWord = findViewById(R.id.testWord);
         testWord.setText("Level_C");
 
@@ -156,7 +156,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
                             }
                         }
 
-                        ShowScoreDialog(score,"C");
+                        ShowScoreDialog(score, "C");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -169,7 +169,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
             // Get random questions and options from Firestore
             getRandomQuestionAndOptions(collectionName);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e("FireStore C1 ", "error: " + e.getMessage());
         }
@@ -214,10 +214,10 @@ public class LevelCQuizActivity extends AppCompatActivity {
             }
 
             //set Hint
-            if(Score<2){
-                setStayHint(dialog,Level);
-            }else {
-                setNextHint(dialog,Level);
+            if (Score < 2) {
+                setStayHint(dialog, Level);
+            } else {
+                setNextHint(dialog, Level);
             }
 
             //enter to next part
@@ -265,6 +265,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
             Log.i("dia33", "error: " + e.getMessage());
         }
     }
+
     //show Help dialog
     public void ShowHelpDialog() {
         Dialog dialog = new Dialog(this);
@@ -281,27 +282,19 @@ public class LevelCQuizActivity extends AppCompatActivity {
             }
         });
     }
-    public void getHelp(View view){
+
+    public void getHelp(View view) {
         ShowHelpDialog();
     }
+
     //Stay in Original Level
-    public void StayOriginalLevel(String LevelValue) {
-        switch (LevelValue) {
-            case "A":
-                Intent intentA = new Intent(this, LevelAQuizActivity.class);
-                startActivity(intentA);
-                break;
+    public void GoToMain(String LevelValue) {
+        //set hint
+        Log.e("setHint", "show B ");
+        Intent intentA = new Intent(this, MainActivity.class);
+        startActivity(intentA);
+        SaveWordLevel(LevelValue);
 
-            case "B":
-                Intent intentB = new Intent(this, LevelBQuizActivity.class);
-                startActivity(intentB);
-                break;
-
-            case "C":
-                Intent intentC = new Intent(this, MainActivity.class);
-                startActivity(intentC);
-                break;
-        }
     }
 
     //Go To Next Level
@@ -343,6 +336,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
         }
 
     }
+
     // set pass Hint
     public void setNextHint(Dialog dialog, String LevelValue) {
         TextView Hint = dialog.findViewById(R.id.ScoreHint);
@@ -375,16 +369,17 @@ public class LevelCQuizActivity extends AppCompatActivity {
                     if ("C".equals(WordLevel1)) {
                         root.child(userId).child("WordLevel").setValue("C");
 
-                    }else if("B".equals(WordLevel)){
+                    } else if ("B".equals(WordLevel)) {
                         root.child(userId).child("WordLevel").setValue("B");
-                    }else{
+                    } else {
                         root.child(userId).child("WordLevel").setValue("A");
                     }
-                }else {
+                } else {
                     root.child(userId).child("WordLevel").setValue(WordLevel);
                     Log.i("SaveData", "show B fail2");
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -409,7 +404,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
                                     wordList.add(new WordQuizData(meaning, pos, word, word, word));
 
                                 }
-                                setRandomQuestionAndOptions(wordList,wordList);
+                                setRandomQuestionAndOptions(wordList, wordList);
                             } else {
                             }
                         } catch (Exception e) {
@@ -419,6 +414,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
                     }
                 });
     }
+
     //setQuestion
     public void setRandomQuestionAndOptions(List<WordQuizData> questionList, List<WordQuizData> optionList) {
         int TestNum = 10;
@@ -476,8 +472,8 @@ public class LevelCQuizActivity extends AppCompatActivity {
         editor.putInt("Score", Score);
         editor.apply();
         //save level
-        SharedPreferences level=getSharedPreferences("level", MODE_PRIVATE);
-        SharedPreferences.Editor editor2= level.edit();
+        SharedPreferences level = getSharedPreferences("level", MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = level.edit();
         editor2.putString("level", Level);
         editor2.apply();
     }
