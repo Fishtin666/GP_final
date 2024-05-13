@@ -91,7 +91,6 @@ public class ChosReadingAdapter extends RecyclerView.Adapter<ChosReadingAdapter.
             switch (chosenNumber) {
                 case 1:
                     Intent intent1 = new Intent(context, R_blank.class);
-                    // 在這裡可以添加任何你希望添加的額外數據
                     intent1.putExtra("DocumentId", Dnumber);
                     context.startActivity(intent1);
                     break;

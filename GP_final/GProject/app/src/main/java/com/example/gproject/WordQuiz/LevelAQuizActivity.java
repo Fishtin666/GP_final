@@ -142,6 +142,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
                                         radioButton.setTextColor(Color.RED);
                                     }
                                 }
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Log.e("FireStore A2 ", "error: " + e.getMessage());
@@ -195,12 +196,12 @@ public class LevelAQuizActivity extends AppCompatActivity {
             });
 
             //identify whether "word" EXIST
-            if (!"unKnow".equals(wordLog)) {
-                cancelButton.setVisibility(View.GONE);
-                Log.i("dia11", "Gone 11");
-            } else {
-                Log.i("dia11", "Gone 13");
-            }
+//            if (!"unKnow".equals(wordLog)) {
+//                cancelButton.setVisibility(View.GONE);
+//                Log.i("dia11", "Gone 11");
+//            } else {
+//                Log.i("dia11", "Gone 13");
+//            }
 
             //set Hint
             if(Score<2){
@@ -217,7 +218,8 @@ public class LevelAQuizActivity extends AppCompatActivity {
                     if (!"unKnow".equals(wordLog)) {
 
                         if (Score < 3) {
-                            StayOriginalLevel(Level);
+                            Intent intent = new Intent(LevelAQuizActivity.this, MainActivity.class);
+                            startActivity(intent);
 
                         } else {
                             GoToNextLevel(Level);

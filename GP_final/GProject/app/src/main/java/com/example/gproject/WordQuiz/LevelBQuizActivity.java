@@ -222,7 +222,8 @@ public class LevelBQuizActivity extends AppCompatActivity {
                     if (!"unKnow".equals(wordLog)) {
 
                         if (Score < 2) {
-                            StayOriginalLevel(dialog, Level);
+                            Intent intent = new Intent(LevelBQuizActivity.this, MainActivity.class);
+                            startActivity(intent);
 
                         } else {
                             GoToNextLevel(dialog, Level);

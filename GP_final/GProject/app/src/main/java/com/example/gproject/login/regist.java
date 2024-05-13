@@ -54,7 +54,7 @@ public class regist extends AppCompatActivity {
 
                 // 检查密码长度
                 if (!isPasswordValid(password)) {
-                    Toast.makeText(regist.this, "密码长度需至少六位", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(regist.this, "密碼長度需至少六位", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -65,7 +65,7 @@ public class regist extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // 注册成功
-                                    Toast.makeText(regist.this, "注册成功", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(regist.this, "註冊成功", Toast.LENGTH_SHORT).show();
                                     // 跳转到登录页面
                                     Intent intent = new Intent(regist.this, login.class);
                                     startActivity(intent);
@@ -73,7 +73,7 @@ public class regist extends AppCompatActivity {
                                     //
                                 } else {
                                     // 注册失败
-                                    Toast.makeText(regist.this, "注册失败：" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(regist.this, "註冊失败：" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
