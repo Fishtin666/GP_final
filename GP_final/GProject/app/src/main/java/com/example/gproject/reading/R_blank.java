@@ -197,7 +197,7 @@ public class R_blank extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("R_Review");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review").child(ReviewName);
+        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review");
         String userId = user.getUid();
         String D_ID = String.valueOf(documentID);
 //        String A_cul = String.valueOf(cul);
