@@ -489,10 +489,10 @@ public class JustifyTextView4 extends AppCompatTextView {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(JustifyTextView4.this.getContext(), "成功新增", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JustifyTextView4.this.getContext(), "單字收藏成功", Toast.LENGTH_SHORT).show();
 
                             } else {
-                                Toast.makeText(JustifyTextView4.this.getContext(), "新增失敗", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JustifyTextView4.this.getContext(), "單字收藏失敗", Toast.LENGTH_SHORT).show();
 
                             }
                         }
@@ -519,10 +519,10 @@ public class JustifyTextView4 extends AppCompatTextView {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(JustifyTextView4.this.getContext(), "成功刪除", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JustifyTextView4.this.getContext(), "單字刪除成功", Toast.LENGTH_SHORT).show();
 
                             } else {
-                                Toast.makeText(JustifyTextView4.this.getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JustifyTextView4.this.getContext(), "單字刪除失敗", Toast.LENGTH_SHORT).show();
 
                             }
                         }

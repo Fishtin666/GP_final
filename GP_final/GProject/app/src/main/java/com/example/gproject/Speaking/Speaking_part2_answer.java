@@ -39,11 +39,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gproject.AiTeacher.AiTeacher2;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.example.gproject.meaning.DataHolder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
@@ -268,17 +276,21 @@ public class Speaking_part2_answer extends AppCompatActivity {
             star.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(star_yellow){
+                    if (star_yellow) {
                         star.setImageResource(R.drawable.star_black);
-                        star_yellow=false;
-                    }else{
+                        star_yellow = false;
+                        voc_delete_db(selectedWord);
+
+                    } else {
                         star.setImageResource(R.drawable.star_yellow);
-                        star_yellow=true;
+                        star_yellow = true;
+                        voc_insert_db(selectedWord,adapter,phonetic.getText().toString(),0);
                     }
 
 
                 }
             });
+
 
         });
 
@@ -615,6 +627,73 @@ public class Speaking_part2_answer extends AppCompatActivity {
             }
         });
     }
+
+    public void voc_insert_db(String word, MeaningAdapter adapter,String phonetic,int count){
+
+        String definitionsText="";
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+
+        definitionsText=adapter.getDefinitionsText();
+        DataHolder obj = new DataHolder(definitionsText, phonetic, 0);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.setValue(obj)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Speaking_part2_answer.this, "單字收藏成功", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(Speaking_part2_answer.this,"新增失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void voc_delete_db(String word){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Speaking_part2_answer.this, "單字刪除成功", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(Speaking_part2_answer.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
 
 
 }

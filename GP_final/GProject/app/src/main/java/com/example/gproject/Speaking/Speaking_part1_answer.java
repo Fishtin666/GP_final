@@ -60,6 +60,7 @@ import com.example.gproject.Writing.Writing_T1answer2;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.example.gproject.meaning.DataHolder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -324,6 +325,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
                 }
             });
+
             ImageView star = popupView.findViewById(R.id.star);
 
             star.setOnClickListener(new View.OnClickListener() {
@@ -332,9 +334,12 @@ public class Speaking_part1_answer extends AppCompatActivity {
                     if (star_yellow) {
                         star.setImageResource(R.drawable.star_black);
                         star_yellow = false;
+                        voc_delete_db(selectedWord);
+
                     } else {
                         star.setImageResource(R.drawable.star_yellow);
                         star_yellow = true;
+                        voc_insert_db(selectedWord,adapter,phonetic.getText().toString(),0);
                     }
 
 
@@ -945,6 +950,70 @@ public class Speaking_part1_answer extends AppCompatActivity {
         }
     }
 
+    public void voc_insert_db(String word, MeaningAdapter adapter,String phonetic,int count){
+
+        String definitionsText="";
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+
+        definitionsText=adapter.getDefinitionsText();
+        DataHolder obj = new DataHolder(definitionsText, phonetic, 0);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.setValue(obj)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Speaking_part1_answer.this, "成功新增", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(Speaking_part1_answer.this,"新增失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void voc_delete_db(String word){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference Ref = databaseReference
+                    .child("word_collect")
+                    .child(userId)
+                    .child(word);
+
+
+            Ref.removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Speaking_part1_answer.this, "成功刪除", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(Speaking_part1_answer.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
 
 
 }
