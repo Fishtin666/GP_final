@@ -40,13 +40,13 @@ import okhttp3.internal.ws.RealWebSocket;
 public class R_multiple extends AppCompatActivity {
     private static final String TAG = "R_multiple";
     String ReviewName = "R_multiple";
-    int numberOfFields = 3; //Set the Number of Question
+    int numberOfFields = 4; //Set the Number of Question
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_chose);
 
-        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
+        int Dnumber = getIntent().getIntExtra("DocumentId", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
 
@@ -71,6 +71,8 @@ public class R_multiple extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 long currentTime = System.currentTimeMillis();
+                                List<String> incorrectAnswers = new ArrayList<>();
+
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
@@ -78,20 +80,28 @@ public class R_multiple extends AppCompatActivity {
                                     String editTextValue = editText.getText().toString().trim();
 
                                     saveReviewData(Dnumber, currentTime, ansName, editTextValue);
-                                    List<String> incorrectAnswers = new ArrayList<>();
 
                                     if (document.contains(ansName)) {
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
-                                        Log.e("mattttt", firestoreValue);
-                                        Log.e("mattttt2", editTextValue);
+                                        Log.e("correct", "A：" + firestoreValue);
+
                                         // compare the value of EditText and Firestore's colum
                                         if (!editTextValue.equals(firestoreValue)) {
                                             //mark incorrect answer
                                             editText.setTextColor(Color.RED);
+                                            // add the incorrect answer to the list
+                                            incorrectAnswers.add(firestoreValue);
+
+                                        }else {
+                                            incorrectAnswers.add("");
                                         }
                                     }
+
+                                }if (!incorrectAnswers.isEmpty()) {
+                                    SetCorrectAns(incorrectAnswers);
                                 }
+
                             } else {
                                 Log.d(TAG, "No such document");
                                 // Firestore 中不存在文档时，您可以在此处进行其他操作，比如显示一条消息
@@ -191,6 +201,9 @@ public class R_multiple extends AppCompatActivity {
             case "Q3":
                 optTextView = findViewById(R.id.Q3);
                 break;
+            case "Q4":
+                optTextView = findViewById(R.id.Q4);
+                break;
             case "opt1":
                 optTextView = findViewById(R.id.opt1);
                 break;
@@ -199,6 +212,9 @@ public class R_multiple extends AppCompatActivity {
                 break;
             case "opt3":
                 optTextView = findViewById(R.id.opt3);
+                break;
+            case "opt4":
+                optTextView = findViewById(R.id.opt4);
                 break;
         }
         optTextView.setText(que);
@@ -245,6 +261,22 @@ public class R_multiple extends AppCompatActivity {
                 textC.setVisibility(View.GONE);
             }else{
                 break;
+            }
+        }
+    }
+    //Show the correct ans
+    public void SetCorrectAns(List<String> correctList) {
+        for (int i = 0; i < numberOfFields; i++) {
+            String correct = correctList.get(i);
+            String correctName = "c" + (i + 1);
+            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+            TextView textC = findViewById(correctID);
+            textC.setVisibility(View.VISIBLE);
+
+            if (correct != null) {
+                textC.setText(correct);
+            } else {
+                textC.setText(""); // 如果答案正确，将文本设置为空
             }
         }
     }

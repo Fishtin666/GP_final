@@ -45,7 +45,7 @@
             android:name=".reading.R_match"
             android:exported="true"/>
         <activity
-            android:name=".reading.ChoseTestActivity"
+            android:name=".reading.ChoseTestActivity2"
             android:exported="true"/>
                 <activity
                     android:name=".reading.R_multiple"
@@ -64,6 +64,9 @@
             android:exported="true"/>
         <activity
             android:name=".reading.R_topic"
+            android:exported="true"/>
+        <activity
+            android:name=".reading.ChoseTestActivity"
             android:exported="true"/>
 <!---->
 

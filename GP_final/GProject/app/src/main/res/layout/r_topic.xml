@@ -80,15 +80,13 @@
                         android:id="@+id/Q1"
                         android:layout_width="160dp"
                         android:layout_height="160dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
                         android:background="@color/grey"
                         android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingRight="20dp"
                         android:paddingBottom="30dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/title"
+                        android:src="@drawable/r_blank"
                         app:cardCornerRadius="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -305,150 +303,150 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/multchoose"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#E9E8EC"
-                android:onClick="M_choiceClick"
-                app:cardCornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/chart"
-                app:layout_constraintTop_toBottomOf="@+id/chart">
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/multchoose"-->
+<!--                android:layout_width="160dp"-->
+<!--                android:layout_height="160dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:backgroundTint="#E9E8EC"-->
+<!--                android:onClick="M_choiceClick"-->
+<!--                app:cardCornerRadius="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/chart"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/chart">-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                    <ImageButton
-                        android:id="@+id/Q6"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@color/grey"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="20dp"
-                        android:paddingBottom="30dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/document"
-                        app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/Q6"-->
+<!--                        android:layout_width="160dp"-->
+<!--                        android:layout_height="160dp"-->
+<!--                        android:layout_marginLeft="10dp"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:background="@color/grey"-->
+<!--                        android:paddingLeft="20dp"-->
+<!--                        android:paddingTop="10dp"-->
+<!--                        android:paddingRight="20dp"-->
+<!--                        android:paddingBottom="30dp"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        android:src="@drawable/document"-->
+<!--                        app:cardCornerRadius="10dp"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent" />-->
 
-                    <TextView
-                        android:id="@+id/T6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="8dp"
-                        android:text="單字練習"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/Q6"
-                        app:layout_constraintEnd_toEndOf="@+id/Q6"
-                        app:layout_constraintStart_toStartOf="@+id/Q6" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/T6"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:text="單字練習"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/Q6"-->
+<!--                        app:layout_constraintEnd_toEndOf="@+id/Q6"-->
+<!--                        app:layout_constraintStart_toStartOf="@+id/Q6" />-->
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/shortanswer"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#E9E8EC"
-                android:onClick="shortanswerClick"
-                app:cardCornerRadius="10dp"
-                app:layout_constraintStart_toStartOf="@+id/single_choice"
-                app:layout_constraintTop_toBottomOf="@+id/single_choice">
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/shortanswer"-->
+<!--                android:layout_width="160dp"-->
+<!--                android:layout_height="160dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:backgroundTint="#E9E8EC"-->
+<!--                android:onClick="shortanswerClick"-->
+<!--                app:cardCornerRadius="10dp"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/single_choice"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/single_choice">-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                    <ImageButton
-                        android:id="@+id/Q7"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/grey"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="20dp"
-                        android:paddingBottom="30dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/dic2"
-                        app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/Q7"-->
+<!--                        android:layout_width="160dp"-->
+<!--                        android:layout_height="160dp"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:background="@color/grey"-->
+<!--                        android:paddingLeft="20dp"-->
+<!--                        android:paddingTop="10dp"-->
+<!--                        android:paddingRight="20dp"-->
+<!--                        android:paddingBottom="30dp"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        android:src="@drawable/dic2"-->
+<!--                        app:cardCornerRadius="10dp"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent" />-->
 
-                    <TextView
-                        android:id="@+id/CrossTopic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="字典"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/Q7"
-                        app:layout_constraintEnd_toEndOf="@+id/Q7"
-                        app:layout_constraintStart_toStartOf="@+id/Q7" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/T7"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:text="字典"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/Q7"-->
+<!--                        app:layout_constraintEnd_toEndOf="@+id/Q7"-->
+<!--                        app:layout_constraintStart_toStartOf="@+id/Q7" />-->
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/title2"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#E9E8EC"
-                android:onClick="titleClick"
-                app:cardCornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/multchoose"
-                app:layout_constraintTop_toBottomOf="@+id/multchoose">
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/title2"-->
+<!--                android:layout_width="160dp"-->
+<!--                android:layout_height="160dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:backgroundTint="#E9E8EC"-->
+<!--                android:onClick="titleClick"-->
+<!--                app:cardCornerRadius="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/multchoose"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/multchoose">-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                    <ImageButton
-                        android:id="@+id/Q8"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@color/grey"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="20dp"
-                        android:paddingBottom="30dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/card1"
-                        app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/Q8"-->
+<!--                        android:layout_width="160dp"-->
+<!--                        android:layout_height="160dp"-->
+<!--                        android:layout_marginLeft="10dp"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:background="@color/grey"-->
+<!--                        android:paddingLeft="20dp"-->
+<!--                        android:paddingTop="10dp"-->
+<!--                        android:paddingRight="20dp"-->
+<!--                        android:paddingBottom="30dp"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        android:src="@drawable/card1"-->
+<!--                        app:cardCornerRadius="10dp"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent" />-->
 
-                    <TextView
-                        android:id="@+id/T8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="8dp"
-                        android:text="單字收藏夾"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/Q8"
-                        app:layout_constraintEnd_toEndOf="@+id/Q8"
-                        app:layout_constraintStart_toStartOf="@+id/Q8" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+<!--                    <TextView-->
+<!--                        android:id="@+id/T8"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:text="單字收藏夾"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/Q8"-->
+<!--                        app:layout_constraintEnd_toEndOf="@+id/Q8"-->
+<!--                        app:layout_constraintStart_toStartOf="@+id/Q8" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

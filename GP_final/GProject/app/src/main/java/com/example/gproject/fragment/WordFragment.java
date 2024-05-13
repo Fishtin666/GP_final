@@ -96,28 +96,6 @@ public class WordFragment extends Fragment {
                 word_collect_click(view);
             }
         });
-
-
-//
-//        recyclerView = rootView.findViewById(R.id.QuesNum_Recy);
-//
-//        list =new ArrayList<>();
-//
-//        LinearLayoutManager manager =new LinearLayoutManager(getContext());
-//        recyclerView.setLayoutManager(manager);
-//
-//
-//
-//
-//        for(int i=1;i<13;i++)
-//            list.add(new QuestionNumberModel("考古題"+i,1));
-//
-//
-//
-//        adapter = new QuestionNumberAdapter(getContext(),list);
-//        recyclerView.setAdapter(adapter);
-//
-//        //return inflater.inflate(R.layout.fragment_test, container, false);
         return rootView;
 
     }

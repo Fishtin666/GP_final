@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,8 +87,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(LevelAQuizActivity.this, WordFragment.class);
-                        startActivity(intent);
+                        finish();
                     }
                 });
             }
@@ -229,6 +229,25 @@ public class LevelAQuizActivity extends AppCompatActivity {
             Log.i("dia11", "error: " + e.getMessage());
         }
     }
+    //show Help dialog
+    public void ShowHelpDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.word_dialog_help);
+        Window window = dialog.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); // 设置宽高为全屏
+        dialog.show();
+
+        ImageButton close = dialog.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+    }
+    public void getHelp(View view){
+        ShowHelpDialog();
+    }
 
     //Stay in Original Level
     public void StayOriginalLevel(String LevelValue) {
@@ -314,14 +333,16 @@ public class LevelAQuizActivity extends AppCompatActivity {
         levelRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.child("WordLevel").exists() && !"A".equals(WordLevel)) {
+                if (snapshot.exists() && snapshot.child("WordLevel").exists()) {
                     DataSnapshot speechTextSnapshot = snapshot.child("WordLevel");
                     String WordLevel1 = speechTextSnapshot.getValue(String.class);
                     if ("C".equals(WordLevel1)) {
                         root.child(userId).child("WordLevel").setValue("C");
 
+                    }else if("B".equals(WordLevel)){
+                        root.child(userId).child("WordLevel").setValue("B");
                     }else{
-                        Log.i("SaveData", "show B fail");
+                        root.child(userId).child("WordLevel").setValue("A");
                     }
                 }else {
                     root.child(userId).child("WordLevel").setValue(WordLevel);

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.gproject.JustifyTextView;
 import com.example.gproject.JustifyTextView2;
 import com.example.gproject.R;
+import com.example.gproject.WordQuiz.WordListActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,7 +56,7 @@ public class R_match extends AppCompatActivity {
         HideCorrectAns();
 
         //get Document ID
-        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
+        int Dnumber = getIntent().getIntExtra("DocumentId", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
 
@@ -74,6 +76,8 @@ public class R_match extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try{
+//                exChangeTextview();
                 documentRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -81,6 +85,8 @@ public class R_match extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 long currentTime = System.currentTimeMillis();
+                                List<String> incorrectAnswers = new ArrayList<>();
+
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
@@ -88,7 +94,7 @@ public class R_match extends AppCompatActivity {
                                     String editTextValue = editText.getText().toString().trim();
 
                                     saveReviewData(Dnumber, currentTime, ansName, editTextValue);
-                                    List<String> incorrectAnswers = new ArrayList<>();
+
                                     if (document.contains(ansName)) {
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
@@ -102,16 +108,12 @@ public class R_match extends AppCompatActivity {
                                             incorrectAnswers.add(firestoreValue);
 
                                         }else {
-                                            incorrectAnswers.add(null);
+                                            incorrectAnswers.add("");
                                         }
                                     }
-                                    for (String incorrectAnswer : incorrectAnswers) {
-                                        // only call SetCorrectAns if the answer is incorrect
-                                        Log.e("correct", "A：" + incorrectAnswer);
-                                    }
-                                    if (!incorrectAnswers.isEmpty()) {
-                                        SetCorrectAns(incorrectAnswers);
-                                    }
+
+                                }if (!incorrectAnswers.isEmpty()) {
+                                    SetCorrectAns(incorrectAnswers);
                                 }
 
                             } else {
@@ -121,7 +123,10 @@ public class R_match extends AppCompatActivity {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
                     }
-                });
+                });} catch (Exception e) {
+
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -287,7 +292,7 @@ public class R_match extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("R_Review");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review").child(ReviewName);
+        DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review");
         String userId = user.getUid();
         String D_ID = String.valueOf(documentID);
 //        String A_cul = String.valueOf(cul);
@@ -300,7 +305,12 @@ public class R_match extends AppCompatActivity {
                     Date date = new Date(currentTime);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     String formattedDate = sdf.format(date);
-                    root.child(ReviewName).child(userId).child(D_ID).child(formattedDate).child(cul).setValue(ans);
+                    root.child(userId)
+                            .child(ReviewName)
+                            .child(D_ID)
+                            .child(formattedDate)
+                            .child(cul)
+                            .setValue(ans);
                 } else {
                     Log.e(ReviewName, "review save data failed");
                 }
@@ -310,7 +320,6 @@ public class R_match extends AppCompatActivity {
                 Log.e("R_match", "review save data failed 2");
             }
         });
-
     }
 
     //Hide correct ans cul
@@ -326,7 +335,7 @@ public class R_match extends AppCompatActivity {
             }
         }
     }
-
+    //Show the correct ans
     public void SetCorrectAns(List<String> correctList) {
         for (int i = 0; i < numberOfFields; i++) {
             String correct = correctList.get(i);
@@ -341,6 +350,25 @@ public class R_match extends AppCompatActivity {
                 textC.setText(""); // 如果答案正确，将文本设置为空
             }
         }
+    }
+
+    public void exChangeTextview(){
+        TextView originalTextView = findViewById(R.id.Content);
+        String originalText = originalTextView.getText().toString();
+
+        // 获取原始 TextView 的布局参数
+        ViewGroup.LayoutParams params = originalTextView.getLayoutParams();
+        ViewGroup parent = (ViewGroup) originalTextView.getParent();
+        int index = parent.indexOfChild(originalTextView); // 获取原始 TextView 在父容器中的索引
+
+        // 创建并设置 JustifyTextView
+        JustifyTextView justifyTextView = new JustifyTextView(R_match.this, null);
+        justifyTextView.setText(originalText);
+        justifyTextView.setLayoutParams(params);
+
+        // 替换原始 TextView
+        parent.removeView(originalTextView);
+        parent.addView(justifyTextView, index);
     }
 }
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,12 +47,16 @@ public class WordListActivity extends AppCompatActivity {
         TextView testWord = findViewById(R.id.testWord);
         testWord.setVisibility(View.GONE);
 
+        ImageView imageView = findViewById(R.id.imageView3);
+        imageView.setVisibility(View.GONE);
+
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WordListActivity.this, WordFragment.class);
-                startActivity(intent);
+//                Intent intent = new Intent(WordListActivity.this, WordFragment.class);
+//                startActivity(intent);
+                finish();
             }
         });
 
@@ -74,6 +79,7 @@ public class WordListActivity extends AppCompatActivity {
                 Intent intent = new Intent(WordListActivity.this, WordCardActivity.class);
                 intent.putExtra("position", position);
                 startActivity(intent);
+                finish();
             }
         });
     }
