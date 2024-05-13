@@ -81,6 +81,8 @@ public class R_match extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 long currentTime = System.currentTimeMillis();
+                                List<String> incorrectAnswers = new ArrayList<>();
+
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
@@ -88,7 +90,7 @@ public class R_match extends AppCompatActivity {
                                     String editTextValue = editText.getText().toString().trim();
 
                                     saveReviewData(Dnumber, currentTime, ansName, editTextValue);
-                                    List<String> incorrectAnswers = new ArrayList<>();
+
                                     if (document.contains(ansName)) {
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
@@ -102,16 +104,12 @@ public class R_match extends AppCompatActivity {
                                             incorrectAnswers.add(firestoreValue);
 
                                         }else {
-                                            incorrectAnswers.add(null);
+                                            incorrectAnswers.add("");
                                         }
                                     }
-                                    for (String incorrectAnswer : incorrectAnswers) {
-                                        // only call SetCorrectAns if the answer is incorrect
-                                        Log.e("correct", "A：" + incorrectAnswer);
-                                    }
-                                    if (!incorrectAnswers.isEmpty()) {
-                                        SetCorrectAns(incorrectAnswers);
-                                    }
+
+                                }if (!incorrectAnswers.isEmpty()) {
+                                    SetCorrectAns(incorrectAnswers);
                                 }
 
                             } else {
@@ -300,7 +298,12 @@ public class R_match extends AppCompatActivity {
                     Date date = new Date(currentTime);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     String formattedDate = sdf.format(date);
-                    root.child(ReviewName).child(userId).child(D_ID).child(formattedDate).child(cul).setValue(ans);
+                    root.child(userId)
+                            .child(ReviewName)
+                            .child(D_ID)
+                            .child(formattedDate)
+                            .child(cul)
+                            .setValue(ans);
                 } else {
                     Log.e(ReviewName, "review save data failed");
                 }
@@ -310,7 +313,6 @@ public class R_match extends AppCompatActivity {
                 Log.e("R_match", "review save data failed 2");
             }
         });
-
     }
 
     //Hide correct ans cul
@@ -326,7 +328,7 @@ public class R_match extends AppCompatActivity {
             }
         }
     }
-
+    //Show the correct ans
     public void SetCorrectAns(List<String> correctList) {
         for (int i = 0; i < numberOfFields; i++) {
             String correct = correctList.get(i);

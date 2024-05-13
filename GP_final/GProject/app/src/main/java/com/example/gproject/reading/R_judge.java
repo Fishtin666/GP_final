@@ -29,7 +29,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class R_judge extends AppCompatActivity {
@@ -78,6 +80,8 @@ public class R_judge extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 long currentTime = System.currentTimeMillis();
+                                List<String> incorrectAnswers = new ArrayList<>();
+
                                 for (int i = 0; i < numberOfFields; i++) {
                                     String ansName = "A" + (i + 1);
                                     int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
@@ -85,19 +89,28 @@ public class R_judge extends AppCompatActivity {
                                     String editTextValue = editText.getText().toString().trim();
 
                                     saveReviewData(Dnumber, currentTime, ansName, editTextValue);
-                                    if (document.contains(ansName)) {
 
+                                    if (document.contains(ansName)) {
                                         //get Firestore's ans colum
                                         String firestoreValue = document.getString(ansName);
-                                        Log.e("mattttt",firestoreValue );
-                                        Log.e("mattttt2",editTextValue );
+                                        Log.e("correct", "A：" + firestoreValue);
+
                                         // compare the value of EditText and Firestore's colum
                                         if (!editTextValue.equals(firestoreValue)) {
                                             //mark incorrect answer
                                             editText.setTextColor(Color.RED);
+                                            // add the incorrect answer to the list
+                                            incorrectAnswers.add(firestoreValue);
+
+                                        }else {
+                                            incorrectAnswers.add("");
                                         }
                                     }
+
+                                }if (!incorrectAnswers.isEmpty()) {
+                                    SetCorrectAns(incorrectAnswers);
                                 }
+
                             } else {
                                 Log.d(TAG, "No such document");
                             }
@@ -221,7 +234,12 @@ public class R_judge extends AppCompatActivity {
                     Date date = new Date(currentTime);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     String formattedDate = sdf.format(date);
-                    root.child(ReviewName).child(userId).child(D_ID).child(formattedDate).child(cul).setValue(ans);
+                    root.child(userId)
+                            .child(ReviewName)
+                            .child(D_ID)
+                            .child(formattedDate)
+                            .child(cul)
+                            .setValue(ans);
                 } else {
                     Log.e(ReviewName, "review save data failed");
                 }
@@ -247,6 +265,22 @@ public class R_judge extends AppCompatActivity {
                 break;
             }
 
+        }
+    }
+    //Show the correct ans
+    public void SetCorrectAns(List<String> correctList) {
+        for (int i = 0; i < numberOfFields; i++) {
+            String correct = correctList.get(i);
+            String correctName = "c" + (i + 1);
+            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+            TextView textC = findViewById(correctID);
+            textC.setVisibility(View.VISIBLE);
+
+            if (correct != null) {
+                textC.setText(correct);
+            } else {
+                textC.setText(""); // 如果答案正确，将文本设置为空
+            }
         }
     }
 }

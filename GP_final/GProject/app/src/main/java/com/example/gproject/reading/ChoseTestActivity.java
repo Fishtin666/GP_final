@@ -30,26 +30,26 @@ public class ChoseTestActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //get number from R_topic
-        int number = getIntent().getIntExtra("number", 0);
+        int R_number = getIntent().getIntExtra("R_topic", 0);
         Button test1 = findViewById(R.id.test1);
         Button test2 = findViewById(R.id.test2);
         Button test3 = findViewById(R.id.test3);
         test1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                        ChoseTestNum(number,1);
+                        ChoseTestNum(R_number,1);
             }
         });
         test2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChoseTestNum(number,2);
+                ChoseTestNum(R_number,2);
             }
         });
         test3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChoseTestNum(number,3);
+                ChoseTestNum(R_number,3);
             }
         });
 

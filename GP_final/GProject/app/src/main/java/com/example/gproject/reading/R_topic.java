@@ -1,6 +1,7 @@
 package com.example.gproject.reading;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ public class R_topic extends AppCompatActivity {
                 finish();
             }
         });
+
         ButBlank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,11 +66,24 @@ public class R_topic extends AppCompatActivity {
             }
         });
     }
+
+    //Set Next Form's chos Num
     private void goToChoseTest(int number) {
         Intent intent = new Intent(this, ChoseTestActivity.class);
         intent.putExtra("number", number);
         startActivity(intent);
-        Log.d("topic","A"+ number);
+        Log.d("topic", "A" + number);
+        //获取SharedPreferences实例
+        SharedPreferences sharedPreferences = getSharedPreferences("R_topic", MODE_PRIVATE);
+
+        // 从SharedPreferences中获取当前单词级别，默认值为"未知"
+        String wordLevel = sharedPreferences.getString("R_topic", "unKnow");
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // 将单词级别设置为"Login"
+        editor.putInt("R_topic", number);
+        // 提交编辑
+        editor.apply();
     }
 }
 
