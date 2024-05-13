@@ -61,53 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="vertical"
-                android:padding="10dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/button"
-                        android:layout_width="match_parent"
-                        android:layout_height="110dp"
-                        android:backgroundTint="@color/gray"
-                        android:text="Reading"
-                        android:textAlignment="viewStart"
-                        android:textColor="#0B0B0B"
-                        app:cornerRadius="25dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:backgroundTint="@color/gray"
-                    android:text="Reading"
-                    android:textAlignment="viewStart"
-                    android:textColor="#0B0B0B"
-                    app:cornerRadius="25dp" />
-
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:backgroundTint="@color/gray"
-                    android:text="Button"
-                    android:textColor="#0B0B0B"
-                    app:cornerRadius="25dp" />
-
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:backgroundTint="@color/gray"
-                    android:text="Button"
-                    android:textColor="#0B0B0B"
-                    app:cornerRadius="25dp" />
-            </LinearLayout>
+                android:padding="10dp"/>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
