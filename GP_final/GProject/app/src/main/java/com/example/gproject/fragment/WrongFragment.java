@@ -102,7 +102,7 @@ public class WrongFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0: //R
-                        //getReading();
+                        getReading();
                         break;
                     case 1: //L
                         getListening();
@@ -166,6 +166,50 @@ public class WrongFragment extends Fragment {
 
         return button;
     }
+
+    @NonNull
+    public void getReading(){
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            DatabaseReference targetRef = databaseReference
+                    .child("R_Rriview")
+                    .child(userId);
+                    //.child("Writing");
+
+            targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // 清空布局中的按钮
+                    reviewLayout.removeAllViews();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            String key = childSnapshot.getKey();
+
+                            // 获取子节点下的所有子节点名称
+                            for (DataSnapshot subChildSnapshot : childSnapshot.getChildren()) {
+                                String subKey = subChildSnapshot.getKey();
+                                // 这里可以处理子节点名称，例如打印输出或者其他操作
+                                Log.d("SubKey", subKey);
+                                // 创建一个按钮
+                                Button button = setbutton();
+                                // 设置按钮的文本为子节点的键名
+                                button.setText("Writing " + key + " question" + subKey);
+                                // 将按钮添加到布局中
+                                reviewLayout.addView(button);
+                            }
+                        }
+                    } else {
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+    }
+
     @NonNull
     public void getWriting(){
         FirebaseUser currentUser = auth.getCurrentUser();
