@@ -45,7 +45,7 @@ public class R_blank extends AppCompatActivity {
         setContentView(R.layout.r_blank);
         HideCorrectAns();
 
-        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
+        int Dnumber = getIntent().getIntExtra("DocumentId", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
 

@@ -34,56 +34,62 @@ public class R_topic extends AppCompatActivity {
                 finish();
             }
         });
-
-        ButBlank.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChoseTest(1);
-            }
-        });
-        ButJudge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChoseTest(2);
-            }
-        });
-        ButChos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChoseTest(3);
-            }
-        });
-        ButMatch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChoseTest(4);
-            }
-        });
-        ButMultiple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChoseTest(5);
-            }
-        });
+        try {
+            ButBlank.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToChoseTest(1);
+                }
+            });
+            ButJudge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToChoseTest(2);
+                }
+            });
+            ButChos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToChoseTest(3);
+                }
+            });
+            ButMatch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToChoseTest(4);
+                }
+            });
+            ButMultiple.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToChoseTest(5);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("WordListActivity", "Failed with error: " + e.getMessage());
+        }
     }
 
     //Set Next Form's chos Num
     private void goToChoseTest(int number) {
+//        Intent intent = new Intent(this, ChoseTestActivity.class);
         Intent intent = new Intent(this, ChoseTestActivity.class);
-        intent.putExtra("number", number);
+//        intent.putExtra("R_topic", number);
         startActivity(intent);
-        Log.d("topic", "A" + number);
+
         //获取SharedPreferences实例
         SharedPreferences sharedPreferences = getSharedPreferences("R_topic", MODE_PRIVATE);
 
         // 从SharedPreferences中获取当前单词级别，默认值为"未知"
-        String wordLevel = sharedPreferences.getString("R_topic", "unKnow");
+//        String wordLevel = sharedPreferences.getString("R_topic", "unKnow");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // 将单词级别设置为"Login"
         editor.putInt("R_topic", number);
         // 提交编辑
         editor.apply();
+        Log.e("R_topic", "A" + number);
     }
 }
 

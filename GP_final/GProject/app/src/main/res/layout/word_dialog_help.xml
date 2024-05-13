@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    android:backgroundTint="@color/grey"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        >
+
+        <ImageButton
+            android:id="@+id/close"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/close"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/titleQ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 什麼是單字等級？"
+            android:textSize="26sp"
+            android:layout_margin="20dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/content1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:paddingLeft="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/titleQ"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="將單字依照CEFR之A1、A2、B1、B2、C1、C2個等級畫分為Level A、Level B、Level C三級。"
+            />
+        <TextView
+            android:id="@+id/content2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/content1"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="2. 必須做嗎？"/>
+        <TextView
+            android:id="@+id/content3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:paddingLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/content2"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="需先完成初次單字等級測驗，始能開始使用其他功能。\n而後想進行單字測驗，可至「單字」區域練習。"/>
+        <TextView
+            android:id="@+id/content4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/content3"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="3. 哪裡可察看單字等級呢？"/>
+        <TextView
+            android:id="@+id/content5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:paddingLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/content4"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="可至用戶資訊內查看。"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+</LinearLayout>

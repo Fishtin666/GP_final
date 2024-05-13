@@ -46,7 +46,7 @@ public class R_multiple extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_chose);
 
-        int Dnumber = getIntent().getIntExtra("ChoseNumber", 0);
+        int Dnumber = getIntent().getIntExtra("DocumentId", 0);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
 
