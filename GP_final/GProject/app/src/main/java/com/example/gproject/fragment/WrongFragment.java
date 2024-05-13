@@ -1,11 +1,14 @@
 package com.example.gproject.fragment;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.example.gproject.Listening.listen_Ans1;
 import com.example.gproject.R;
-import com.example.gproject.Review.Fragment_Review_VR;
-import com.example.gproject.Review.Fragment_Review_listening;
-import com.example.gproject.Review.Fragment_Review_reading;
-import com.example.gproject.Review.Fragment_Review_speaking;
-import com.example.gproject.Review.Fragment_Review_writing;
 import com.example.gproject.Review.RReview;
 import com.example.gproject.Review.Review_choose;
-import com.example.gproject.getDb;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -82,6 +80,7 @@ public class WrongFragment extends Fragment {
 
     FirebaseAuth auth;
     private DatabaseReference databaseReference;
+    private LinearLayout reviewLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,7 +88,8 @@ public class WrongFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_wrong, container, false);
 
         ImageButton pencil = rootview.findViewById(R.id.pencil1);
-        Button button = rootview.findViewById(R.id.button);
+        //Button button = rootview.findViewById(R.id.button);
+        reviewLayout = rootview.findViewById(R.id.reviewLayout);
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -102,13 +102,16 @@ public class WrongFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0: //R
+                        //getReading();
                         break;
                     case 1: //L
+                        getListening();
                         break;
                     case 2: //W
                         getWriting();
                         break;
                     case 3: //S
+                        getSpeaking();
                         break;
                     case 4: //VR
                         break;
@@ -139,6 +142,30 @@ public class WrongFragment extends Fragment {
     return rootview;
     }
 
+    public Button setbutton(){
+        // 创建一个按钮
+        Button button = new Button(getContext());
+        // 设置按钮的布局参数
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                250); // 设置高度为110dp
+        layoutParams.setMargins(0, 20, 0, 0); // 设置按钮之间的间距
+        button.setLayoutParams(layoutParams);
+
+        // 设置按钮的背景色和圆角
+        button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+        button.setTextColor(getResources().getColor(R.color.black));
+        button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        button.setPadding(20, 0, 0, 0); // 设置文本的左内边距
+
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadii(new float[] { 40, 40, 40, 40, 40, 40, 40, 40 }); // 设置圆角半径
+        shape.setColor(getResources().getColor(R.color.gray)); // 设置背景颜色
+        button.setBackground(shape);
+
+        return button;
+    }
     @NonNull
     public void getWriting(){
         FirebaseUser currentUser = auth.getCurrentUser();
@@ -153,25 +180,130 @@ public class WrongFragment extends Fragment {
             targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // 清空布局中的按钮
+                    reviewLayout.removeAllViews();
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                             String key = childSnapshot.getKey();
-                            // 创建一个按钮
-                            Button button = new Button(getContext());
-                            // 设置按钮的文本为子节点的键名
-                            button.setText(key);
+
+                            // 获取子节点下的所有子节点名称
+                            for (DataSnapshot subChildSnapshot : childSnapshot.getChildren()) {
+                                String subKey = subChildSnapshot.getKey();
+                                // 这里可以处理子节点名称，例如打印输出或者其他操作
+                                Log.d("SubKey", subKey);
+                                // 创建一个按钮
+                                Button button = setbutton();
+                                // 设置按钮的文本为子节点的键名
+                                button.setText("Writing task" + key + " question" + subKey);
+                                // 将按钮添加到布局中
+                                reviewLayout.addView(button);
+                            }
                         }
                     } else {
-
-
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
+            });
+        }
+    }
 
+    @NonNull
+    public void getListening(){
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            DatabaseReference targetRef = databaseReference
+                    .child("Listen")
+                    .child(userId);
+                    //.child("Writing");
+            targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // 清空布局中的按钮
+                    reviewLayout.removeAllViews();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            String key = childSnapshot.getKey();
+
+                            // 获取子节点下的所有子节点名称
+                            for (DataSnapshot subChildSnapshot : childSnapshot.getChildren()) {
+                                String subKey = subChildSnapshot.getKey();
+                                // 这里可以处理子节点名称，例如打印输出或者其他操作
+                                Log.d("SubKey", subKey);
+                                // 创建一个按钮
+                                Button button = setbutton();
+                                // 设置按钮的文本为子节点的键名
+                                button.setText("Listening "+key+" "+subKey);
+                                // 将按钮添加到布局中
+                                reviewLayout.addView(button);
+
+                                // 为按钮设置点击事件
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // 创建一个新的 Intent
+                                        Intent intent = new Intent(getContext(), listen_Ans1.class);
+                                        // 将 key 和 subKey 作为额外数据传递给下一个 Activity
+                                        intent.putExtra("key", key);
+                                        intent.putExtra("subKey", subKey);
+                                        // 启动新的 Activity
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        }
+                    } else {
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+    }
+
+    @NonNull
+    public void getSpeaking(){
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            DatabaseReference targetRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Speaking");
+
+            targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // 清空布局中的按钮
+                    reviewLayout.removeAllViews();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            String key = childSnapshot.getKey();
+
+                            // 获取子节点下的所有子节点名称
+                            for (DataSnapshot subChildSnapshot : childSnapshot.getChildren()) {
+                                String subKey = subChildSnapshot.getKey();
+                                // 这里可以处理子节点名称，例如打印输出或者其他操作
+                                Log.d("SubKey", subKey);
+                                // 创建一个按钮
+                                Button button = setbutton();
+                                // 设置按钮的文本为子节点的键名
+                                button.setText("Speaking --" + key);
+                                // 将按钮添加到布局中
+                                reviewLayout.addView(button);
+                            }
+                        }
+                    } else {
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
             });
         }
     }
