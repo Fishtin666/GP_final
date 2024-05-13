@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -215,6 +216,13 @@ public class R_judge extends AppCompatActivity {
             Log.e(TAG, "OptTextView is null for cul: " + cul);
         }
     }
+
+    public void homeClick(View view){
+        Intent intent = new Intent(R_judge.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     // save Review data
     public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
 

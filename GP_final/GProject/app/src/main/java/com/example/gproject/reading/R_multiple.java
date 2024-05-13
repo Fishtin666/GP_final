@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -219,6 +220,13 @@ public class R_multiple extends AppCompatActivity {
         }
         optTextView.setText(que);
     }
+
+    public void homeClick(View view){
+        Intent intent = new Intent(R_multiple.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     // save Review data
     public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
 

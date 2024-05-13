@@ -22,6 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.gproject.JustifyTextView;
 import com.example.gproject.JustifyTextView2;
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.WordQuiz.WordListActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -286,6 +287,11 @@ public class R_match extends AppCompatActivity {
         }
     }
 
+    public void homeClick(View view){
+        Intent intent = new Intent(R_match.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
     // save Review data
     public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
 
