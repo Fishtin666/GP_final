@@ -103,7 +103,7 @@
         android:clickable="true"
         android:gravity="center"
         android:onClick="goRegist"
-        android:text="Don't have an account yet?\nLet's Regist!"
+        android:text="Don't have an account yet?\nLet's Sign In!"
         android:textColor="@color/darkGrey" />
 
 </RelativeLayout>

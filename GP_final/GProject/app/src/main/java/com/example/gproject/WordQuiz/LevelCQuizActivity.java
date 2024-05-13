@@ -94,8 +94,9 @@ public class LevelCQuizActivity extends AppCompatActivity {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(LevelCQuizActivity.this, WordFragment.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(LevelCQuizActivity.this, WordFragment.class);
+//                        startActivity(intent);
+                        finish();
                     }
                 });
             }
@@ -215,8 +216,9 @@ public class LevelCQuizActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (!"unKnow".equals(wordLog)) {
 
-                        if (Score < 2) {
-                            StayOriginalLevel(Level);
+                        if (Score < 6) {
+                            GoToNextLevel(Level);
+
                             // Remove Extra Value
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.remove("word_level");
@@ -234,7 +236,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
                             Log.i("dia11", "exist " + wordLog);
                         }
                     } else {
-                        if (Score > 2) {
+                        if (Score > 6) {
                             GoToNextLevel(Level);
                             // Remove Extra Value
                             SharedPreferences.Editor editor = sharedPreferences.edit();

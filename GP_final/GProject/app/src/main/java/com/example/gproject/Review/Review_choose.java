@@ -33,6 +33,15 @@ public class Review_choose extends AppCompatActivity {
         manager = getSupportFragmentManager();
 
         ImageButton pencil = findViewById(R.id.pencil2);
+        ImageButton backButton = findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(WordListActivity.this, WordFragment.class);
+//                startActivity(intent);
+                finish();
+            }
+        });
 
 //        pencil.setOnClickListener(new View.OnClickListener() {
 //            @Override
