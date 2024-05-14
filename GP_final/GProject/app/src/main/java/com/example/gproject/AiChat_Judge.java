@@ -79,7 +79,7 @@ public class AiChat_Judge extends AppCompatActivity {
             public void onConversationLoaded(String conversation) {
                 // 在对话加载完成后调用 API
                 System.out.println(judge_question + ":" + conversation);
-               Toast.makeText(AiChat_Judge.this, "呼叫gpt"+judge_question + ":" + conversation, Toast.LENGTH_SHORT).show();
+               //Toast.makeText(AiChat_Judge.this, "呼叫gpt"+judge_question + ":" + conversation, Toast.LENGTH_SHORT).show();
 
                 callAPI(judge_question + ":" + conversation);
             }
@@ -189,7 +189,7 @@ public class AiChat_Judge extends AppCompatActivity {
                         }
                         String result = sb.toString();
                         System.out.println("對話string: " + result);
-                        Toast.makeText(AiChat_Judge.this, "對話string: " + result, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(AiChat_Judge.this, "對話string: " + result, Toast.LENGTH_SHORT).show();
 
                         // 将对话内容传递给回调函数
                         if (listener != null) {

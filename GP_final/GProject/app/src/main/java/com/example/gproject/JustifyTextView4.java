@@ -252,7 +252,7 @@ public class JustifyTextView4 extends AppCompatTextView {
 
                         // 使用正则表达式匹配只含有英文字母的部分
                         String word = Word.replaceAll("[^a-zA-Z]", "");
-                        showToast(word.toString());
+                        //showToast(word.toString());
 
 
 
@@ -429,9 +429,9 @@ public class JustifyTextView4 extends AppCompatTextView {
                         @Override
                         public void run() {
                             if (word == null) {
-                                Toast.makeText(getContext(), "No word selected", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "No word selected", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "Something went wrong: " + word, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "Something went wrong: " + word, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

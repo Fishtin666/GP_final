@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.gproject.Adapters.QuestionAdapter;
@@ -35,12 +37,14 @@ public class Speaking_part3_question extends AppCompatActivity {
     FirebaseAuth auth;
 
     String Num,Topic;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaking_part3_question);
         auth = FirebaseAuth.getInstance();
+        back=findViewById(R.id.back2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -54,6 +58,13 @@ public class Speaking_part3_question extends AppCompatActivity {
             Topic =extras.getString("topic");
 
         }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
         Toast.makeText(Speaking_part3_question.this, Num, Toast.LENGTH_SHORT).show();

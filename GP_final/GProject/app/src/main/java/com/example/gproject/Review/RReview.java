@@ -27,7 +27,7 @@ public class RReview extends AppCompatActivity {
         textView1 = findViewById(R.id.textView7);
         textView2 = findViewById(R.id.textView8);
         textView3 = findViewById(R.id.textView9);
-        db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore. getInstance();
         content = db.collection("R_judge").document("1");
         content.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
