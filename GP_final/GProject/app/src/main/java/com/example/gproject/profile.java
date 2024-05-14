@@ -74,7 +74,9 @@ public class profile extends AppCompatActivity {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(profile.this,ReviewShow_Speaking.class));
+                //startActivity(new Intent(profile.this,ReviewShow_Speaking.class));
+//                startActivity(new Intent(profile.this,ReviewShow_Writing.class));
+                startActivity(new Intent(profile.this,ReviewShow_appConversation.class));
             }
         });
 

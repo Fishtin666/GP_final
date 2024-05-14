@@ -130,6 +130,8 @@ public class Writing_T2answer1 extends AppCompatActivity {
                     .child(String.valueOf(QuesNum))
                     .push(); // 使用 push() 生成唯一键
 
+            String answerKey = userAnswersRef.getKey();
+
             userAnswersRef.setValue(answerText)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -141,6 +143,7 @@ public class Writing_T2answer1 extends AppCompatActivity {
                                 bundle.putString("Ques", Ques.getText().toString());
                                 bundle.putString("Ans", Ans.getText().toString());
                                 bundle.putString("Part", "2");
+                                bundle.putString("pushKey",answerKey);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             } else {

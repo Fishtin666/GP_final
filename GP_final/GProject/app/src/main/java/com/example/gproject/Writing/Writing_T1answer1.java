@@ -139,6 +139,7 @@ public class Writing_T1answer1 extends AppCompatActivity {
             }
         });
     }
+
     public void nextClick(View v){
 //        Intent intent=new Intent(Writing_T1answer1.this,Writing_T1answer2.class);
 //        intent.putExtra("Ans",Writing_T1answer2.PassAns);

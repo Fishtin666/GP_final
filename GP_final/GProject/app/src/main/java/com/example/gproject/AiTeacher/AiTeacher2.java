@@ -306,6 +306,7 @@ public class AiTeacher2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                delete_db();
             }
         });
 
@@ -349,8 +350,11 @@ public class AiTeacher2 extends AppCompatActivity {
                         dialog.dismiss(); // 關閉對話框
                         Toast.makeText(AiTeacher2.this, "結束對話", Toast.LENGTH_SHORT).show();
 
+                        Bundle bundle=new Bundle();
                         Intent intent = new Intent(AiTeacher2.this, AiChat_Judge.class);
-                        intent.putExtra("pushKey",pushKey);
+                        bundle.putString("pushKey",pushKey);
+                        bundle.putString("topic",topic);
+                        intent.putExtras(bundle);
                         startActivity(intent);
                     }
                 });
@@ -999,6 +1003,7 @@ public class AiTeacher2 extends AppCompatActivity {
                         .child("app_conversation")
                         .child(userId)
                         .child("Conversation")
+                        .child(topic)
                         .push()
                         .getKey(); // 获取新生成的 pushKey
 
@@ -1006,6 +1011,7 @@ public class AiTeacher2 extends AppCompatActivity {
                         .child("app_conversation")
                         .child(userId)
                         .child("Conversation")
+                        .child(topic)
                         .child(pushKey)
                         .child(String.valueOf(num));
             }else{
@@ -1013,6 +1019,7 @@ public class AiTeacher2 extends AppCompatActivity {
                         .child("app_conversation")
                         .child(userId)
                         .child("Conversation")
+                        .child(topic)
                         .child(pushKey)
                         .child(String.valueOf(num));
             }
@@ -1035,6 +1042,7 @@ public class AiTeacher2 extends AppCompatActivity {
                     .child("app_conversation")
                     .child(userId)
                     .child("Conversation")
+                    .child(topic)
                     .child(pushKey);
 
 

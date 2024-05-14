@@ -42,7 +42,7 @@ import okhttp3.Response;
 
 public class AiChat_Judge extends AppCompatActivity {
     TextView judge;
-    String pushKey;
+    String pushKey,topic;
     String judge_question,result;
     ImageView home;
 
@@ -68,8 +68,15 @@ public class AiChat_Judge extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        pushKey=intent.getStringExtra("pushKey");
+
+
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            pushKey=extras.getString("pushKey");
+            topic=extras.getString("topic");
+
+        }
 
         judge_question="The following is a conversation between AI and a user. First,provide feedback about user's whole responses.YOU DON'T NEED to judge about AI responses.Then Check each response for grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.";
 
@@ -164,6 +171,7 @@ public class AiChat_Judge extends AppCompatActivity {
                     .child("app_conversation")
                     .child(userId)
                     .child("Conversation")
+                    .child(topic)
                     .child(pushKey);
             targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -217,6 +225,7 @@ public class AiChat_Judge extends AppCompatActivity {
                     .child("app_conversation")
                     .child(userId)
                     .child("Judge")
+                    .child(topic)
                     .child(pushKey);
 
             userAnswersRef.setValue(Judge)

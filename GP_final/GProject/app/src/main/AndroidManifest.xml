@@ -13,6 +13,12 @@
         android:theme="@style/Theme.GProject"
         tools:targetApi="31">
         <activity
+            android:name=".ReviewShow_appConversation"
+            android:exported="false" />
+        <activity
+            android:name=".ReviewShow_Writing"
+            android:exported="false" />
+        <activity
             android:name=".ReviewShow_Speaking"
             android:exported="false" />
         <activity
@@ -45,7 +51,6 @@
         <activity
             android:name=".reading.R_match"
             android:exported="true" />
-
         <activity
             android:name=".reading.R_multiple"
             android:exported="true" />
@@ -79,7 +84,6 @@
         <activity
             android:name=".Review.Review_choose"
             android:exported="false" />
-
         <activity
             android:name=".Cross_Topic_qusetion"
             android:exported="false" />
