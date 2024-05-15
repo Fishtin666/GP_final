@@ -122,6 +122,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     boolean speakover=false,indic=true,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
     Context context;
+    boolean isPart3=false;
 
     String[] words;
 
@@ -171,8 +172,11 @@ public class Speaking_part1_answer extends AppCompatActivity {
         }
 
         ROf_ques = getIntent().getStringExtra("ROf_ques");
-        if(ROf_ques!=null)
+        if(ROf_ques!=null){
             question.setText(ROf_ques);
+            isPart3=true;
+        }
+
 
     }
 
@@ -495,7 +499,6 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     public  void Pass_to_judge(){
         bundle.putString("judge",judge);
-
         Intent intent =new Intent(Speaking_part1_answer.this, Speaking_judge.class);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -612,11 +615,8 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     }
 
-    public void finishClick(View v){
-        send.setBackgroundColor(Color.BLACK);
-        pass_answer=true;
+    public void part1_insert_to_db(){
         //將答案存入db
-
         FirebaseUser currentUser = auth.getCurrentUser();
 
         if (currentUser != null) {
@@ -649,6 +649,52 @@ public class Speaking_part1_answer extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    public void Rof_insert_to_db(){
+    //將答案存入db
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = answer.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Speaking")
+                    .child("Part3")
+                    .child(question.getText().toString())
+                    .push(); // 使用 push() 生成隨機碼
+
+            String answerKey = userAnswersRef.getKey();
+
+            userAnswersRef.setValue(answerText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                bundle.putString("key",answerKey);
+                                callAPI("You are a IELTS examiner for speaking part 3.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+
+                            } else {
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void finishClick(View v){
+        send.setBackgroundColor(Color.BLACK);
+        pass_answer=true;
+        if(isPart3){
+            //Rof_insert_to_db();
+        }else
+            part1_insert_to_db();
+
 
     }
 

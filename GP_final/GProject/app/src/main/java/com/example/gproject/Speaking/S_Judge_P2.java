@@ -15,7 +15,14 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +42,7 @@ import okhttp3.Response;
 public class S_Judge_P2 extends AppCompatActivity {
 
     TextView Response,rof1,rof2;
-    String Ques,Ans,Num,Topic;
+    String Ques,Ans,Num,Topic,key;
     ImageButton back;
 
     public static boolean ROf_ques=false;
@@ -67,6 +74,7 @@ public class S_Judge_P2 extends AppCompatActivity {
             Ans= extras.getString("answer");
             Num = extras.getString("num");
             Topic = extras.getString("topic");
+            key =extras.getString("key");
         }
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +103,44 @@ public class S_Judge_P2 extends AppCompatActivity {
 //
 //        callAPI("Check the following sentences for spelling and grammar errors, correct them.And tell me where is wrong and why."+Ans,2);
 
+    }
+
+    //將答案存入db
+    public void insert_to_db(String judge){
+        DatabaseReference databaseReference;
+        FirebaseAuth auth;
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Judge")
+                    .child("Speaking")
+                    .child(key);
+
+
+            userAnswersRef.setValue(judge)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+
+                            }
+                        }
+                    });
+        }
     }
 
     public void callAPI(String question,int num){
@@ -145,6 +191,7 @@ public class S_Judge_P2 extends AppCompatActivity {
                             public void run() {
                                 if(num==0){
                                     Response.setText(result.trim());
+                                    insert_to_db(result.trim());
                                     callAPI("You are a ielts examiner.My answer for"+Ques+"is"+Ans+", Please ask me another question related to my answer.Do not reply to my answer,just ask question.",1);
 
                                 }else
@@ -187,7 +234,7 @@ public class S_Judge_P2 extends AppCompatActivity {
     }
 
     public void homeClick(View v){
-        Intent intent =new Intent(this,Speaking.class);
+        Intent intent =new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

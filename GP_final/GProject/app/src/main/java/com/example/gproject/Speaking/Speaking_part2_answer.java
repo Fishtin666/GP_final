@@ -81,7 +81,7 @@ import okhttp3.Response;
 public class Speaking_part2_answer extends AppCompatActivity {
 
     TextView answer,taskcard,time;
-
+    String answerKey;
     ImageButton back;
     ImageView home;
 
@@ -438,10 +438,12 @@ public class Speaking_part2_answer extends AppCompatActivity {
     public void finishClick(View v){
         //send_1=true;
         //callAPI("You are a IELTS examiner for speaking part 2.The question is"+Ques+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+        insert_to_db();
         bundle.putString("question",taskcard.getText().toString());
         bundle.putString("answer",answer.getText().toString());
         bundle.putString("num",Num);
         bundle.putString("topic",Topic);
+        bundle.putString("key",answerKey);
         Intent intent =new Intent(this, S_Judge_P2.class);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -666,6 +668,48 @@ public class Speaking_part2_answer extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //將答案存入db
+    public void insert_to_db(){
+        DatabaseReference databaseReference;
+        FirebaseAuth auth;
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = answer.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Speaking")
+                    .child(Topic)
+                    .child(Num)
+                    .push(); // 使用 push() 生成隨機碼
+
+            answerKey = userAnswersRef.getKey();
+
+            userAnswersRef.setValue(answerText)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                                callAPI("You are a IELTS examiner for speaking part 3.The question is"+taskcard.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+
+                            } else {
+
+                            }
+                        }
+                    });
+        }
     }
 
     public void voc_insert_db(String word, MeaningAdapter adapter,String phonetic,int count){

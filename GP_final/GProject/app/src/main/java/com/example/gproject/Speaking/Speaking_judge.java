@@ -89,9 +89,6 @@ public class Speaking_judge extends AppCompatActivity {
         if (currentUser != null) {
             String userId = currentUser.getUid();
 
-
-
-
             DatabaseReference userAnswersRef = databaseReference
                     .child("users")
                     .child(userId)
