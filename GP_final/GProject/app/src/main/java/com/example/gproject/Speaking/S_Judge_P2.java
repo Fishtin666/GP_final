@@ -44,6 +44,7 @@ public class S_Judge_P2 extends AppCompatActivity {
     TextView Response,rof1,rof2;
     String Ques,Ans,Num,Topic,key;
     ImageButton back;
+    public static String key_Part2ToPrt3;
 
     public static boolean ROf_ques=false;
 
@@ -76,6 +77,7 @@ public class S_Judge_P2 extends AppCompatActivity {
             Topic = extras.getString("topic");
             key =extras.getString("key");
         }
+        key_Part2ToPrt3=key;
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -36,7 +36,7 @@ public class Speaking_part3_question extends AppCompatActivity {
     ArrayList<QuestionModel> list;
     FirebaseAuth auth;
 
-    String Num,Topic;
+    String Num,Topic,key;
     ImageButton back;
 
     @Override
@@ -56,6 +56,7 @@ public class Speaking_part3_question extends AppCompatActivity {
         if (extras != null) {
             Num =extras.getString("num");
             Topic =extras.getString("topic");
+
 
         }
 

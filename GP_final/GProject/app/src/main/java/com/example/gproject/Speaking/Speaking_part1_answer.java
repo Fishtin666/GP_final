@@ -7,6 +7,7 @@ import static android.content.ContentValues.TAG;
 
 import static com.example.gproject.Adapters.QuestionNumberAdapter.sharedString;
 import static com.example.gproject.MainActivity.apiKey;
+import static com.example.gproject.Speaking.S_Judge_P2.key_Part2ToPrt3;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -94,8 +95,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -122,7 +125,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     boolean speakover=false,indic=true,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
     Context context;
-    boolean isPart3=false;
+
 
     String[] words;
 
@@ -142,6 +145,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
     private PopupWindow popupWindow,popup;
 
     String Question,QuesNum,Topic;
+    boolean isPart3=false,isROF=false;
 
     SpeechConfig speechConfig;
     public static final MediaType JSON
@@ -174,7 +178,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         ROf_ques = getIntent().getStringExtra("ROf_ques");
         if(ROf_ques!=null){
             question.setText(ROf_ques);
-            isPart3=true;
+            isROF=true;
         }
 
 
@@ -268,6 +272,15 @@ public class Speaking_part1_answer extends AppCompatActivity {
             Question=extras.getString("question");
             QuesNum =extras.getString("num");
             Topic=extras.getString("topic");
+
+        }
+        String[] topic={"People","Place","Item","Experience"};
+        for(int i=0;i<topic.length;i++){
+            if(Topic.equals(topic[i])){
+                isPart3=true;
+
+            }
+
 
         }
 
@@ -687,11 +700,59 @@ public class Speaking_part1_answer extends AppCompatActivity {
         }
     }
 
+    public void part3_insert_to_db(){
+    //將答案存入db
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String answerText = answer.getText().toString();
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Part3")
+                    .child(key_Part2ToPrt3);
+//                    .child(question.getText().toString())
+//                    .child(answer.getText().toString());
+                    // 使用 push() 生成隨機碼
+
+            //String answerKey = userAnswersRef.getKey();
+            // 创建一个 Map 来存储你的数据
+            Map<String, String> dataMap = new HashMap<>();
+            dataMap.put("Question", question.getText().toString());
+            dataMap.put("Ans", answer.getText().toString());
+
+            userAnswersRef.setValue(dataMap)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                bundle.putString("key",key_Part2ToPrt3);
+                                callAPI("You are a IELTS examiner for speaking part 3.The question is"+question.getText().toString()+"My answer is"+answer.getText().toString()+"Check my answer for spelling and grammar errors, correct them.And tell me where is wrong and why.If my answer is too short,please tell me how to improve it and give me example.");
+
+                            } else {
+
+                            }
+                        }
+                    });
+        }
+    }
+
     public void finishClick(View v){
         send.setBackgroundColor(Color.BLACK);
         pass_answer=true;
         if(isPart3){
+            part3_insert_to_db();
+            isPart3=false;
+        }
+
+
+        if(isROF){
             //Rof_insert_to_db();
+
         }else
             part1_insert_to_db();
 

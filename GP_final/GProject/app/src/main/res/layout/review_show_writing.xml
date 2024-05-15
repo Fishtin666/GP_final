@@ -73,7 +73,7 @@
                 android:text="question"
                 android:background="@drawable/rounded_corner"
                 android:backgroundTint="@color/gray"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_marginTop="5dp"
                 />
 
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="answer"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/rounded_corner"
                 />
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="judge"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:background="@drawable/rounded_corner"
                 android:backgroundTint="@color/gray"
                 android:layout_marginTop="5dp"/>

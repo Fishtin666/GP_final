@@ -35,7 +35,7 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     ImageView home;
 
     TextView Ques,Ans,Judge;
-    String topic="Study";
+    String topic="Place";
     String ques_num="1"; //第幾題
     String num="0";  //第幾次回答
 
@@ -100,7 +100,9 @@ public class ReviewShow_Speaking extends AppCompatActivity {
                                     DocumentSnapshot thirdDocument = documents.get(Integer.parseInt(ques_num)-1); // 第三个文档在列表中的索引是 ques_num-1
                                     String question = (String) thirdDocument.get("Question");
                                     //Toast.makeText(ReviewShow_Speaking.this, question, Toast.LENGTH_SHORT).show();
-                                    Ques.setText(question);
+                                    String newQuestion = question.replace("\\n", "\n");
+
+                                    Ques.setText(newQuestion);
 
                                 } else {
                                     Toast.makeText(ReviewShow_Speaking.this, "少於n個資料", Toast.LENGTH_SHORT).show();
