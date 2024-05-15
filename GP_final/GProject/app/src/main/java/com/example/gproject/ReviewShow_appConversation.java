@@ -2,6 +2,7 @@ package com.example.gproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,11 +39,13 @@ public class ReviewShow_appConversation extends AppCompatActivity {
     MessageAdapter messageAdapter;
     List<Message> messageList;
     RecyclerView recy;
-    TextView checkJudge;
+
+    PopupWindow popupWindow;
+    TextView checkJudge,Judge;
 //    String randomCode="-NxsG-gP0QuHJweA8BT2";
-    String randomCode;
-    String topic="Hobby";
-    String num="0";
+    String randomCode;  //隨機瑪
+    String topic="Hobby";  //主題
+    String num="0";    //第幾個回答
 
     private ArrayList<String> conversation;
     @Override
@@ -54,13 +57,9 @@ public class ReviewShow_appConversation extends AppCompatActivity {
         back =findViewById(R.id.back2);
         recy = findViewById(R.id.recy);
         checkJudge = findViewById(R.id.check_judge);
+        Judge = findViewById(R.id.judge);
 
-        checkJudge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                show_popup(value);
-            }
-        });
+
 
 
         messageList=new ArrayList<>();
@@ -252,7 +251,8 @@ public class ReviewShow_appConversation extends AppCompatActivity {
                                 DataSnapshot valueSnapshot = dataSnapshot.child(randomCode);
                                 if (valueSnapshot.exists()) {
                                     value = valueSnapshot.getValue(String.class);
-
+                                    //show_popup(value);
+                                    Judge.setText(value);
 
                                     //Toast.makeText(ReviewShow_appConversation.this, "judge:"+value, Toast.LENGTH_SHORT).show();
 
@@ -297,19 +297,25 @@ public class ReviewShow_appConversation extends AppCompatActivity {
 
     public void show_popup(String JudgeText){
         // 弹出 PopupWindow
-        PopupWindow popupWindow;
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.review_judge_popup, null);
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = 1200;
+        int width = ConstraintLayout.LayoutParams.WRAP_CONTENT;;
+        int height = ConstraintLayout.LayoutParams.WRAP_CONTENT;;
         boolean focusable = true; // 让PopupWindow在失去焦点时自动关闭
         popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         // 设置PopupWindow的内容
         TextView close=popupView.findViewById(R.id.close);
-        TextView judge=popupView.findViewById(R.id.close);
+        TextView judge=popupView.findViewById(R.id.judge);
 
         judge.setText(JudgeText);
+        judge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,7 +323,7 @@ public class ReviewShow_appConversation extends AppCompatActivity {
                 popupWindow.dismiss();
             }
         });
-        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+
 
 
     }

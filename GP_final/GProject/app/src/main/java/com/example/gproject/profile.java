@@ -74,9 +74,9 @@ public class profile extends AppCompatActivity {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(profile.this,ReviewShow_Speaking.class));
-//                startActivity(new Intent(profile.this,ReviewShow_Writing.class));
-                startActivity(new Intent(profile.this,ReviewShow_appConversation.class));
+                startActivity(new Intent(profile.this,ReviewShow_Speaking.class));
+                //startActivity(new Intent(profile.this,ReviewShow_Writing.class));
+//                startActivity(new Intent(profile.this,ReviewShow_appConversation.class));
             }
         });
 
@@ -104,40 +104,88 @@ public class profile extends AppCompatActivity {
 
         }
 
+
+
         db = FirebaseFirestore.getInstance();
         getWordLevel();
-        getDocNum("Writing");
-        getDocNum("Writing2");
 
-        String[] topic = {"Speaking_Study","Speaking_Work","Speaking_Hometown","Speaking_Accommodation",
+
+        String[] w_topic={"Writing","Writing2"};
+        for(int i=0;i<w_topic.length;i++){
+            getDocNum(w_topic[i],new profile.OnRandomCodeGeneratedListener() {
+                @Override
+                public void onRandomCodeGenerated(int w_num, int s_num, int r_num, int l_num) {
+                    getRealNum("Writing","0");
+                }
+
+
+            });
+        }
+
+
+        String[] s_topic = {"Speaking_Study","Speaking_Work","Speaking_Hometown","Speaking_Accommodation",
         "Speaking_Family","Speaking_Friend","Speaking_Entertainment","Speaking_Childhood"
         ,"Speaking_Daily life","Speaking_People","Speaking_Place","Speaking_Item","Speaking_Experience"};
+        for(int i=0;i<s_topic.length;i++){
+            getDocNum(s_topic[i],new profile.OnRandomCodeGeneratedListener() {
+                @Override
+                public void onRandomCodeGenerated(int w_num, int s_num, int r_num, int l_num) {
+                    getRealNum("Speaking","1");
+                }
 
-        for(int i=0;i<topic.length;i++){
-            getDocNum(topic[i]);
+
+            });
         }
 
-        String[] topic_r ={"R_blank","R_chose", "R_judge", "R_match", "R_word,", "R_wordA", "R_wordB", "R_wordC"};
-        for(int i=0;i<topic_r.length;i++){
-            getDocNum(topic[i]);
+        String[] r_topic ={"R_blank","R_chose", "R_judge", "R_match", "R_word,", "R_wordA", "R_wordB", "R_wordC"};
+        for(int i=0;i<r_topic.length;i++){
+            getDocNum(r_topic[i],new profile.OnRandomCodeGeneratedListener() {
+                @Override
+                public void onRandomCodeGenerated(int w_num, int s_num, int r_num, int l_num) {
+                    getRealNum2("Reading");
+                }
+
+
+            });
         }
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getRealNum("Writing","0");
-                getRealNum("Speaking","1");
-                //getRealNum("Listening","2");
-                //getRealNum("Reading","3");
-            }
-        }, 2000); //
+        getRealNum3();
+
+
+
+//        for(int i=0;i<topic.length;i++){
+//            getDocNum(topic[i]);
+//        }
+//
+//        String[] topic_r ={"R_blank","R_chose", "R_judge", "R_match", "R_word,", "R_wordA", "R_wordB", "R_wordC"};
+//        for(int i=0;i<topic_r.length;i++){
+//            getDocNum(topic[i]);
+//
+//        }Toast.makeText(profile.this, r_num, Toast.LENGTH_SHORT).show();
+
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                getRealNum("Writing","0");
+//                getRealNum("Speaking","1");
+//                //getRealNum("Listening","2");
+////                for(int i=0;i< topic.length;i++)
+////                    getRealNum2(topic_r[i]);
+//            }
+//        }, 3000); //
 
 
 
 
     }
-    public void getDocNum(String collectionName){
+
+    public interface OnRandomCodeGeneratedListener {
+        void onRandomCodeGenerated(int w_num,int s_num,int r_num,int l_num);
+    }
+
+
+    public void getDocNum(String collectionName,final profile.OnRandomCodeGeneratedListener listener){
         db.collection(collectionName)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -170,8 +218,15 @@ public class profile extends AppCompatActivity {
                             case "R_word":
                                 r_num+=queryDocumentSnapshots.size();
                                 break;
+                            case "Listen_1":
+                            case "Listen_2":
+                            case "Listen_3":
+                            case "Listen_4":
+                                l_num+=queryDocumentSnapshots.size();
+                                break;
 
                         }
+                        listener.onRandomCodeGenerated(w_num,s_num,r_num,l_num);
                         //documentCount = queryDocumentSnapshots.size();
                         //System.out.println("數量:"+String.valueOf(documentCount));
                     }
@@ -179,47 +234,125 @@ public class profile extends AppCompatActivity {
     }
 
     public void getRealNum(String part,String partCode){
+        getDocNum(part,new OnRandomCodeGeneratedListener() {
+            @Override
+            public void onRandomCodeGenerated(int w_num, int s_num, int r_num, int l_num) {
+                // 获取当前用户的 ID
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+
+                    // 构建路径以获取特定问题的答案数量
+                    String answersPath = "users/" + userId +"/"+part;
+
+                    // 添加 ValueEventListener 监听器以获取数据快照
+                    databaseReference.child(answersPath).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            // 获取子节点数量
+                            answerCount = dataSnapshot.getChildrenCount();
+
+                            switch (partCode){
+                                case "0": //Writing
+                                    w_done.setText(String.valueOf(answerCount)+"/"+w_num);
+                                    progress=answerCount*100/w_num;
+                                    w_progressBar.setProgress((int)progress);
+                                    break;
+                                case "1": //Speaking
+                                    s_done.setText((answerCount)+"/"+s_num);
+                                    progress=answerCount*100/s_num;
+                                    s_progressBar.setProgress((int)progress);
+                                    break;
+                                case "2" ://Listening
+                                    l_done.setText((answerCount)+"/"+l_num);
+                                    progress=answerCount*100/l_num;
+                                    l_progressBar.setProgress((int)progress);
+
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // 处理取消监听事件
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+
+    public void getRealNum2(String part){
+        getDocNum(part,new OnRandomCodeGeneratedListener() {
+            @Override
+            public void onRandomCodeGenerated(int w_num, int s_num, int r_num, int l_num) {
+                // 获取当前用户的 ID
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+
+                    // 构建路径以获取特定问题的答案数量
+                    String answersPath = "R_Review/" + userId ;//+"/"+part
+
+                    // 添加 ValueEventListener 监听器以获取数据快照
+                    databaseReference.child(answersPath).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                // 获取子节点数量
+                                answerCount = dataSnapshot.getChildrenCount();
+                                r_done.setText(answerCount + "/" + r_num);
+                                progress = answerCount * 100 / r_num;
+                                r_progressBar.setProgress((int) progress);
+                            } else {
+                                Toast.makeText(profile.this, "資料庫不存在", Toast.LENGTH_SHORT).show();
+
+                                // 路径不存在时的处理逻辑，例如显示错误消息或日志记录
+                                Log.d("Firebase", "Path does not exist: " + answersPath);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // 处理取消监听事件
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    public void getRealNum3(){
         // 获取当前用户的 ID
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
 
             // 构建路径以获取特定问题的答案数量
-            String answersPath = "users/" + userId +"/"+part;
+            String answersPath = "R_Review/" + userId ;//+"/"+part
 
             // 添加 ValueEventListener 监听器以获取数据快照
             databaseReference.child(answersPath).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    // 获取子节点数量
-                    answerCount = dataSnapshot.getChildrenCount();
+                    if (dataSnapshot.exists()) {
+                        // 获取子节点数量
+                        answerCount = dataSnapshot.getChildrenCount();
+                        l_done.setText(answerCount + "/" + 4);
+                        progress = answerCount * 100 / 4;
+                        l_progressBar.setProgress((int) progress);
+                    } else {
+                        Toast.makeText(profile.this, "資料庫不存在", Toast.LENGTH_SHORT).show();
 
-                    switch (partCode){
-                        case "0": //Writing
-                            w_done.setText(String.valueOf(answerCount)+"/"+w_num);
-                            progress=answerCount*100/w_num;
-                            w_progressBar.setProgress((int)progress);
-                            break;
-                        case "1": //Speaking
-                            l_done.setText((answerCount)+"/"+s_num);
-                            progress=answerCount*100/s_num;
-                            s_progressBar.setProgress((int)progress);
-                            break;
-                        case "2" ://Listening
-                            l_done.setText((answerCount)+"/"+l_num);
-                            progress=answerCount*100/l_num;
-                            l_progressBar.setProgress((int)progress);
-                        case "3" ://Reading
-                            r_done.setText((answerCount)+"/"+r_num);
-                            progress=answerCount*100/r_num;
-                            r_progressBar.setProgress((int)progress);
+                        // 路径不存在时的处理逻辑，例如显示错误消息或日志记录
+                        Log.d("Firebase", "Path does not exist: " + answersPath);
                     }
-
-
-
-
-
-
 
 
                 }
@@ -230,6 +363,9 @@ public class profile extends AppCompatActivity {
                 }
             });
         }
+
+
+
     }
 
     public void getWordLevel(){

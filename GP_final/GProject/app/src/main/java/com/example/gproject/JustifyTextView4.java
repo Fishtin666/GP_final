@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gproject.Adapters.QuestionNumberAdapter;
-import com.example.gproject.databinding.WordDicSearchBinding;
+
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;

@@ -82,6 +82,9 @@ public class Speaking_part2_answer extends AppCompatActivity {
 
     TextView answer,taskcard,time;
 
+    ImageButton back;
+    ImageView home;
+
     String[] words;
 
     Boolean eye_open = true,clockup = true,star_yellow=false,indic=true,send_1=false;;
@@ -96,6 +99,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
     TextToSpeech tts;
 
     MeaningAdapter adapter;
+    ImageView mic;
 
     private PopupWindow popupWindow,popup;
     private CountDownTimer timer;
@@ -140,6 +144,37 @@ public class Speaking_part2_answer extends AppCompatActivity {
         clock = findViewById(R.id.clock);
         voice = findViewById(R.id.voice);
         progressBar.setVisibility(View.INVISIBLE);
+        back = findViewById(R.id.back2);
+        home=findViewById(R.id.home);
+        mic  =findViewById(R.id.mic);
+        mic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mic.setImageResource(R.drawable.mic_gray);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        micClick();
+                    }
+                }, 100); //
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Speaking_part2_answer.this, MainActivity.class));
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         //Ques= getIntent().getStringExtra("question");
 
@@ -159,7 +194,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
             S_Judge_P2.ROf_ques=false;
         }
 
-        long countdownTimeInMillis = 10000; // 60秒
+        long countdownTimeInMillis = 6000; // 60秒
 
         // 创建并启动倒计时器
         timer = new CountDownTimer(countdownTimeInMillis, 1000) {
@@ -171,12 +206,13 @@ public class Speaking_part2_answer extends AppCompatActivity {
                 time.setText(formattedTime);
             }
 
+
             @Override
             public void onFinish() {
                 // 倒计时结束时的操作
                 AlertDialog.Builder P2_start = new AlertDialog.Builder(Speaking_part2_answer.this);
                 P2_start.setTitle("請開始回答");
-                P2_start.setMessage("Taskcard 閱讀時間結束，請開始回答，您最多可以回答兩分鐘。");
+                P2_start.setMessage("TaskCard 閱讀時間結束，請開始回答，您最多可以回答兩分鐘。");
                 P2_start.setCancelable(false);
                 P2_start.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
                     @Override
@@ -187,7 +223,8 @@ public class Speaking_part2_answer extends AppCompatActivity {
                         voice.setImageResource(R.drawable.voice_gray);
                         eye_open=false;
                         // 重新启动计时器，如果需要的话
-                        long newCountdownTimeInMillis = 10000; // 新的倒计时时间，单位为毫秒120000
+                        long newCountdownTimeInMillis = 12000; // 新的倒计时时间，单位为毫秒120000
+                        //CountDownTimer timer;
                         timer = new CountDownTimer(newCountdownTimeInMillis, 1000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
@@ -197,6 +234,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
                                 String timeLeftFormatted = String.format("%d:%02d", minutes, seconds);
                                 time.setText(timeLeftFormatted );
                             }
+
 
                             @Override
                             public void onFinish() {
@@ -218,6 +256,8 @@ public class Speaking_part2_answer extends AppCompatActivity {
                 P2_start.show();
             }
         }.start();
+
+
 
         answer.setOnClickListener(v -> {
             StringTokenizer tokenizer = new StringTokenizer(hintanswer, " \t\n\r\f,.?!;:\"");
@@ -364,9 +404,8 @@ public class Speaking_part2_answer extends AppCompatActivity {
 
 
     //mic按下
-    public void micClick(View view){
-
-
+    public void micClick(){
+        timer.cancel();
         TextView txt =  this.findViewById(R.id.Answer);
 
         try (SpeechConfig config = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
@@ -379,6 +418,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
 
             if (result.getReason() == ResultReason.RecognizedSpeech) {
                 txt.setText(result.getText());
+                mic.setImageResource(R.drawable.mic);
             } else {
                 txt.setText("Error recognizing. Did you update the subscription info?" + System.lineSeparator() + result.toString());
             }

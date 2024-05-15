@@ -68,8 +68,9 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="question"
-                android:background="@color/gray"
+                android:text=""
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/gray"
                 android:textSize="18sp"
                 android:layout_marginTop="5dp"/>
 
@@ -88,11 +89,14 @@
                 android:id="@+id/Answer"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+
                 android:layout_gravity="center_horizontal"
-                android:text="answer"
+                android:text=""
+                android:backgroundTint="@color/gray"
                 android:textSize="18sp"
                 android:layout_marginTop="5dp"
-                android:background="@color/gray"/>
+                android:background="@drawable/rounded_corner"
+                />
 
             <TextView
                 android:id="@+id/Judge_title"
@@ -109,10 +113,11 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="judge"
+                android:text=""
                 android:textSize="18sp"
-                android:background="@color/gray"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/gray"/>
         </LinearLayout>
     </ScrollView>
 

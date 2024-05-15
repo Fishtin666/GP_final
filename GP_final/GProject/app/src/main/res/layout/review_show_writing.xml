@@ -47,7 +47,8 @@
         android:paddingHorizontal="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view4">
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,9 +71,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="question"
-                android:background="@color/gray"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/gray"
                 android:textSize="18sp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                />
 
             <ImageView
                 android:id="@+id/pic"
@@ -102,7 +105,8 @@
                 android:text="answer"
                 android:textSize="18sp"
                 android:layout_marginTop="5dp"
-                android:background="@color/gray"/>
+                android:background="@drawable/rounded_corner"
+                />
 
             <TextView
                 android:id="@+id/Judge_title"
@@ -121,7 +125,8 @@
                 android:layout_gravity="center_horizontal"
                 android:text="judge"
                 android:textSize="18sp"
-                android:background="@color/gray"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/gray"
                 android:layout_marginTop="5dp"/>
         </LinearLayout>
     </ScrollView>
