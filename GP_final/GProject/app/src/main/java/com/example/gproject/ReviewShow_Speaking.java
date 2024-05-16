@@ -35,11 +35,14 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     ImageView home;
 
     TextView Ques,Ans,Judge;
-    String topic="Place";
-    String ques_num="1"; //第幾題
-    String num="0";  //第幾次回答
+    String topic="People";
+    String ques_num="3"; //第幾題
+    String num="1";  //第幾次回答
 
     String randomCode;
+
+    //part3
+    TextView part3,p3_question_title,p3_question,p3_ans_title,p3_answer,p3_judge_title,p3_judge;
 
     //String randomCode="-NxTC6YNpganZiCH4JPg"; //隨機碼  //"NxTC6YNpganZiCH4JPg"
     @Override
@@ -50,6 +53,26 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         Ans = findViewById(R.id.Answer);
         Judge = findViewById(R.id.Judge);
         home = findViewById(R.id.home);
+
+        //part3
+        part3 = findViewById(R.id.part3);
+        p3_question_title= findViewById(R.id.P3_ques_title);
+        p3_question= findViewById(R.id.P3_Question);
+        p3_ans_title=findViewById(R.id.P3_Ans_title);
+        p3_answer=findViewById(R.id.P3_Answer);
+        p3_judge_title=findViewById(R.id.P3_Judge_title);
+        p3_judge=findViewById(R.id.P3_Judge);
+
+        part3.setVisibility(View.GONE);
+        p3_question_title.setVisibility(View.GONE);
+        p3_question.setVisibility(View.GONE);
+        p3_ans_title.setVisibility(View.GONE);
+        p3_answer.setVisibility(View.GONE);
+        p3_judge_title.setVisibility(View.GONE);
+        p3_judge.setVisibility(View.GONE);
+
+
+
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +90,7 @@ public class ReviewShow_Speaking extends AppCompatActivity {
 
                 getJudge();
                 getAns();
+                getPart3();
 
             }
         });
@@ -156,6 +180,60 @@ public class ReviewShow_Speaking extends AppCompatActivity {
                                 if (valueSnapshot.exists()) {
                                     String value = valueSnapshot.getValue(String.class);
                                     Judge.setText(value);
+                                    Log.d("FirebaseValue", "Value: " + value);
+                                } else {
+                                    Log.d("FirebaseValue", "Key not found");
+                                    Toast.makeText(ReviewShow_Speaking.this, "randomCode找不到", Toast.LENGTH_SHORT).show();
+
+                                }
+                            } else {
+                                Toast.makeText(ReviewShow_Speaking.this, "judge資料庫找不到", Toast.LENGTH_SHORT).show();
+
+                                Log.d("FirebaseValue", "Path not found");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+                }
+            }
+        });
+
+    }
+
+    public void getPart3Judge(){
+        getRandomCode(new OnRandomCodeGeneratedListener() {
+            @Override
+            public void onRandomCodeGenerated(String randomCode) {
+                auth = FirebaseAuth.getInstance();
+                databaseReference = FirebaseDatabase.getInstance().getReference();
+
+                FirebaseUser currentUser = auth.getCurrentUser();
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+
+                    DatabaseReference targetRef = databaseReference
+                            .child("users")
+                            .child(userId)
+                            .child("Judge")
+                            .child("Speaking_Part3");
+                    //.child(randomCode);    //###選擇是第幾次回答####
+
+
+                    targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            if (dataSnapshot.exists()) {
+                                // 检查特定 key 的值
+                                DataSnapshot valueSnapshot = dataSnapshot.child(randomCode);
+                                if (valueSnapshot.exists()) {
+                                    String value = valueSnapshot.getValue(String.class);
+                                    p3_judge.setText(value);
                                     Log.d("FirebaseValue", "Value: " + value);
                                 } else {
                                     Log.d("FirebaseValue", "Key not found");
@@ -298,6 +376,70 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         }
             }
         });
+
+
+    }
+
+
+    public void getPart3(){
+        getRandomCode(new OnRandomCodeGeneratedListener() {
+            @Override
+            public void onRandomCodeGenerated(String randomCode) {
+                auth = FirebaseAuth.getInstance();
+                databaseReference = FirebaseDatabase.getInstance().getReference();
+
+                FirebaseUser currentUser = auth.getCurrentUser();
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+
+                    DatabaseReference targetRef = databaseReference
+                            .child("users")
+                            .child(userId)
+                            .child("Part3")
+                            .child(randomCode);
+
+
+
+                    targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            if (dataSnapshot.exists()) {
+                                //Toast.makeText(ReviewShow_Speaking.this, "part3資料庫存在", Toast.LENGTH_SHORT).show();
+
+                                part3.setVisibility(View.VISIBLE);
+                                p3_question_title.setVisibility(View.VISIBLE);
+                                p3_question.setVisibility(View.VISIBLE);
+                                p3_ans_title.setVisibility(View.VISIBLE);
+                                p3_answer.setVisibility(View.VISIBLE);
+                                p3_judge_title.setVisibility(View.VISIBLE);
+                                p3_judge.setVisibility(View.VISIBLE);
+                                String question = dataSnapshot.child("Question").getValue(String.class);
+                                String answer = dataSnapshot.child("Ans").getValue(String.class);
+                                //Toast.makeText(ReviewShow_Speaking.this, question+","+answer+","+randomCode, Toast.LENGTH_SHORT).show();
+                                p3_question.setText(question);
+                                p3_answer.setText(answer);
+                                getPart3Judge();
+
+
+
+                            } else {
+                                Toast.makeText(ReviewShow_Speaking.this, "Ans資料庫找不到", Toast.LENGTH_SHORT).show();
+
+                                Log.d("FirebaseValue", "Path not found");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+                }
+            }
+        });
+
 
     }
 }

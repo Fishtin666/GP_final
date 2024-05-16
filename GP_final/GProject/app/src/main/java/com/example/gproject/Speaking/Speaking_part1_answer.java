@@ -122,6 +122,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
     FirebaseAuth auth;
 
     public static boolean star_show=true;
+    public static  boolean FromPart2=false;
 
     boolean speakover=false,indic=true,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
     Context context;
@@ -701,6 +702,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
     }
 
     public void part3_insert_to_db(){
+        FromPart2=true;
     //將答案存入db
         FirebaseUser currentUser = auth.getCurrentUser();
 
@@ -747,14 +749,13 @@ public class Speaking_part1_answer extends AppCompatActivity {
         if(isPart3){
             part3_insert_to_db();
             isPart3=false;
-        }
-
-
-        if(isROF){
-            //Rof_insert_to_db();
-
         }else
             part1_insert_to_db();
+
+//        if(isROF){
+//            //Rof_insert_to_db();
+//        }else
+//            part1_insert_to_db();
 
 
     }

@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Ans"
+                android:text="Answer"
                 android:textSize="20sp"
                 android:layout_marginTop="10dp"
                 />
@@ -110,6 +110,94 @@
 
             <com.example.gproject.JustifyTextView4
                 android:id="@+id/Judge"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text=""
+                android:textSize="20sp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/gray"/>
+
+<!--            <View-->
+<!--                android:id="@+id/cross"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:background="@color/black"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                />-->
+
+            <TextView
+                android:id="@+id/part3"
+                android:textStyle="bold"
+                android:background="@color/red"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Part3"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:padding="5dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/P3_ques_title"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Question"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"/>
+
+            <com.example.gproject.JustifyTextView4
+                android:id="@+id/P3_Question"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text=""
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/gray"
+                android:textSize="20sp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/P3_Ans_title"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Answer"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                />
+
+            <com.example.gproject.JustifyTextView4
+                android:id="@+id/P3_Answer"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="center_horizontal"
+                android:text=""
+                android:backgroundTint="@color/gray"
+                android:textSize="20sp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_corner"
+                />
+
+            <TextView
+                android:id="@+id/P3_Judge_title"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Judge"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"/>
+
+            <com.example.gproject.JustifyTextView4
+                android:id="@+id/P3_Judge"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

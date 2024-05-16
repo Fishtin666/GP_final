@@ -120,6 +120,8 @@ public class AiTeacher2 extends AppCompatActivity {
 
     String pushKey="";
 
+    boolean Origin_is_speaking;
+
     Boolean write_or_speak=true,indic=true;
     public String public_result;
     boolean speak_or_not = true,PA_mic=false;
@@ -291,13 +293,34 @@ public class AiTeacher2 extends AppCompatActivity {
                 addToChat(keyboard_write,Message.SENT_BY_ME);
                 editText.setText("");
                 callAPI(keyboard_write+" *Please reply me within 3 sentences (each sentence about 10 words) first and continue to ask  a relevant question to me.");
+            //如果原本是說話 -> 調回說話
+                if(Origin_is_speaking){
+                    mic.setVisibility(View.VISIBLE);
+                    hint.setVisibility(View.VISIBLE);
+                    exit.setVisibility(View.VISIBLE);
+                    keyboard.setImageResource(R.drawable.keyboard);
+                    linear_keyboard.setVisibility(View.INVISIBLE);
+                }else{
+                    mic.setVisibility(View.INVISIBLE);
+                    hint.setVisibility(View.INVISIBLE);
+                    exit.setVisibility(View.INVISIBLE);
+                    keyboard.setImageResource(R.drawable.mic2);
+                    linear_keyboard.setVisibility(View.VISIBLE);
+
+                }
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editText.setText("");
+                //editText.setText("");
+                //變回說話
+                mic.setVisibility(View.VISIBLE);
+                hint.setVisibility(View.VISIBLE);
+                exit.setVisibility(View.VISIBLE);
+                keyboard.setImageResource(R.drawable.keyboard);
+                linear_keyboard.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -668,9 +691,16 @@ public class AiTeacher2 extends AppCompatActivity {
                 SpeechRecognitionResult result = task.get();
 
                 if (result.getReason() == ResultReason.RecognizedSpeech) {
-                    addToChat(result.getText(),Message.SENT_BY_ME);
-                    mic.setImageResource(R.drawable.mic);
-                    callAPI(result.getText());
+                    //要不要送出
+                    mic.setVisibility(View.INVISIBLE);
+                    hint.setVisibility(View.INVISIBLE);
+                    exit.setVisibility(View.INVISIBLE);
+                    linear_keyboard.setVisibility(View.VISIBLE);
+                    editText.setText(result.getText());
+                    Origin_is_speaking=true;
+                    //addToChat(result.getText(),Message.SENT_BY_ME);
+                    //mic.setImageResource(R.drawable.mic);
+                    //callAPI(result.getText());
                 } else {
                     mic.setImageResource(R.drawable.mic);
                     System.out.println("Error recognizing. Did you update the subscription info?" + System.lineSeparator() + result.toString());
@@ -954,7 +984,7 @@ public class AiTeacher2 extends AppCompatActivity {
     }
 
     public void keyboardClick(View view){
-        //打字
+        //變打字
         if(write_or_speak){
             runOnUiThread(new Runnable() {
                 @Override
@@ -965,10 +995,12 @@ public class AiTeacher2 extends AppCompatActivity {
                     keyboard.setImageResource(R.drawable.mic2);
                     write_or_speak=false;
                     linear_keyboard.setVisibility(View.VISIBLE);
+                    Origin_is_speaking=false;
+
                 }
             });
 
-            //說話
+            //變說話
         }else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -979,6 +1011,7 @@ public class AiTeacher2 extends AppCompatActivity {
                     keyboard.setImageResource(R.drawable.keyboard);
                     linear_keyboard.setVisibility(View.INVISIBLE);
                     write_or_speak=true;
+                    Origin_is_speaking=true;
                 }
             });
 

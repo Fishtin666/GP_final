@@ -23,10 +23,10 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="請選擇你要練習的大題"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="160dp"
-        android:textSize="24sp"
+        android:text="選擇Part"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/part1"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView"
         android:layout_centerHorizontal="true"
@@ -53,11 +53,11 @@
         android:onClick="part1Click"
         android:text="Part1"
         android:textColor="@color/white"
-        android:textSize="30sp" />
+        android:textSize="28sp" />
 
     <Button
         android:id="@+id/part2"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/part1"
         android:layout_centerHorizontal="true"
@@ -66,7 +66,7 @@
         android:onClick="part2Click"
         android:text="Part2+Part3"
         android:textColor="@color/white"
-        android:textSize="30sp" />
+        android:textSize="28sp" />
 
     <ImageButton
         android:id="@+id/back2"

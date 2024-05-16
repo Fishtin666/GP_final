@@ -1,5 +1,7 @@
 package com.example.gproject.Speaking;
 
+import static com.example.gproject.Speaking.Speaking_part1_answer.FromPart2;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -74,7 +76,9 @@ public class Speaking_judge extends AppCompatActivity {
             Key = extras.getString("key");
         }
         judge.setText(Judge);
-        push();
+        if(FromPart2){
+            part3_push();
+        }else push();
         //tts.speak(Judge, TextToSpeech.QUEUE_FLUSH, null);
 
     }
@@ -83,6 +87,37 @@ public class Speaking_judge extends AppCompatActivity {
         Intent intent =new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void part3_push(){
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("users")
+                    .child(userId)
+                    .child("Judge")
+                    .child("Speaking_Part3")
+                    .child(Key);
+
+            userAnswersRef.setValue(Judge)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+                                // 存储失败
+                                // 处理存储失败的情况
+                            }
+                        }
+                    });
+
+        }
+    }
+
+
+
 
     public void push(){
         FirebaseUser currentUser = auth.getCurrentUser();

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.gproject.MainActivity;
@@ -43,6 +44,7 @@ public class W_Judge_P1 extends AppCompatActivity {
     TextView judge;
     String Ans,Ques,Part,Key;
     FirebaseAuth auth;
+    ImageButton back;
     private DatabaseReference databaseReference;
 
     public static final MediaType JSON
@@ -61,6 +63,13 @@ public class W_Judge_P1 extends AppCompatActivity {
         judge.setMovementMethod(new ScrollingMovementMethod());
         databaseReference = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        back = findViewById(R.id.back2);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -105,8 +114,6 @@ public class W_Judge_P1 extends AppCompatActivity {
         if (currentUser != null) {
             String userId = currentUser.getUid();
             String judgeText = judge.getText().toString();
-
-
 
             DatabaseReference userAnswersRef = databaseReference
                     .child("users")
