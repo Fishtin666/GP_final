@@ -174,7 +174,7 @@ public class WrongFragment extends Fragment {
             String userId = currentUser.getUid();
 
             DatabaseReference targetRef = databaseReference
-                    .child("R_Rriview")
+                    .child("R_Review")
                     .child(userId);
                     //.child("Writing");
 
@@ -195,7 +195,7 @@ public class WrongFragment extends Fragment {
                                 // 创建一个按钮
                                 Button button = setbutton();
                                 // 设置按钮的文本为子节点的键名
-                                button.setText("Writing " + key + " question" + subKey);
+                                button.setText("Reading " + key + " question" + subKey);
                                 // 将按钮添加到布局中
                                 reviewLayout.addView(button);
                             }
@@ -209,6 +209,7 @@ public class WrongFragment extends Fragment {
             });
         }
     }
+
 
     @NonNull
     public void getWriting(){
@@ -289,12 +290,12 @@ public class WrongFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         // 创建一个新的 Intent
-                                        Intent intent = new Intent(getContext(), listen_Ans1.class);
+                                        //Intent intent = new Intent(getContext(), listen_Ans1.class);
                                         // 将 key 和 subKey 作为额外数据传递给下一个 Activity
-                                        intent.putExtra("key", key);
-                                        intent.putExtra("subKey", subKey);
-                                        // 启动新的 Activity
-                                        startActivity(intent);
+//                                        intent.putExtra("key", key);
+//                                        intent.putExtra("subKey", subKey);
+//                                        // 启动新的 Activity
+//                                        startActivity(intent);
                                     }
                                 });
                             }
@@ -337,7 +338,7 @@ public class WrongFragment extends Fragment {
                                 // 创建一个按钮
                                 Button button = setbutton();
                                 // 设置按钮的文本为子节点的键名
-                                button.setText("Speaking --" + key);
+                                button.setText("Speaking --" + key+" question"+subKey);
                                 // 将按钮添加到布局中
                                 reviewLayout.addView(button);
                             }
