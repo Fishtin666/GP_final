@@ -88,7 +88,10 @@ public class listen_Ans1 extends AppCompatActivity {
         }
 
 
+
+
     }
+
     public void NextClick(View view){
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);

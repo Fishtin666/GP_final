@@ -386,8 +386,8 @@ public class listen_ftest1 extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     // 存储成功
-                                    Intent intent = new Intent(listen_ftest1.this, listen_Ans1.class);
-                                    startActivity(intent);
+                                    //Intent intent = new Intent(listen_ftest1.this, listen_Ans1.class);
+                                    //startActivity(intent);
                                 } else {
                                     // 存储失败
                                     // 处理存储失败的情况
@@ -397,6 +397,16 @@ public class listen_ftest1 extends AppCompatActivity {
             }
         }
 
+        Intent intent = new Intent(this,listen_ftest1.class);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("key1", "value1");
+        hashMap.put("key2", "value2");
+
+        for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+            intent.putExtra(entry.getKey(), entry.getValue());
+        }
+
+        startActivity(intent);
     }
 
     //音頻撥放
