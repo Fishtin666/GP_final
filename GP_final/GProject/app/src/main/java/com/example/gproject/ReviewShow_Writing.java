@@ -45,11 +45,11 @@ public class ReviewShow_Writing extends AppCompatActivity {
     TextView Ques,Ans,Judge;
     String randomCode;
 
-    String Task_passIn="1";  //Task_passIn:傳入的參數
+    String Task_passIn;  //Task_passIn:傳入的參數
 
-    String task=Task_passIn;
+    //String task=Task_passIn;
     String topic;
-    String ques_num="1"; //第幾題
+    String ques_num; //第幾題
     String num="0";  //第幾次回答
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,14 @@ public class ReviewShow_Writing extends AppCompatActivity {
             }
         });
 
-        if(task.equals("1")){
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Task_passIn = bundle.getString("task");
+            ques_num = bundle.getString("question");
+            randomCode = bundle.getString("times");
+        }
+
+        if(Task_passIn.equals("1")){
             topic="Writing";
             getPic();
             //Toast.makeText(ReviewShow_Writing.this, "task1", Toast.LENGTH_SHORT).show();
@@ -203,7 +210,7 @@ public class ReviewShow_Writing extends AppCompatActivity {
                     .child("users")
                     .child(userId)
                     .child("Writing")
-                    .child(task)
+                    .child(Task_passIn)
                     .child(ques_num);  //###选择是第几题####
 
             RandomCodeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -268,7 +275,7 @@ public class ReviewShow_Writing extends AppCompatActivity {
                             .child("users")
                             .child(userId)
                             .child("Writing")
-                            .child(task)
+                            .child(Task_passIn)
                             .child(ques_num) ; //###選擇是第幾題####
                     //.child(randomCode);    //###選擇是第幾次回答####
 
