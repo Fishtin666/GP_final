@@ -66,8 +66,11 @@ public class WordListActivity extends AppCompatActivity {
 
         // set Adapter
         List<WordListData> wordListDataList = new ArrayList<>();
-        adapter = new WordListAdapter(wordListDataList);
+        adapter = new WordListAdapter(wordListDataList,this);
         recyclerView.setAdapter(adapter);
+
+        // Attach ItemTouchHelper to RecyclerView
+        adapter.attachItemTouchHelperToRecyclerView(recyclerView);
 
         // set Word Data
         setCollectWordData();

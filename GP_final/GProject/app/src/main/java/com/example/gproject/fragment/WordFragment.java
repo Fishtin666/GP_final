@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.gproject.Adapters.QuestionNumberAdapter;
 import com.example.gproject.Models.QuestionNumberModel;
 import com.example.gproject.R;
+import com.example.gproject.WordQuiz.WordLevelChose;
 import com.example.gproject.WordQuiz.WordListActivity;
 import com.example.gproject.WordQuiz.LevelAQuizActivity;
 import com.example.gproject.meaning.ShowMeaning;
@@ -104,7 +105,7 @@ public class WordFragment extends Fragment {
         startActivity(intent);
     }
     public void word_test_click(View view){
-        Intent intent = new Intent(getActivity(), LevelAQuizActivity.class);
+        Intent intent = new Intent(getActivity(), WordLevelChose.class);
         startActivity(intent);
     }
     public void word_collect_click(View view){
