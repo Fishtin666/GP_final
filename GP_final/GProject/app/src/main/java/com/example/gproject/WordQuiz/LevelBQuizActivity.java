@@ -100,8 +100,9 @@ public class LevelBQuizActivity extends AppCompatActivity {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
+//                        startActivity(intent);
+                        finish();
                     }
                 });
             }

@@ -67,6 +67,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
         //delay loading page
         wordSendButton = findViewById(R.id.wordSend);
         wordSendButton.setVisibility(View.INVISIBLE);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
