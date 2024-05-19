@@ -43,6 +43,9 @@
             android:name=".WordQuiz.WordListActivity"
             android:exported="true" />
         <activity
+            android:name=".WordQuiz.WordLevelChose"
+            android:exported="true" />
+        <activity
             android:name=".reading.R_blank"
             android:exported="true" />
         <activity
