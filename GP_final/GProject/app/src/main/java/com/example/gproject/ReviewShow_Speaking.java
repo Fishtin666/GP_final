@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     FirebaseAuth auth;
     private DatabaseReference databaseReference;
     ImageView home;
+    ImageButton back;
 
     TextView Ques,Ans,Judge;
     String topic;
@@ -37,6 +39,8 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     String num="1";  //第幾次回答
 
     String randomCode;
+
+    Boolean isPart3=false;
 
     //part3
     TextView part3,p3_question_title,p3_question,p3_ans_title,p3_answer,p3_judge_title,p3_judge;
@@ -68,11 +72,28 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         p3_judge_title.setVisibility(View.GONE);
         p3_judge.setVisibility(View.GONE);
 
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
+
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             topic = bundle.getString("topic");
             ques_num = bundle.getString("speakQ");
+        }
+
+        String[] Part3_topic={"People","Item","Place","Experience"};
+        for(int i=0;i<Part3_topic.length;i++){
+            if(topic.equals(Part3_topic[i]))
+                isPart3=true;
+
         }
 
         home.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +113,8 @@ public class ReviewShow_Speaking extends AppCompatActivity {
 
                 getJudge();
                 getAns();
-                getPart3();
+                if (isPart3)
+                   getPart3();
 
             }
         });

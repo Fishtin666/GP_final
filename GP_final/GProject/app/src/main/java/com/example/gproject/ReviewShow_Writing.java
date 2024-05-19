@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class ReviewShow_Writing extends AppCompatActivity {
 
     //String task=Task_passIn;
     String topic;
+
+    ImageButton back;
     String ques_num; //第幾題
     String num="0";  //第幾次回答
     @Override
@@ -64,6 +67,17 @@ public class ReviewShow_Writing extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ReviewShow_Writing.this,MainActivity.class));
+            }
+        });
+
+
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
             }
         });
 
