@@ -61,7 +61,6 @@ public class login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 在此處調用登錄方法
                 loginUser();
 
             }

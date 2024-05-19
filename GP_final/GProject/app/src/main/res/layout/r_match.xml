@@ -45,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/load"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -63,7 +64,9 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginRight="30dp"
                     android:gravity="center"
-                    android:hint="Title"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:text="Title"
                     android:textSize="36sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -77,8 +80,6 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:background="@color/grey"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:hint="Question"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -90,10 +91,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="30dp"
                     android:hint="Question"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +109,7 @@
                     android:layout_marginRight="30dp"
                     android:background="@color/grey"
                     android:gravity="center"
-                    android:hint="Title2"
+                    android:text="Title2"
                     android:textSize="26sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -133,10 +134,10 @@
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:hint="ans"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/A1"
+                    app:layout_constraintBottom_toBottomOf="@+id/A1"
+                    app:layout_constraintTop_toTopOf="@id/A1"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <EditText
@@ -144,11 +145,10 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:ems="10"
                     android:inputType="text"
                     app:layout_constraintStart_toEndOf="@id/c1"
-                    app:layout_constraintTop_toBottomOf="@id/section1" />
+                    app:layout_constraintTop_toTopOf="@+id/Q1" />
 
                 <com.example.gproject.JustifyTextView2
                     android:id="@+id/Q1"
@@ -158,12 +158,11 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="10dp"
                     android:hint="AAAA"
+
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/A1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/A1"
-                    app:layout_constraintTop_toTopOf="@+id/A1" />
+                    app:layout_constraintTop_toBottomOf="@id/section1" />
 
                 <TextView
                     android:id="@+id/c2"
@@ -172,7 +171,8 @@
                     android:layout_marginLeft="10dp"
                     android:hint="ans"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/A2"
+                    app:layout_constraintBottom_toBottomOf="@+id/A2"
+                    app:layout_constraintTop_toTopOf="@id/A2"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <EditText
@@ -180,11 +180,10 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:ems="10"
                     android:inputType="text"
                     app:layout_constraintStart_toEndOf="@id/c2"
-                    app:layout_constraintTop_toBottomOf="@id/A1" />
+                    app:layout_constraintTop_toTopOf="@id/Q2" />
 
                 <com.example.gproject.JustifyTextView2
                     android:id="@+id/Q2"
@@ -195,11 +194,9 @@
                     android:layout_marginRight="10dp"
                     android:hint="ABBB"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/A2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/A2"
-                    app:layout_constraintTop_toTopOf="@+id/A2" />
+                    app:layout_constraintTop_toBottomOf="@id/Q1" />
 
                 <TextView
                     android:id="@+id/c3"
@@ -208,7 +205,8 @@
                     android:layout_marginLeft="10dp"
                     android:hint="ans"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/A3"
+                    app:layout_constraintBottom_toBottomOf="@+id/A3"
+                    app:layout_constraintTop_toTopOf="@id/A3"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <EditText
@@ -216,11 +214,10 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:ems="10"
                     android:inputType="text"
                     app:layout_constraintStart_toEndOf="@id/c3"
-                    app:layout_constraintTop_toBottomOf="@+id/A2" />
+                    app:layout_constraintTop_toTopOf="@+id/Q3" />
 
                 <com.example.gproject.JustifyTextView2
                     android:id="@+id/Q3"
@@ -231,11 +228,9 @@
                     android:layout_marginRight="10dp"
                     android:hint="ABBB"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/A3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/A3"
-                    app:layout_constraintTop_toTopOf="@+id/A3" />
+                    app:layout_constraintTop_toBottomOf="@+id/Q2" />
 
                 <TextView
                     android:id="@+id/c4"
@@ -244,7 +239,8 @@
                     android:layout_marginLeft="10dp"
                     android:hint="ans"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/A4"
+                    app:layout_constraintBottom_toBottomOf="@+id/A4"
+                    app:layout_constraintTop_toTopOf="@id/A4"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <EditText
@@ -252,11 +248,10 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:ems="10"
                     android:inputType="text"
                     app:layout_constraintStart_toEndOf="@id/c4"
-                    app:layout_constraintTop_toBottomOf="@+id/A3" />
+                    app:layout_constraintTop_toTopOf="@+id/Q4" />
 
                 <com.example.gproject.JustifyTextView2
                     android:id="@+id/Q4"
@@ -267,11 +262,9 @@
                     android:layout_marginRight="10dp"
                     android:hint="ABBB"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/A4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/A4"
-                    app:layout_constraintTop_toTopOf="@+id/A4" />
+                    app:layout_constraintTop_toBottomOf="@+id/Q3" />
 
                 <TextView
                     android:id="@+id/c5"
@@ -280,7 +273,8 @@
                     android:layout_marginLeft="10dp"
                     android:hint="ans"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/A5"
+                    app:layout_constraintBottom_toBottomOf="@+id/A5"
+                    app:layout_constraintTop_toTopOf="@id/A5"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <EditText
@@ -288,11 +282,10 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:ems="10"
                     android:inputType="text"
                     app:layout_constraintStart_toEndOf="@id/c5"
-                    app:layout_constraintTop_toBottomOf="@+id/A4" />
+                    app:layout_constraintTop_toTopOf="@+id/Q5" />
 
                 <com.example.gproject.JustifyTextView2
                     android:id="@+id/Q5"
@@ -303,11 +296,9 @@
                     android:layout_marginRight="10dp"
                     android:hint="ABBB"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/A5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/A5"
-                    app:layout_constraintTop_toTopOf="@+id/A5" />
+                    app:layout_constraintTop_toBottomOf="@+id/Q4" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.example.gproject.WordQuiz.WordLevelChose;
 import com.example.gproject.WordQuiz.WordListActivity;
 import com.example.gproject.WordQuiz.LevelAQuizActivity;
 import com.example.gproject.meaning.ShowMeaning;
@@ -26,7 +27,7 @@ public class WordTopicActivity extends AppCompatActivity{
         finish();
     }
     public void word_test_click(View view){
-        Intent intent = new Intent(WordTopicActivity.this, LevelAQuizActivity.class);
+        Intent intent = new Intent(WordTopicActivity.this, WordLevelChose.class);
         startActivity(intent);
         finish();
     }

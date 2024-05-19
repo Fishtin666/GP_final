@@ -20,11 +20,6 @@ public class R_topic extends AppCompatActivity {
         setContentView(R.layout.r_topic);
 
         ImageButton backButton = findViewById(R.id.back);
-        ImageButton ButBlank = findViewById(R.id.Q1);
-        ImageButton ButJudge = findViewById(R.id.Q2);
-        ImageButton ButChos = findViewById(R.id.Q3);
-        ImageButton ButMatch = findViewById(R.id.Q4);
-        ImageButton ButMultiple = findViewById(R.id.Q5);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,41 +29,28 @@ public class R_topic extends AppCompatActivity {
                 finish();
             }
         });
-        try {
-            ButBlank.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToChoseTest(1);
-                }
-            });
-            ButJudge.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToChoseTest(2);
-                }
-            });
-            ButChos.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToChoseTest(3);
-                }
-            });
-            ButMatch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToChoseTest(4);
-                }
-            });
-            ButMultiple.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToChoseTest(5);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("WordListActivity", "Failed with error: " + e.getMessage());
-        }
+    }
+    public void homeClick(View view){
+        Intent intent = new Intent(R_topic.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public void blankClick(View View){
+        goToChoseTest(1);
+    }
+    public void judge_click(View view){
+        goToChoseTest(2);
+    }
+
+    public void singleChos_click(View view){
+        goToChoseTest(3);
+    }
+
+    public void match_click(View view){
+        goToChoseTest(4);
+    }
+    public void multipleChos_click(View view){
+        goToChoseTest(5);
     }
 
     //Set Next Form's chos Num
@@ -77,17 +59,10 @@ public class R_topic extends AppCompatActivity {
         Intent intent = new Intent(this, ChoseTestActivity.class);
 //        intent.putExtra("R_topic", number);
         startActivity(intent);
-
-        //获取SharedPreferences实例
+        
         SharedPreferences sharedPreferences = getSharedPreferences("R_topic", MODE_PRIVATE);
-
-        // 从SharedPreferences中获取当前单词级别，默认值为"未知"
-//        String wordLevel = sharedPreferences.getString("R_topic", "unKnow");
-
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        // 将单词级别设置为"Login"
         editor.putInt("R_topic", number);
-        // 提交编辑
         editor.apply();
         Log.e("R_topic", "A" + number);
     }
