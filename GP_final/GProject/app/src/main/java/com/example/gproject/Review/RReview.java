@@ -44,6 +44,7 @@ public class RReview extends AppCompatActivity {
     ImageView pre,next;
     TextView Ques;
     LinearLayout Ans;
+    int documentcount;
     int question=1;//S1_"1"，目前在section1的第""部分
     String test;  //Task_passIn:傳入的參數
     int section=1; //由1開始有4個section
@@ -80,40 +81,7 @@ public class RReview extends AppCompatActivity {
 
     }
 
-    //計算每個section有幾題題目
-    private Map<Integer, Integer> docCountMap = new HashMap<>();
-    public void  countDocument(){
-        // 查询以 "S1" 开头的文档数量
-        //Qcount = 0 ;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Listen_"+test)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots){
-                        String documentName = document.getId();
-                         //计算文档数量
-                            for(int sec=0 ;sec<=4 ;sec++) {
-                                if (documentName.startsWith("S" + sec)) {
-                                    Integer currentCount = docCountMap.get(sec);
-                                    if (currentCount == null) {
-                                        currentCount = 0;
-                                    }
-                                    docCountMap.put(sec, currentCount + 1);
-//                                    for (Map.Entry<Integer, Integer> entry : docCountMap.entrySet()) {
-//                                        Log.d("TAG", "Key: " + entry.getKey() + ", Count: " + entry.getValue());
-//                                    }
-                                    Log.d("TAG", "Document count for " + sec + ": " + docCountMap.get(section));
-                                    break; // 一旦找到匹配的前缀就可以停止检查其他前缀
 
-                                }
-                            }
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("TAG", "Error getting document count: ", e);
-                });
-    }
 
     private void getData(){
         Ans.removeAllViews();
@@ -152,44 +120,6 @@ public class RReview extends AppCompatActivity {
                         }
                     }
 
-                    //檢查這題是否需要圖片
-                    boolean haspicture = false;
-                    //int[] p = {1}; //圖片名稱: 1_s1_p2.png
-                    for (Map.Entry<String, Object> entry : document.getData().entrySet()) {
-                        String fieldName = entry.getKey();
-                        // 檢查是否有picture欄位
-                        if (fieldName.equals("picture")) {
-                            haspicture = true;
-                            //final int pValue = p[0]; // 保存循环开始时的 p[0] 的值
-                            StorageReference storageRef = FirebaseStorage.getInstance().getReference("Listen/" + test + "_s" + section +"_p" +Qcount+".png");
-                            //Log.d("TAG", "pic ref: " + test + "_p" + pValue);
-                            try {
-                                File localfile = File.createTempFile("tempfile", ".png");
-                                storageRef.getFile(localfile)
-                                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
-                                                pic.setImageBitmap(bitmap);
-                                                // 成功下载图片后，递增 p 变量
-                                                //p[0]++;
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-
-                                            }
-                                        });
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                    if (!haspicture) {
-                        pic.setVisibility(View.GONE);
-                    }
-
-
                     //顯示題目到textview
                     if (document.exists()) {
                         // 根据字段的数量来处理文档中的数据
@@ -210,19 +140,20 @@ public class RReview extends AppCompatActivity {
                 }
             }
         });
+        getpic();
     }
 
     //換題目頁面
     public void nextClick2(View view){
         //Log.d("TAG", "question count: " + question);
         pre.setVisibility(View.VISIBLE);
-        if(question < docCountMap.get(section) ){
+        if(question < documentcount ){
             question++;
             Log.d("TAG", "question count: " + question);
 
             Qcount=question;
 //            pre.setVisibility(View.VISIBLE);
-            if (question == docCountMap.get(section)) {
+            if (question == documentcount) {
                 next.setVisibility(View.INVISIBLE);
             }
             getData();
@@ -233,7 +164,7 @@ public class RReview extends AppCompatActivity {
     public void preClick2(View view){
         //Log.d("TAG", "question count: " + question);
         next.setVisibility(View.VISIBLE);
-        if(1<question && question <=docCountMap.get(section)){
+        if(1<question && question <=documentcount){
             question--;
             Log.d("TAG", "question count: " + question);
 
@@ -254,7 +185,7 @@ public class RReview extends AppCompatActivity {
         section = buttonIdentifier;
         Qcount=1;
         Log.d("TAG", "現在選擇的Activity section: " + section);
-        Log.d("TAG", "選擇section button後 Document count: " + docCountMap.get(section)); // 打印文档数量
+        Log.d("TAG", "選擇section button後 Document count: " + documentcount); // 打印文档数量
     }
     //当点击 button1 按钮时调用该方法
     public void s1Click2(View view) {
@@ -281,4 +212,77 @@ public class RReview extends AppCompatActivity {
         getData();
     }
 
+    //計算每個section有幾題題目
+    public void  countDocument(){
+        // 查询以 "S1" 开头的文档数量
+        documentcount = 0 ;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Listen_"+test)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots){
+                        String documentName = document.getId();
+                        //计算文档数量
+                        //for(int sec=0 ;sec<=4 ;sec++) {
+                        if (documentName.startsWith("S" + section)) {
+                            documentcount++;
+                        }
+                        // }
+                    }
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("TAG", "Error getting document count: ", e);
+                });
+    }
+
+    private void getpic(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //int section = 1;
+        DocumentReference Q = db.collection("Listen_" + test).document("S" + section + "_" + Qcount);
+        Log.d("Ref", "Listen_" + test+"/S"+section+"_"+Qcount);
+        Q.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    //檢查這題是否需要圖片
+                    boolean haspicture = false;
+                    //int[] p = {1}; //圖片名稱: 1_s1_p2.png
+                    for (Map.Entry<String, Object> entry : document.getData().entrySet()) {
+                        String fieldName = entry.getKey();
+                        // 檢查是否有picture欄位
+                        if (fieldName.equals("picture")) {
+                            haspicture = true;
+                            //final int pValue = p[0]; // 保存循环开始时的 p[0] 的值
+                            StorageReference storageRef = FirebaseStorage.getInstance().getReference("Listen/" + test + "_s" + section + "_p" + Qcount + ".png");
+                            //Log.d("TAG", "pic ref: " + test + "_p" + pValue);
+                            try {
+                                File localfile = File.createTempFile("tempfile", ".png");
+                                storageRef.getFile(localfile)
+                                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                                pic.setImageBitmap(bitmap);
+                                                // 成功下载图片后，递增 p 变量
+                                                //p[0]++;
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+
+                                            }
+                                        });
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    if (!haspicture) {
+                        pic.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
 }
