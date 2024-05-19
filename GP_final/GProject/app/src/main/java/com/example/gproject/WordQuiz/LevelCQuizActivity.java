@@ -233,6 +233,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
                 public void onClick(View view) {
 
                     GoToMain(Level);
+
                     // Remove Extra Value
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.remove("word_level");
@@ -273,8 +274,8 @@ public class LevelCQuizActivity extends AppCompatActivity {
     public void GoToMain(String LevelValue) {
         //set hint
         Log.e("setHint", "show B ");
-//        Intent intentA = new Intent(this, MainActivity.class);
-//        startActivity(intentA);
+        Intent intentA = new Intent(this, MainActivity.class);
+        startActivity(intentA);
         finish();
         SaveWordLevel(LevelValue);
 

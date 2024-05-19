@@ -263,8 +263,8 @@ public class LevelAQuizActivity extends AppCompatActivity {
     public void GoToMain(String LevelValue) {
         //set hint
         Log.e("setHint", "show B ");
-//        Intent intentA = new Intent(this, MainActivity.class);
-//        startActivity(intentA);
+        Intent intentA = new Intent(this, MainActivity.class);
+        startActivity(intentA);
         finish();
         SaveWordLevel(LevelValue);
 
