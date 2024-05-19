@@ -303,11 +303,11 @@ public class WrongFragment extends Fragment {
                             for (DataSnapshot subChildSnapshot : childSnapshot.getChildren()) {
                                 String subKey = subChildSnapshot.getKey();
                                 // 这里可以处理子节点名称，例如打印输出或者其他操作
-                                Log.d("SubKey", subKey);
+                                //
                                 // 创建一个按钮
                                 Button button = setbutton();
                                 // 设置按钮的文本为子节点的键名
-                                button.setText("Listening "+key+" "+subKey);
+                                button.setText("Listening test"+key+" \n"+subKey);
                                 // 将按钮添加到布局中
                                 reviewLayout.addView(button);
 
@@ -316,12 +316,13 @@ public class WrongFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         // 创建一个新的 Intent
-                                        //Intent intent = new Intent(getContext(), listen_Ans1.class);
-                                        // 将 key 和 subKey 作为额外数据传递给下一个 Activity
-//                                        intent.putExtra("key", key);
-//                                        intent.putExtra("subKey", subKey);
-//                                        // 启动新的 Activity
-//                                        startActivity(intent);
+                                        Intent intent = new Intent(getContext(), RReview.class);
+                                         //将 key 和 subKey 作为额外数据传递给下一个 Activity
+                                        intent.putExtra("test", key);
+                                        intent.putExtra("Ldate", subKey);
+                                        Log.d("SubKey", key+","+subKey);
+                                        // 启动新的 Activity
+                                        startActivity(intent);
                                     }
                                 });
                             }

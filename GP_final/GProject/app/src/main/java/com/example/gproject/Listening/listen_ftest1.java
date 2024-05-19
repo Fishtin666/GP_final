@@ -376,7 +376,7 @@ public class listen_ftest1 extends AppCompatActivity {
                 DatabaseReference listenAnswersRef = databaseReference
                         .child("Listen")
                         .child(userId)
-                        .child("test"+bundleValue)
+                        .child(String.valueOf(bundleValue))
                         .child(formattedDate)
                         .child(String.valueOf(ansKey));
                         //.push(); // 使用 push() 生成唯一键
