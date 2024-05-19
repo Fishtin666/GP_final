@@ -30,6 +30,9 @@ import com.example.gproject.Models.QuestionModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -39,7 +42,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -54,12 +62,13 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
     CrossTopicAdapter adapter;
     RecyclerView recyclerView;
     ArrayList<String> list;
-
+    String crossQuestions;
     FirebaseAuth auth;
     Button start;
-    JustifyTextView Result;
+    TextView Result;
     ImageButton back;
     ImageView home;
+    String topic;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -105,7 +114,16 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
         adapter = new CrossTopicAdapter(this,list);
         recyclerView.setAdapter(adapter);
 
-        String topic=getIntent().getStringExtra("topic");
+        //String topic=getIntent().getStringExtra("topic");
+
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            topic= extras.getString("topic");
+
+
+        }
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Speaking_"+topic)
@@ -149,7 +167,7 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
                 }
 
                 // 将所有被选中的文本存储在一个字符串中
-                String crossQuestions = crossQuestionsBuilder.toString();
+                crossQuestions = crossQuestionsBuilder.toString();
                 String order=crossQuestions+"Please generate an answer for me based on the above sentence, so that no matter which of the above questions I encounter, I can answer according to this response.";
                 callAPI(order);
                 //Toast.makeText(Cross_Topic_qusetion.this, crossQuestions, Toast.LENGTH_SHORT).show();
@@ -218,9 +236,11 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Result.setText(result.trim());
+                                push(result.trim(),crossQuestions);
                                 System.out.println("結果"+result.trim());
                                 //SpanningString();
                                 start.setText("開始串題");
+
                             }
                         });
 
@@ -241,5 +261,43 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void push(String cross_ans,String cross_ques){
+        auth = FirebaseAuth.getInstance();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        //將答案存入db
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            long currentTime = System.currentTimeMillis();
+            Date date = new Date(currentTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String formattedDate = sdf.format(date);
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("CrossTopic")
+                    .child(userId)
+                    .child(topic)
+                    .child(String.valueOf(formattedDate));
+
+            Map<String, String> dataMap = new HashMap<>();
+            dataMap.put("Ques", cross_ques);
+            dataMap.put("Ans", cross_ans);
+            userAnswersRef.setValue(dataMap)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+
+                            }
+                        }
+                    });
+        }
     }
 }

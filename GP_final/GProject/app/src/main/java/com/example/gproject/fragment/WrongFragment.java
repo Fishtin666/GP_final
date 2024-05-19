@@ -386,6 +386,7 @@ public class WrongFragment extends Fragment {
                                             //将 key 和 subKey 作为额外数据传递给下一个 Activity
                                             intent.putExtra("topic", key);
                                             intent.putExtra("speakQ", subKey);
+                                            intent.putExtra("times", subSubKey);
                                             // 启动新的 Activity
                                             startActivity(intent);
                                         }
