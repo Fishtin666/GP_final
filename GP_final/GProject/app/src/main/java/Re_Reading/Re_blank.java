@@ -56,6 +56,7 @@ public class Re_blank extends AppCompatActivity {
             }
         }, 2000);
 
+
         //back button
         ImageButton backButton = findViewById(R.id.back);
         backButton.setOnClickListener(new View.OnClickListener() {
