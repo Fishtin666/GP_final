@@ -23,6 +23,7 @@ import com.example.gproject.Listening.listen_Ans1;
 import com.example.gproject.R;
 import com.example.gproject.Review.RReview;
 import com.example.gproject.Review.Review_choose;
+import com.example.gproject.ReviewShow_Speaking;
 import com.example.gproject.ReviewShow_Writing;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -360,12 +361,35 @@ public class WrongFragment extends Fragment {
                                 String subKey = subChildSnapshot.getKey();
                                 // 这里可以处理子节点名称，例如打印输出或者其他操作
                                 Log.d("SubKey", subKey);
-                                // 创建一个按钮
-                                Button button = setbutton();
-                                // 设置按钮的文本为子节点的键名
-                                button.setText("Speaking --" + key+" question"+subKey);
-                                // 将按钮添加到布局中
-                                reviewLayout.addView(button);
+                                // 获取子节点下的所有子节点名称
+                                for (DataSnapshot subSubChildSnapshot : subChildSnapshot.getChildren()) {
+                                    String subSubKey = subSubChildSnapshot.getKey();
+                                    long childCount = subSubChildSnapshot.getChildrenCount();
+                                    // 打印subSubKey
+                                    Log.d("SubSubKey", subSubKey);
+                                    Log.d("SubSubKey childCount", String.valueOf(childCount));
+
+                                    // 创建一个按钮
+                                    Button button = setbutton();
+                                    // 设置按钮的文本为子节点的键名
+                                    button.setText("Speaking --" + key+" question"+subKey+" SubSubKey:"+subSubKey);
+                                    // 将按钮添加到布局中
+                                    reviewLayout.addView(button);
+
+                                    // 为按钮设置点击事件
+                                    button.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // 创建一个新的 Intent
+                                            Intent intent = new Intent(getContext(), ReviewShow_Speaking.class);
+                                            //将 key 和 subKey 作为额外数据传递给下一个 Activity
+                                            intent.putExtra("topic", key);
+                                            intent.putExtra("speakQ", subKey);
+                                            // 启动新的 Activity
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
                             }
                         }
                     } else {

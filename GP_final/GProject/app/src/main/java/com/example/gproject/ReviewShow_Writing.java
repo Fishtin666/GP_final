@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gproject.Writing.Writing_T1answer1;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,7 +55,7 @@ public class ReviewShow_Writing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_writing);
         Ques = findViewById(R.id.Question);
-        Ans = findViewById(R.id.Answer);
+        Ans = findViewById(R.id.listenContent);
         Judge = findViewById(R.id.Judge);
         pic=findViewById(R.id.pic);
 

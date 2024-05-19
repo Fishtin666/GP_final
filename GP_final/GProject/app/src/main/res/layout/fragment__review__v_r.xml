@@ -34,7 +34,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <Button
-            android:id="@+id/r_all5"
+            android:id="@+id/hometown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -59,7 +59,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/r_all5" />
+            app:layout_constraintTop_toBottomOf="@+id/hometown" />
 
         <Button
             android:id="@+id/r_all7"

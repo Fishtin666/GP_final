@@ -5,14 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gproject.Models.QuestionModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -35,8 +32,8 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     ImageView home;
 
     TextView Ques,Ans,Judge;
-    String topic="People";
-    String ques_num="3"; //第幾題
+    String topic;
+    String ques_num; //第幾題
     String num="1";  //第幾次回答
 
     String randomCode;
@@ -50,7 +47,7 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_speaking);
         Ques = findViewById(R.id.Question);
-        Ans = findViewById(R.id.Answer);
+        Ans = findViewById(R.id.listenContent);
         Judge = findViewById(R.id.Judge);
         home = findViewById(R.id.home);
 
@@ -72,6 +69,11 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         p3_judge.setVisibility(View.GONE);
 
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            topic = bundle.getString("topic");
+            ques_num = bundle.getString("speakQ");
+        }
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override

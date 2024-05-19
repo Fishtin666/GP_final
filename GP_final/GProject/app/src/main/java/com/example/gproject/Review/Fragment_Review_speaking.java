@@ -65,7 +65,7 @@ public class Fragment_Review_speaking extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment__review_speaking, container, false);
-        myButton = view.findViewById(R.id.r_all4);
+        myButton = view.findViewById(R.id.r_all3);
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

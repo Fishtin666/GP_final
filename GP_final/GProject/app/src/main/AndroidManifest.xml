@@ -13,6 +13,15 @@
         android:theme="@style/Theme.GProject"
         tools:targetApi="31">
         <activity
+            android:name=".Review.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Review.ReviewShow_Listencontent"
+            android:exported="false" />
+        <activity
+            android:name=".Review.ReviewShow_ListenContent"
+            android:exported="false" />
+        <activity
             android:name=".ReviewShow_appConversation"
             android:exported="false" />
         <activity

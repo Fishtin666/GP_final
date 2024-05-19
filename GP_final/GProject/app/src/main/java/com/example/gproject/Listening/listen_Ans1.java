@@ -148,7 +148,9 @@ public class listen_Ans1 extends AppCompatActivity {
                                         //Log.d("TAG", "empty i " + i);
                                         textView.setText(answerMap.get(i));
                                         textView.setTextColor(ContextCompat.getColor(this, R.color.blue));
-//                                        textView.setText("");
+                                        if (ansView != null) {
+                                            ansView.setText("");
+                                        }
                                     }
 
                                 }

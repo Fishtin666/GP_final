@@ -39,7 +39,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gproject.AiTeacher.AiTeacher2;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.dictionary.MeaningAdapter;
@@ -134,7 +133,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
             }
         });
 
-        answer = findViewById(R.id.Answer);
+        answer = findViewById(R.id.listenContent);
         taskcard = findViewById(R.id.TaskCard);
         time = findViewById(R.id.time);
         answer.setMovementMethod(new ScrollingMovementMethod());
@@ -406,7 +405,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
     //mic按下
     public void micClick(){
         timer.cancel();
-        TextView txt =  this.findViewById(R.id.Answer);
+        TextView txt =  this.findViewById(R.id.listenContent);
 
         try (SpeechConfig config = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
              SpeechRecognizer reco = new SpeechRecognizer(config);) {

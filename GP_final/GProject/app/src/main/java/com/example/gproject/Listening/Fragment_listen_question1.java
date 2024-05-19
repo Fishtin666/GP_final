@@ -1,9 +1,7 @@
 package com.example.gproject.Listening;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,11 +10,9 @@ import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,8 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -258,7 +252,7 @@ public class Fragment_listen_question1 extends Fragment {
                                         }
 
                                         // 将水平 LinearLayout 添加到父 LinearLayout
-                                        LinearLayout answer = rootView.findViewById(R.id.Answer);
+                                        LinearLayout answer = rootView.findViewById(R.id.listenContent);
                                         answer.addView(horizonLayout);
                                     }
 
