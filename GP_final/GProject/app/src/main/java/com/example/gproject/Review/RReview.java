@@ -85,6 +85,7 @@ public class RReview extends AppCompatActivity {
 
     private void getData(){
         Ans.removeAllViews();
+        getpic();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //int section = 1;
         DocumentReference Q = db.collection("Listen_" + test).document("S" + section + "_" + Qcount);
@@ -140,7 +141,6 @@ public class RReview extends AppCompatActivity {
                 }
             }
         });
-        getpic();
     }
 
     //換題目頁面
@@ -156,15 +156,15 @@ public class RReview extends AppCompatActivity {
             if (question == documentcount) {
                 next.setVisibility(View.INVISIBLE);
             }
-            getData();
         }
+        getData();
 
     }
 
     public void preClick2(View view){
         //Log.d("TAG", "question count: " + question);
         next.setVisibility(View.VISIBLE);
-        if(1<question && question <=documentcount){
+        if(1<question && question <= documentcount){
             question--;
             Log.d("TAG", "question count: " + question);
 
@@ -173,8 +173,8 @@ public class RReview extends AppCompatActivity {
             if (question==1) {
                 pre.setVisibility(View.INVISIBLE);
             }
-            getData();
         }
+        getData();
     }
 
     // 将 sectionClick 传递按钮标识作为参数

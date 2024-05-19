@@ -31,8 +31,7 @@
     <ScrollView
         android:layout_width="413dp"
         android:layout_height="807dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view18" >
+        app:layout_constraintTop_toBottomOf="@+id/view18">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -103,21 +102,28 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/arrow_circle_left" />
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView"
-                android:name="com.example.gproject.Listening.Fragment_listen_question1"
+            <ScrollView
+                android:id="@+id/scrollView2"
                 android:layout_width="match_parent"
-                android:layout_height="620dp"
+                android:layout_height="630dp"
                 android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:layout_editor_absoluteX="-17dp">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragmentContainerView"
+                    android:name="com.example.gproject.Listening.Fragment_listen_question1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+            </ScrollView>
 
             <Button
                 android:id="@+id/button1"
                 android:layout_width="57dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#932D2D"
                 android:onClick="s1Click"
                 android:text="1"
@@ -125,14 +131,14 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
             <Button
                 android:id="@+id/button2"
                 android:layout_width="57dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="14dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#932D2D"
                 android:onClick="s2Click"
                 android:text="2"
@@ -140,14 +146,14 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/button1"
-                app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
             <Button
                 android:id="@+id/button3"
                 android:layout_width="57dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#932D2D"
                 android:onClick="s3Click"
                 android:text="3"
@@ -155,14 +161,14 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/button2"
-                app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
             <Button
                 android:id="@+id/button4"
                 android:layout_width="57dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#932D2D"
                 android:onClick="s4Click"
                 android:text="4"
@@ -170,21 +176,21 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/button3"
-                app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
             <Button
                 android:id="@+id/button5"
                 android:layout_width="98dp"
                 android:layout_height="57dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/pink"
                 android:onClick="finishClick"
                 android:text="DONE"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/button4"
-                app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
