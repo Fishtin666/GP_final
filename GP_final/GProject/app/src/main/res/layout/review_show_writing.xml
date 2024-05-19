@@ -98,7 +98,7 @@
                 />
 
             <com.example.gproject.JustifyTextView4
-                android:id="@+id/Answer"
+                android:id="@+id/listenContent"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

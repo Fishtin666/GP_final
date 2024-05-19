@@ -13,6 +13,15 @@
         android:theme="@style/Theme.GProject"
         tools:targetApi="31">
         <activity
+            android:name=".ReviewShow_appConversation"
+            android:exported="false" />
+        <activity
+            android:name=".ReviewShow_Writing"
+            android:exported="false" />
+        <activity
+            android:name=".ReviewShow_Speaking"
+            android:exported="false" />
+        <activity
             android:name=".getDb"
             android:exported="false" />
         <activity
@@ -42,7 +51,7 @@
         <activity
             android:name=".reading.R_match"
             android:exported="true" />
-        <
+        <activity
             android:name=".reading.R_multiple"
             android:exported="true" />
         <activity
@@ -62,32 +71,19 @@
             android:exported="true" />
         <activity
             android:name=".reading.ChoseTestActivity"
-            android:exported="true"/>
-<!---->
-
-
-
+            android:exported="true" /> <!--  -->
         <activity
             android:name=".Listening.listen_Ans1"
             android:exported="false" />
-
         <activity
             android:name=".Listening.listen"
             android:exported="true" />
-
-
         <activity
             android:name=".Review.RReview"
             android:exported="false" />
         <activity
             android:name=".Review.Review_choose"
             android:exported="false" />
-        <activity
-            android:name=".Review.Review_main"
-            android:exported="true" />
-
-
-        <!---->
         <activity
             android:name=".Cross_Topic_qusetion"
             android:exported="false" />
@@ -112,11 +108,9 @@
         <activity
             android:name=".AiTeacher.AiTeacher2"
             android:exported="false" />
-
         <activity
             android:name=".Writing.W_topic"
             android:exported="false" />
-
         <activity
             android:name=".Writing.W_Judge_P1"
             android:exported="false" />
@@ -147,7 +141,6 @@
         <activity
             android:name=".Speaking.Speaking_part1_answer"
             android:exported="true" />
-
         <activity
             android:name=".Learning"
             android:exported="true" />
@@ -172,42 +165,21 @@
         <activity
             android:name=".PronunciationAssessment"
             android:exported="true" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
             android:name=".AiChat_Judge"
             android:exported="false" />
-
         <activity
-            android:name=".ReviewShow_appConversation"
+            android:name=".Review.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviewShow_Writing"
+            android:name=".Review.ReviewShow_Listencontent"
             android:exported="false" />
         <activity
-            android:name=".ReviewShow_Speaking"
+            android:name=".Review.ReviewShow_ListenContent"
             android:exported="false" />
-
-        <activity
-            android:name="Re_Reading.Re_blank"
-            android:exported="true"/>
-        <activity
-            android:name="Re_Reading.Re_chose"
-            android:exported="true"/>
-        <activity
-            android:name="Re_Reading.Re_judge"
-            android:exported="true"/>
-        <activity
-            android:name="Re_Reading.Re_match"
-            android:exported="true"/>
-        <activity
-            android:name="Re_Reading.Re_multiple"
-            android:exported="true"/>
-        <activity
-            android:name=".WordQuiz.WordLevelChose"
-            android:exported="true"/>
 
         <activity
             android:name=".login.login"
@@ -217,7 +189,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

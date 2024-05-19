@@ -376,7 +376,7 @@ public class listen_ftest1 extends AppCompatActivity {
                 DatabaseReference listenAnswersRef = databaseReference
                         .child("Listen")
                         .child(userId)
-                        .child("test"+bundleValue)
+                        .child(String.valueOf(bundleValue))
                         .child(formattedDate)
                         .child(String.valueOf(ansKey));
                         //.push(); // 使用 push() 生成唯一键
@@ -397,15 +397,14 @@ public class listen_ftest1 extends AppCompatActivity {
             }
         }
 
-        Intent intent = new Intent(this,listen_ftest1.class);
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("key1", "value1");
-        hashMap.put("key2", "value2");
-
-        for (Map.Entry<String, String> entry : hashMap.entrySet()) {
-            intent.putExtra(entry.getKey(), entry.getValue());
+        Intent intent = new Intent(this,listen_Ans1.class);
+        Bundle bundle = new Bundle();
+        Log.d("TAG","bV: "+bundleValue);
+        bundle.putInt("test",bundleValue);
+        for (Map.Entry<Integer, String> entry : editTextMapFG.entrySet()) {
+            bundle.putString(String.valueOf(entry.getKey()),entry.getValue());
         }
-
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
