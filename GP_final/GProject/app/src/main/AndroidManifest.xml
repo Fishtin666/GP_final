@@ -13,6 +13,9 @@
         android:theme="@style/Theme.GProject"
         tools:targetApi="31">
         <activity
+            android:name=".ChooseCrossTopic"
+            android:exported="false" />
+        <activity
             android:name=".CrossTopic_show"
             android:exported="false" />
         <activity
@@ -180,11 +183,9 @@
         <activity
             android:name=".AiChat_Judge"
             android:exported="false" />
-
         <activity
             android:name=".Review.ReviewShow_Listencontent"
             android:exported="false" />
-        
         <activity
             android:name=".login.login"
             android:exported="true">

@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="Question"
+                android:text="串題句子"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Answer"
+                android:text="串題結果"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

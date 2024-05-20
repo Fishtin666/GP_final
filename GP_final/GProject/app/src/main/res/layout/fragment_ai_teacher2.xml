@@ -32,7 +32,7 @@
                 android:paddingRight="20dp"
                 android:paddingBottom="30dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/card1"
+                android:src="@drawable/aiteacher_db"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -91,7 +91,7 @@
                 android:paddingRight="20dp"
                 android:paddingBottom="30dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/card1"
+                android:src="@drawable/aiteacher_chat"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -151,7 +151,7 @@
                 android:paddingRight="20dp"
                 android:paddingBottom="30dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/dic2"
+                android:src="@drawable/aiteacher_crosstopic"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

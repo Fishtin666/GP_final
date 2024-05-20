@@ -33,7 +33,10 @@ public class CrossTopic_db extends AppCompatActivity {
 
 
     CrossAdapter adapter;
-    ArrayList<String> list=new ArrayList<>();
+    String topic;
+    ArrayList<String> Ques_list=new ArrayList<>();
+    ArrayList<String> Ans_list=new ArrayList<>();
+    ArrayList<String> Key_list=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +58,19 @@ public class CrossTopic_db extends AppCompatActivity {
                 finish();
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            topic= extras.getString("topic");
+
+
+        }
+
         getDb();
 
         LinearLayoutManager layoutManager =new LinearLayoutManager(this);
         recy.setLayoutManager(layoutManager);
-        adapter=new CrossAdapter(this,list);
+        adapter=new CrossAdapter(this,Ques_list,Ans_list,Key_list);
         recy.setAdapter(adapter);
 
     }
@@ -75,22 +86,30 @@ public class CrossTopic_db extends AppCompatActivity {
             DatabaseReference targetRef = databaseReference
                     .child("CrossTopic")
                     .child(userId)
-                    .child("Hometown");
+                    .child(topic);
 
 
 
             targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        String ques = childSnapshot.child("Ques").getValue(String.class);
-                        String ans = childSnapshot.child("Ans").getValue(String.class);
+                    if (dataSnapshot.exists()){
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            String ques = childSnapshot.child("Ques").getValue(String.class);
+                            String ans = childSnapshot.child("Ans").getValue(String.class);
+                            String key=childSnapshot.getKey();
 
-                       list.add(ques);
-                       adapter.notifyDataSetChanged();
-                       //Toast.makeText(CrossTopic_db.this, list.toString(), Toast.LENGTH_SHORT).show();
+                            Ques_list.add(ques);
+                            Ans_list.add(ans);
+                            Key_list.add(key);
+                            adapter.notifyDataSetChanged();
 
-                    }
+                        }
+
+                    }else
+                        Toast.makeText(CrossTopic_db.this, "尚未有串題資料", Toast.LENGTH_SHORT).show();
+
+
                 }
 
                 @Override

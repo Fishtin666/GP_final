@@ -296,6 +296,7 @@ public class AiTeacher2 extends AppCompatActivity {
             //如果原本是說話 -> 調回說話
                 if(Origin_is_speaking){
                     mic.setVisibility(View.VISIBLE);
+                    mic.setImageResource(R.drawable.mic);
                     hint.setVisibility(View.VISIBLE);
                     exit.setVisibility(View.VISIBLE);
                     keyboard.setImageResource(R.drawable.keyboard);
