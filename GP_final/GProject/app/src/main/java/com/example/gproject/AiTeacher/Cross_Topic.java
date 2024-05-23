@@ -3,6 +3,7 @@ package com.example.gproject.AiTeacher;
 import static android.content.ContentValues.TAG;
 
 
+import static com.example.gproject.BuildConfig.apikey;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,16 +43,26 @@ import com.example.gproject.R;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
@@ -70,14 +81,10 @@ public class Cross_Topic extends AppCompatActivity {
     TextView cross_result;
     //String cross_question="Describe a beautiful city." + " Describe a memorable trip." + " Describe a place you plan to travel to that is far away from your home?";
     String cross_question,defaultQuestion,cross_answer;
-    String selectedWord;
-    String[] words;
-    Boolean indic=false;
+
     ImageButton back;
 
-    TextToSpeech tts;
-    private PopupWindow popupWindow;
-    MeaningAdapter adapter;
+
 
 
     public static final MediaType JSON
@@ -108,13 +115,7 @@ public class Cross_Topic extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
-        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-                if (i != TextToSpeech.ERROR)
-                    tts.setLanguage(Locale.UK);
-            }
-        });
+
 
         //defaultQuestion ="The cross-topic technique involves identifying patterns between speaking topics, uncovering connections between each question, and using a single set of material/story to cover as many topics as possible.Please help me create cross-topic examples based on the following prompts.(50words)"+cross_question;
 
@@ -145,10 +146,11 @@ public class Cross_Topic extends AppCompatActivity {
             public void onClick(View v) {
                 start.setText("正在串題...");
                 cross_question = editText.getText().toString();
+                Toast.makeText(Cross_Topic.this, cross_question, Toast.LENGTH_SHORT).show();
                 cross_result.setText("");
                 //defaultQuestion="Please help me generate an answer that can address the following questions."+cross_question;
                 //defaultQuestion ="The cross-topic technique involves identifying patterns between speaking topics, uncovering connections between each question, and using a single set of material/story to cover as many topics as possible.Please help me create cross-topic examples based on the following prompts."+cross_question;
-                defaultQuestion = cross_question+"[Ielts speaking test part2]Please generate an answer for me based on the above sentence, so that no matter which of the above questions I encounter, I can answer according to this response.";
+                defaultQuestion = cross_question+"Please generate an answer for me based on the above sentence, so that no matter which of the above questions I encounter, I can answer according to this response.";
                 callAPI(defaultQuestion);
 
 
@@ -157,63 +159,8 @@ public class Cross_Topic extends AppCompatActivity {
         });
         //describe a beautiful city.describe a memorable trip.Describe a place you plan to travel to that is far away from your home.
 
-        cross_result.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StringTokenizer tokenizer = new StringTokenizer(cross_result.getText().toString(), " \t\n\r\f,.?!;:\"");
-                List<String> wordsList = new ArrayList<>();
-                while (tokenizer.hasMoreTokens()) {
-                    String word = tokenizer.nextToken();
-                    wordsList.add(word);
-                }
-                String[] words = wordsList.toArray(new String[0]);
-                // 獲取點擊的位置
-                int index = cross_result.getSelectionStart();
-                // 找到點擊的單字
-                selectedWord = findSelectedWord(words, index);
 
 
-                // 弹出 PopupWindow
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_layout, null);
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = 1200;
-                boolean focusable = true; // 让PopupWindow在失去焦点时自动关闭
-                popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-                // 设置PopupWindow的内容
-                TextView voc = popupView.findViewById(R.id.Voc);
-                TextView phonetic = popupView.findViewById(R.id.phonetics);
-                voc.setText(selectedWord);
-                getMeaning(selectedWord, phonetic);
-
-
-                //dic adapter
-                RecyclerView meaningRecyclerView=popupView.findViewById(R.id.meaningRecyclerView);
-                adapter = new MeaningAdapter(Collections.emptyList());
-                meaningRecyclerView.setAdapter(adapter);
-                LinearLayoutManager layoutManager=new LinearLayoutManager(Cross_Topic.this);
-                meaningRecyclerView.setLayoutManager(layoutManager);
-                //voice
-                ImageButton voice = popupView.findViewById(R.id.voice);
-                voice.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tts.speak(selectedWord, TextToSpeech.QUEUE_FLUSH, null);
-
-                    }
-                });
-                TextView close=popupView.findViewById(R.id.close);
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                       popupWindow.dismiss();
-
-                    }
-                });
-
-            }
-        });
 
 
 
@@ -221,114 +168,19 @@ public class Cross_Topic extends AppCompatActivity {
 
 
 
-     //找到點擊的單字
-    private String findSelectedWord(String[] words, int index) {
-        for (String word : words) {
-            int start = cross_result.getText().toString().indexOf(word);
-            int end = start + word.length();
-            if (index >= start && index <= end) {
-                return word;
-            }
-        }
-        return null;
-    }
 
 
 
 
-    private void SpanningString(){
-        StringTokenizer tokenizer = new StringTokenizer(cross_answer, " \t\n\r\f,.?!;:\"");
-        List<String> wordsList = new ArrayList<>();
-        while (tokenizer.hasMoreTokens()) {
-            String word = tokenizer.nextToken();
-            wordsList.add(word);
-        }
-        words = wordsList.toArray(new String[0]);
-        SpannableString spannableString = new SpannableString(cross_answer);
-
-        for (int i = 0; i < words.length; i++) {
-            int startIndex = cross_answer.indexOf(words[i]);
-            int endIndex = startIndex + words[i].length();
-            int customColor = Color.rgb(120, 59, 55);
-            //Toast.makeText(getApplicationContext(), words[i], Toast.LENGTH_LONG).show();
-            if (InDic(words[i])==false) {
-                spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannableString.setSpan(new ForegroundColorSpan(customColor), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannableString.setSpan(new StyleSpan(Typeface.BOLD), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            }//else spannableString.setSpan(new ForegroundColorSpan(Color.YELLOW), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        }
-        cross_result.setText(spannableString);
-    }
-
-    private  boolean InDic(String word){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(word);
-                    retrofit2.Response<List<WordResult>> response = call.execute();
-
-                    if (response.body() == null) {
-                        indic = false;
-                    }else indic = true;
-
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "錯誤:"+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).start();
-        return indic;
-    }
 
 
-    private void getMeaning(String word, TextView phonetic) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    retrofit2.Call<List<WordResult>> call = RetrofitInstance.dictionaryApi.getMeaning(word);
-                    retrofit2.Response<List<WordResult>> response = call.execute();
 
-                    if (response.body() == null) {
-                        throw new Exception();
 
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (response.body() != null) {
-                                setUI(response.body().get(0), phonetic);
-                                popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-                                //Toast.makeText(getApplicationContext(), "成功", Toast.LENGTH_SHORT).show();
-                                Log.i(String.valueOf(Log.DEBUG),"回答" + response.body().get(0).getPhonetic());
-                            }else
-                                Toast.makeText(getApplicationContext(), "失敗response.body=null", Toast.LENGTH_SHORT).show();
 
-                        }
-                    });
-                } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.i(String.valueOf(Log.DEBUG),"錯誤"+e.getMessage());
-                            if(selectedWord==null){
-                                Toast.makeText(getApplicationContext(), "未點選", Toast.LENGTH_SHORT).show();
 
-                            }else
-                                Toast.makeText(getApplicationContext(), "Something went wrong:"+selectedWord, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
 
-    private void setUI(WordResult response, TextView phonetic) {
-        phonetic.setText(response.getPhonetic());
-        adapter.updateNewData(response.getMeanings());
-    }
+
+
 
 
 
@@ -336,6 +188,45 @@ public class Cross_Topic extends AppCompatActivity {
     public void homeClick(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void push(String cross_ans,String cross_ques){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        //將答案存入db
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            long currentTime = System.currentTimeMillis();
+            Date date = new Date(currentTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String formattedDate = sdf.format(date);
+
+
+            // 生成唯一的键，并存储答案
+            DatabaseReference userAnswersRef = databaseReference
+                    .child("CrossTopic")
+                    .child(userId)
+                    .child("自訂")
+                    .child(String.valueOf(formattedDate));
+
+
+            Map<String, String> dataMap = new HashMap<>();
+            dataMap.put("Ques", cross_ques);
+            dataMap.put("Ans", cross_ans);
+            userAnswersRef.setValue(dataMap)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            } else {
+
+                            }
+                        }
+                    });
+        }
     }
 
     // JSONArray messageArr = new JSONArray();
@@ -375,7 +266,7 @@ public class Cross_Topic extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer ")
+                .header("Authorization", "Bearer "+apikey)
                 .post(body)
                 .build();
 
@@ -404,8 +295,11 @@ public class Cross_Topic extends AppCompatActivity {
 
                                 //cross_result.setText(result.trim());
                                 //cross_answer = cross_result.getText().toString();
-                                cross_answer = result.trim();
-                                SpanningString();
+                                //cross_answer = result.trim();
+                                Toast.makeText(Cross_Topic.this, result.trim(), Toast.LENGTH_SHORT).show();
+                                cross_result.setText(result.trim());
+                                push(result.trim(),editText.getText().toString());
+                                //SpanningString();
                                 start.setText("開始串題");
                             }
                         });

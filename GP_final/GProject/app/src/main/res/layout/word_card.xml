@@ -8,10 +8,10 @@
     app:cardBackgroundColor="@color/grey"
     app:cardCornerRadius="20dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        >
 
         <TextView
             android:id="@+id/word_textview"
@@ -24,6 +24,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/phonetic_textview"
             tools:text="word" />
 
         <TextView
@@ -33,7 +34,23 @@
             android:layout_marginBottom="10dp"
             android:paddingLeft="20dp"
             android:textColor="@color/darkGrey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/word_textview"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="/t e s t/" />
 
-    </LinearLayout>
+<!--        <ImageView-->
+<!--            android:id="@+id/starButton"-->
+<!--            android:layout_width="45dp"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:layout_marginEnd="5dp"-->
+<!--            android:paddingEnd="20dp"-->
+<!--            android:clickable="true"-->
+<!--            android:onClick="collect_word"-->
+<!--            android:src="@drawable/star_black"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -60,7 +60,7 @@ public class W_Judge_P1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.w_judge_p1);
         judge = findViewById(R.id.judge);
-        judge.setMovementMethod(new ScrollingMovementMethod());
+        //judge.setMovementMethod(new ScrollingMovementMethod());
         databaseReference = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         back = findViewById(R.id.back2);
@@ -181,7 +181,7 @@ public class W_Judge_P1 extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                judge.setText(result.trim());
+                                judge.setText(result.trim()+"\n");
                                 push();
 
                             }

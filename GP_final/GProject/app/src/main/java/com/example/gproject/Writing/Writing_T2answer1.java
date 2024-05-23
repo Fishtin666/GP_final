@@ -85,7 +85,7 @@ public class Writing_T2answer1 extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     String ques = documentSnapshot.getString("Question");
-                    question.setText(ques);
+                    question.setText(ques+"\n");
 
                 } else {
                     Toast.makeText(Writing_T2answer1.this, "資料庫不存在", Toast.LENGTH_SHORT).show();
@@ -103,17 +103,17 @@ public class Writing_T2answer1 extends AppCompatActivity {
 
         Ques = findViewById(R.id.question);
         Ans = findViewById(R.id.answer);
-        Ans.setText("English is a gateway to the world and no one should be deprived of the opportunities that\n" +
-                "arise for those with a strong command of the English language. This does not mean that\n" +
-                "local languages are dispensable, however. They have an important role to play in\n" +
-                "supporting education, including English language education.\n" +
-                "People who insist on prioritising local languages are often those who can speak fluent\n" +
-                "English themselves. Advocates of minority languages need to be fluent in English in\n" +
-                "order to research their field and support the cause at international conferences. In doing\n" +
-                "so, however, they are also demonstrating why English is so important. Learning English\n" +
-                "allows people to gain knowledge, communicate with society, further themselves as\n" +
-                "individuals and have a global impact. It is unfair to willingly dispossess people of this\n" +
-                "ability in order to preserve tradition.\n");
+//        Ans.setText("English is a gateway to the world and no one should be deprived of the opportunities that\n" +
+//                "arise for those with a strong command of the English language. This does not mean that\n" +
+//                "local languages are dispensable, however. They have an important role to play in\n" +
+//                "supporting education, including English language education.\n" +
+//                "People who insist on prioritising local languages are often those who can speak fluent\n" +
+//                "English themselves. Advocates of minority languages need to be fluent in English in\n" +
+//                "order to research their field and support the cause at international conferences. In doing\n" +
+//                "so, however, they are also demonstrating why English is so important. Learning English\n" +
+//                "allows people to gain knowledge, communicate with society, further themselves as\n" +
+//                "individuals and have a global impact. It is unfair to willingly dispossess people of this\n" +
+//                "ability in order to preserve tradition.\n");
     }
     public void finishClick(View view) {
         FirebaseUser currentUser = auth.getCurrentUser();

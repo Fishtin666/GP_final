@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.example.gproject.Adapters.TopicAdapter;
 import com.example.gproject.AiTeacher.AiChat;
+import com.example.gproject.AiTeacher.CrossTopic_db;
 import com.example.gproject.AiTeacher.Cross_Topic;
+import com.example.gproject.ChooseCrossTopic;
 import com.example.gproject.Models.TopicModel;
 import com.example.gproject.R;
 
@@ -81,6 +83,7 @@ public class AiTeacherFragment extends Fragment {
         CardView crossTopic = rootView.findViewById(R.id.Cross_Topic);
         CardView aiChat = rootView.findViewById(R.id.AI_chat);
         TextView tip=rootView.findViewById(R.id.tip);
+        CardView db=rootView.findViewById(R.id.db);
 
         tip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +124,13 @@ public class AiTeacherFragment extends Fragment {
                 Intent intent=new Intent(getContext(), AiChat.class);
                 startActivity(intent);
 
+            }
+        });
+
+        db.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), ChooseCrossTopic.class));
             }
         });
 

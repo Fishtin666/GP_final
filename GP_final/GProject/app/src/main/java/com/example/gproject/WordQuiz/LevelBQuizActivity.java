@@ -64,6 +64,7 @@ public class LevelBQuizActivity extends AppCompatActivity {
         TextView testWord = findViewById(R.id.testWord);
         testWord.setText("Level_B");
 
+        //delay loading page
         wordSendButton = findViewById(R.id.wordSend);
         wordSendButton.setVisibility(View.INVISIBLE);
         new Handler().postDelayed(new Runnable() {
@@ -99,17 +100,14 @@ public class LevelBQuizActivity extends AppCompatActivity {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
+//                        startActivity(intent);
+                        finish();
                     }
                 });
             }
 
             // Send Answer button
-
-
-
-
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -188,30 +186,36 @@ public class LevelBQuizActivity extends AppCompatActivity {
             TextView scoreTextView = dialog.findViewById(R.id.ShowScore);
             scoreTextView.setText(String.valueOf(Score));
 
-            // Cancel button
             Button cancelButton = dialog.findViewById(R.id.ButCancel);
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    Intent intent = new Intent(LevelBQuizActivity.this, WordFragment.class);
-//                    startActivity(intent);
-                    finish();
-                }
-            });
+
+            //set Hint
+            if (Score < 2) {
+                setFailHint(dialog, Level);
+                cancelButton.setText("關閉");
+            } else {
+                setPassHint(dialog, Level);
+                cancelButton.setText("返回");
+            }
 
             //identify whether "word" EXIST
             if (!"unKnow".equals(wordLog)) {
                 cancelButton.setVisibility(View.GONE);
-                Log.i("dia22", "Gone 11");
+                Log.i("dia11", "Gone 11");
             } else {
-                Log.i("dia22", "Gone 13");
-            }
-
-            //set Hint
-            if(Score<2){
-                setStayHint(dialog,Level);
-            }else {
-                setNextHint(dialog,Level);
+                // Cancel button
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (Score < 2) {
+                            // close dialog, stay in original page
+                            dialog.dismiss();
+                        } else {
+                            // back to wordFragment
+                            finish();
+                        }
+                    }
+                });
+                Log.i("dia11", "Gone 13");
             }
 
             //enter to next part
@@ -219,33 +223,22 @@ public class LevelBQuizActivity extends AppCompatActivity {
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!"unKnow".equals(wordLog)) {
+//                    if (!"unKnow".equals(wordLog)) {
+                    if (Score < 2) {
+                        GoToMain(Level);
 
-                        if (Score < 2) {
-                            GoToMain(Level);
-
-                        } else {
-                            GoToNextLevel(dialog, Level);
-                            // 移除SharedPreferences中的值
-//                            SharedPreferences.Editor editor = sharedPreferences.edit();
-//                            editor.remove("word_level");
-//                            editor.apply();
-//                            getIntent().removeExtra("word");
-//                            Log.i("dia11", "exist " + wordLog);
-                        }
                     } else {
-                        if (Score > 2) {
-                            GoToNextLevel(dialog, Level);
-                        }
+                        GoToNextLevel(Level);
                     }
                 }
             });
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.i("dia22", "error: " + e.getMessage());
+            Log.i("dia11", "error: " + e.getMessage());
         }
     }
+
     //show Help dialog
     public void ShowHelpDialog() {
         Dialog dialog = new Dialog(this);
@@ -262,44 +255,44 @@ public class LevelBQuizActivity extends AppCompatActivity {
             }
         });
     }
-    public void getHelp(View view){
+
+    public void getHelp(View view) {
         ShowHelpDialog();
     }
+
     //Stay in Original Level
     public void GoToMain(String LevelValue) {
         //set hint
         Log.e("setHint", "show B ");
-                Intent intentA = new Intent(this, MainActivity.class);
-                startActivity(intentA);
-                SaveWordLevel(LevelValue);
+//        Intent intentA = new Intent(this, MainActivity.class);
+//        startActivity(intentA);
+        finish();
+        SaveWordLevel(LevelValue);
 
     }
-    //Go To Next Level
-    public void GoToNextLevel(Dialog dialog, String LevelValue) {
 
+    //Go To Next Level
+    public void GoToNextLevel(String LevelValue) {
         switch (LevelValue) {
             case "A":
                 Intent intentA = new Intent(this, LevelBQuizActivity.class);
                 startActivity(intentA);
-                SaveWordLevel(LevelValue);
                 break;
-
             case "B":
+                SaveWordLevel(LevelValue);
                 Intent intentB = new Intent(this, LevelCQuizActivity.class);
                 startActivity(intentB);
-                SaveWordLevel(LevelValue);
-                break;
 
+                break;
             case "C":
                 Intent intentC = new Intent(this, MainActivity.class);
                 startActivity(intentC);
-                SaveWordLevel(LevelValue);
                 break;
-
         }
     }
-    //set faild hint
-    public void setStayHint(Dialog dialog, String LevelValue) {
+
+    //set fail hint
+    public void setFailHint(Dialog dialog, String LevelValue) {
         TextView Hint = dialog.findViewById(R.id.ScoreHint);
 
         if (LevelValue == "A") {
@@ -310,12 +303,11 @@ public class LevelBQuizActivity extends AppCompatActivity {
 
         } else {
             Hint.setText("未通過單字等級 C");
-
         }
-
     }
-    // set pass Hint
-    public void setNextHint(Dialog dialog, String LevelValue) {
+
+    //set pass Hint
+    public void setPassHint(Dialog dialog, String LevelValue) {
         TextView Hint = dialog.findViewById(R.id.ScoreHint);
 
         if (LevelValue == "A") {
@@ -326,40 +318,52 @@ public class LevelBQuizActivity extends AppCompatActivity {
 
         } else {
             Hint.setText("恭喜通過單字等級 C ");
-
         }
     }
+
+
     //save data into firebase
     public void SaveWordLevel(String WordLevel) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("word_Level");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference levelRef = FirebaseDatabase.getInstance().getReference().child("word_Level").child(WordLevel);
         String userId = user.getUid();
-        levelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        DatabaseReference userRef = root.child(userId); // 用户的引用
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.child("WordLevel").exists()) {
-                    DataSnapshot speechTextSnapshot = snapshot.child("WordLevel");
-                    String WordLevel1 = speechTextSnapshot.getValue(String.class);
-                    if ("C".equals(WordLevel1)) {
-                        root.child(userId).child("WordLevel").setValue("C");
-
-                    }else if("B".equals(WordLevel)){
-                        root.child(userId).child("WordLevel").setValue("B");
-                    }else{
-                        root.child(userId).child("WordLevel").setValue("A");
+                if (snapshot.exists()) {
+                    // 如果用户已存在，则更新其级别
+                    String currentLevel = snapshot.child("WordLevel").getValue(String.class);
+                    if (currentLevel != null) {
+                        // 用户已有级别，判断是否需要更新
+                        if ("C".equals(currentLevel)) {
+                            // 如果当前级别为C，不做任何变动
+                        } else if ("B".equals(currentLevel) && !"C".equals(WordLevel)) {
+                            // 如果当前级别为B，且新级别不是C，则更新为新级别
+                            userRef.child("WordLevel").setValue(WordLevel);
+                        } else if ("A".equals(currentLevel) && !"C".equals(WordLevel) && !"B".equals(WordLevel)) {
+                            // 如果当前级别为A，且新级别不是C或B，则更新为新级别
+                            userRef.child("WordLevel").setValue(WordLevel);
+                        }
+                    } else {
+                        // 用户没有级别，直接设置新级别
+                        userRef.child("WordLevel").setValue(WordLevel);
                     }
-                }else {
+                } else {
+                    // 如果用户不存在，则创建用户并设置级别
                     root.child(userId).child("WordLevel").setValue(WordLevel);
-                    Log.i("SaveData", "show B fail2");
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                // 处理取消操作
             }
         });
     }
+
     //get Question
     public void getRandomQuestionAndOptions(String collectionName) {
         db.collection(collectionName)

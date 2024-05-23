@@ -2,12 +2,19 @@ package com.example.gproject.reading;
 
 import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -55,6 +63,7 @@ public class R_match extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_match);
         HideCorrectAns();
+        showReminderDialog();
 
         //get Document ID
         int Dnumber = getIntent().getIntExtra("DocumentId", 0);
@@ -66,65 +75,97 @@ public class R_match extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(R_match.this, R_topic.class);
-                startActivity(intent);
+//                Intent intent = new Intent(R_match.this, R_topic.class);
+//                startActivity(intent);
                 finish();
             }
         });
 
-        // send n correct answer
+        //delay loading page
+        ConstraintLayout load = findViewById(R.id.load);
+        load.setVisibility(View.INVISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                load.setVisibility(View.VISIBLE);
+            }
+        }, 500);
+
+        // send answer
         Button send = findViewById(R.id.sendAns);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
+                send.setVisibility(View.GONE);
+                try {
 //                exChangeTextview();
-                documentRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                long currentTime = System.currentTimeMillis();
-                                List<String> incorrectAnswers = new ArrayList<>();
+                    documentRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    long currentTime = System.currentTimeMillis();
+                                    List<String> incorrectAnswers = new ArrayList<>();
 
-                                for (int i = 0; i < numberOfFields; i++) {
-                                    String ansName = "A" + (i + 1);
-                                    int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
-                                    EditText editText = findViewById(ansId);
-                                    String editTextValue = editText.getText().toString().trim();
+                                    //replace textview
+                                    TextView ContentTextView = findViewById(R.id.Content);
+                                    TextView SecTextView = findViewById(R.id.section1);
+                                    if (ContentTextView != null) {
+                                        CharSequence conText = ContentTextView.getText();
+                                        CharSequence secText = SecTextView.getText();
+                                        replaceTextview(ContentTextView, conText);
+                                        replaceTextview(SecTextView, secText);
+                                        Log.e("blank0", "successful getting: " + conText + "+" + secText);
 
-                                    saveReviewData(Dnumber, currentTime, ansName, editTextValue);
-
-                                    if (document.contains(ansName)) {
-                                        //get Firestore's ans colum
-                                        String firestoreValue = document.getString(ansName);
-                                        Log.e("correct", "A：" + firestoreValue);
-
-                                        // compare the value of EditText and Firestore's colum
-                                        if (!editTextValue.equals(firestoreValue)) {
-                                            //mark incorrect answer
-                                            editText.setTextColor(Color.RED);
-                                            // add the incorrect answer to the list
-                                            incorrectAnswers.add(firestoreValue);
-
-                                        }else {
-                                            incorrectAnswers.add("");
-                                        }
+                                    } else {
+                                        Log.e("blank0", "Q1TextView is null");
                                     }
 
-                                }if (!incorrectAnswers.isEmpty()) {
-                                    SetCorrectAns(incorrectAnswers);
-                                }
+                                    for (int i = 0; i < numberOfFields; i++) {
+                                        String ansName = "A" + (i + 1);
+                                        int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                                        EditText AnsEditText = findViewById(ansId);
+                                        String editTextValue = AnsEditText.getText().toString().trim();
 
+                                        AnsEditText.setKeyListener(null); //set edittext unable to edit
+                                        hideKeyboard(AnsEditText); // Hide keyboard after editing each field
+
+                                        saveReviewData(document, Dnumber, currentTime, ansName, editTextValue);
+
+                                        if (document.contains(ansName)) {
+                                            //get Firestore's ans colum
+                                            String firestoreValue = document.getString(ansName);
+                                            Log.e("correct", "A：" + firestoreValue);
+
+                                            // compare the value of EditText and Firestore's colum
+                                            if (!editTextValue.equals(firestoreValue)) {
+
+                                                AnsEditText.setTextColor(Color.RED); //mark incorrect answer
+                                                incorrectAnswers.add(firestoreValue); // add the incorrect answer to the list
+
+                                            } else {
+                                                incorrectAnswers.add(" ");
+                                            }
+                                        } else {
+                                            Log.e(ReviewName, "EditText with id " + ansId + " not found");
+                                            break;
+                                        }
+                                        Log.e(ReviewName, "correct ans: " + incorrectAnswers.get(i));
+                                    }
+                                    if (!incorrectAnswers.isEmpty()) {
+                                        SetCorrectAns(incorrectAnswers);
+                                    }
+
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
-                    }
-                });} catch (Exception e) {
+                    });
+                } catch (Exception e) {
 
                     e.printStackTrace();
                 }
@@ -149,86 +190,38 @@ public class R_match extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
 
                             if (document.exists()) {
-                                //set Content
-                                String content = document.getString("content");
-                                String[] splitCont = content.split("。");
-                                StringBuilder combinedContent = new StringBuilder();
-                                for (String line : splitCont) {
-                                    combinedContent.append(line).append("\n");
-                                }
-                                TextView ContentTextView = findViewById(R.id.Content);
-                                ContentTextView.setText(combinedContent.toString());
-
-                                //set section
-                                String section1 = document.getString("section1");
-                                String[] splitSec = section1.split("\\.");
-                                StringBuilder combinedSec = new StringBuilder();
-                                for (String line : splitSec) {
-                                    combinedSec.append(line).append("\n");
-                                }
-                                TextView SecTextView = findViewById(R.id.section1);
-                                SecTextView.setText(combinedSec.toString());
-
-                                //set match
-                                String match = document.getString("match");
-                                String[] splitMatch = match.split("\\.");
-                                StringBuilder combinedMatch = new StringBuilder();
-                                for (String line : splitMatch) {
-                                    combinedMatch.append(line).append(".\n");
-                                }
-                                TextView MatchTextView = findViewById(R.id.match);
-                                MatchTextView.setText(combinedMatch.toString());
-
-                                // build a StringBuilder array to save
-                                StringBuilder[] resultBuilders = new StringBuilder[numberOfFields];
-                                StringBuilder[] resultBuilders2 = new StringBuilder[numberOfFields];
-                                for (int i = 0; i < numberOfFields; i++) {
-                                    resultBuilders[i] = new StringBuilder();
-                                    resultBuilders2[i] = new StringBuilder();
-                                }
 
                                 for (int i = 0; i < numberOfFields; i++) {
 
                                     String titleName = "title" + (i + 1);
                                     String fieldName = "Q" + (i + 1);
-                                    Log.d("QQQQQ", fieldName);
-                                    try {
-                                        // check whether Q is exit
-                                        if (document.contains(fieldName)) {
-                                            String fieldData = document.getString(fieldName);
-                                            String[] splitField = fieldData.split("\\.");
-                                            StringBuilder combinedField = new StringBuilder();
-                                            for (String line : splitField) {
-                                                combinedField.append(line.trim()).append(".\n");
-                                            }
-                                            Log.d("QQ2", fieldName);
-                                            Log.d("QQ2", combinedField.toString());
-                                            displayQuestion(fieldName, combinedField.toString());
-                                        } else {
-                                            int questionId = getResources().getIdentifier(fieldName, "id", getPackageName());
-                                            findViewById(questionId).setVisibility(View.GONE);
-                                            String ansName = "A" + (i + 1);
-                                            int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
-                                            findViewById(ansId).setVisibility(View.GONE);
-                                        }
+                                    String ansName = "A" + (i + 1);
 
-                                        // check whether title is exit
-                                        if (document.contains(titleName)) {
-                                            String titleData = document.getString(titleName);
-                                            String[] splitTitle = titleData.split("\\.");
-                                            StringBuilder combinedTitle = new StringBuilder();
-                                            for (String line : splitTitle) {
-                                                combinedTitle.append(line.trim()).append(".\n");
-                                            }
-                                            displayTitle(titleName, combinedTitle.toString());
-                                        } else {
-                                            int titleId = getResources().getIdentifier(titleName, "id", getPackageName());
-                                            findViewById(titleId).setVisibility(View.GONE);
-                                        }
-                                    } catch (Exception e) {
+                                    int questionId = getResources().getIdentifier(fieldName, "id", getPackageName());
+                                    int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                                    int titleId = getResources().getIdentifier(titleName, "id", getPackageName());
+                                    int matchId = getResources().getIdentifier("match", "id", getPackageName());
+                                    int SecId = getResources().getIdentifier("section1", "id", getPackageName());
+                                    int content = getResources().getIdentifier("Content", "id", getPackageName());
 
-                                        e.printStackTrace();
-                                    }
+                                    //set Content
+                                    CheckSetData(document, "content", content);
+
+                                    // check whether ans/option is exit
+                                    CheckHideData(document, ansName, ansId);
+
+                                    // check whether Q is exit
+                                    CheckSetData(document, fieldName, questionId);
+
+                                    // check whether section1 is exit
+                                    CheckSetData(document, "section1", SecId);
+
+                                    // check whether match is exit
+                                    CheckSetData(document, "match", matchId);
+
+                                    // check whether title is exit
+                                    CheckSetData(document, titleName, titleId);
+
                                 }
                             } else {
                                 Log.d(TAG, "No such document");
@@ -240,60 +233,84 @@ public class R_match extends AppCompatActivity {
                 });
     }
 
-    private void displayQuestion(String cul, String que) {
-        TextView optTextView = null;
-        switch (cul) {
-            case "Q1":
-                optTextView = findViewById(R.id.Q1);
-                break;
-            case "Q2":
-                optTextView = findViewById(R.id.Q2);
-                break;
-            case "Q3":
-                optTextView = findViewById(R.id.Q3);
-                break;
-            case "Q4":
-                optTextView = findViewById(R.id.Q4);
-                break;
-            case "Q5":
-                optTextView = findViewById(R.id.Q5);
-                break;
-        }
-        if (optTextView != null) {
-            optTextView.setText(que);
+    //check whether data is exit, set data
+    private void CheckSetData(DocumentSnapshot document, String dataName, int dataID) {
+
+        TextView QTextView = findViewById(dataID);
+        if (QTextView != null) {
+            if (document.contains(dataName)) {
+                // Set data
+                String fieldData = document.getString(dataName);
+                String[] splitQue = fieldData.split("。");
+                StringBuilder combinedField = new StringBuilder();
+                for (String line : splitQue) {
+                    combinedField.append(line.trim()).append("\n");
+                }
+                QTextView.setText(combinedField.toString());
+            } else {
+                QTextView.setVisibility(View.GONE);
+            }
         } else {
-            Log.e(TAG, "OptTextView is null for cul: " + cul);
+            Log.e(TAG, "TextView with id " + dataName + " not found");
         }
     }
 
-    private void displayTitle(String cul, String que) {
-        TextView titleTextview = null;
-        switch (cul) {
-            case "title1":
-                titleTextview = findViewById(R.id.title1);
-                break;
-            case "title2":
-                titleTextview = findViewById(R.id.title2);
-                break;
-            default:
-                Toast.makeText(R_match.this, cul, Toast.LENGTH_SHORT).show();
+    //check ans opt
+    private void CheckHideData(DocumentSnapshot document, String dataName, int dataID) {
 
-                break;
-        }
-        if (titleTextview != null) {
-            titleTextview.setText(que);
+        TextView QTextView = findViewById(dataID);
+        if (QTextView != null) {
+            if (document.contains(dataName)) {
+                // Set data
+                QTextView.setVisibility(View.VISIBLE);
+            } else {
+                QTextView.setVisibility(View.GONE);
+                Log.e(TAG, "Can't hide： " + dataName + " not found");
+            }
         } else {
-            Log.e(TAG, "OptTextView is null for cul: " + cul);
+            Log.e(TAG, "TextView with id " + dataName + " not found");
         }
     }
 
-    public void homeClick(View view){
+    public void homeClick(View view) {
         Intent intent = new Intent(R_match.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
+
+    //replace textview to JustifyTextview
+    public void replaceTextview(View textView, CharSequence content) {
+        // Get the parent layout
+        ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
+
+        //Create a new JustifyTextView
+        JustifyTextView JustifyText = new JustifyTextView(this, null);
+        JustifyText.setId(textView.getId());  // Keep the same ID
+        JustifyText.setLayoutParams(textView.getLayoutParams());
+        JustifyText.setText(content);
+
+        // Copy TextView attributes to JustifyTextView
+        if (textView instanceof TextView && JustifyText instanceof TextView) {
+            TextView originalTextView = (TextView) textView;
+            TextView newJustifyTextView = (TextView) JustifyText;
+            newJustifyTextView.setTextColor(originalTextView.getCurrentTextColor());
+            newJustifyTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, originalTextView.getTextSize());
+            newJustifyTextView.setTypeface(originalTextView.getTypeface(), originalTextView.getTypeface().getStyle());
+            newJustifyTextView.setGravity(originalTextView.getGravity());
+            newJustifyTextView.setPadding(originalTextView.getPaddingLeft(), originalTextView.getPaddingTop(), originalTextView.getPaddingRight(), originalTextView.getPaddingBottom());
+            newJustifyTextView.setBackgroundColor(getResources().getColor(R.color.grey));
+        }
+
+        // Replace the old TextView with the new CustomTextView
+        int index = parentLayout.indexOfChild(textView);
+        parentLayout.removeView(textView);
+        parentLayout.addView(JustifyText, index);
+
+        Log.e("blank0", "replace Textview");
+    }
+
     // save Review data
-    public void saveReviewData(int documentID, long currentTime, String cul, String ans) {
+    public void saveReviewData(DocumentSnapshot document, int documentID, long currentTime, String cul, String ans) {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("R_Review");
@@ -301,26 +318,29 @@ public class R_match extends AppCompatActivity {
         DatabaseReference R_ReviewRef = FirebaseDatabase.getInstance().getReference().child("R_Review");
         String userId = user.getUid();
         String D_ID = String.valueOf(documentID);
-//        String A_cul = String.valueOf(cul);
         R_ReviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                long currentTime = System.currentTimeMillis();
 
                 if (user != null) {
-                    Date date = new Date(currentTime);
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    String formattedDate = sdf.format(date);
-                    root.child(userId)
-                            .child(ReviewName)
-                            .child(D_ID)
-                            .child(formattedDate)
-                            .child(cul)
-                            .setValue(ans);
+                    if (document.contains(cul)) {
+                        Date date = new Date(currentTime);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        String formattedDate = sdf.format(date);
+                        root.child(userId)
+                                .child(ReviewName)
+                                .child(D_ID)
+                                .child(formattedDate)
+                                .child(cul)
+                                .setValue(ans);
+                    } else {
+                        Log.e(ReviewName, "No cul： " + cul);
+                    }
                 } else {
                     Log.e(ReviewName, "review save data failed");
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("R_match", "review save data failed 2");
@@ -334,47 +354,93 @@ public class R_match extends AppCompatActivity {
             String correctName = "c" + (i + 1);
             int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
             TextView textC = findViewById(correctID);
-            if(textC != null){
+            if (textC != null) {
                 textC.setVisibility(View.GONE);
-            }else{
+            } else {
                 break;
             }
         }
     }
+
     //Show the correct ans
     public void SetCorrectAns(List<String> correctList) {
-        for (int i = 0; i < numberOfFields; i++) {
-            String correct = correctList.get(i);
-            String correctName = "c" + (i + 1);
-            int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
-            TextView textC = findViewById(correctID);
-            textC.setVisibility(View.VISIBLE);
+        try {
+            for (int i = 0; i < numberOfFields; i++) {
+                // 检查 correctList 是否有足够的元素
+                if (i < correctList.size()) {
+                    String correct = correctList.get(i);
+                    String correctName = "c" + (i + 1);
+                    int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
+                    TextView textC = findViewById(correctID);
 
-            if (correct != null) {
-                textC.setText(correct);
-            } else {
-                textC.setText(""); // 如果答案正确，将文本设置为空
+                    if (textC != null) {
+                        textC.setVisibility(View.VISIBLE);
+                        if (correct != null && !correct.isEmpty()) {
+                            textC.setText(correct);
+                            Log.d(TAG, "TextView with id " + correctID + " set to: " + correct);
+                        } else {
+                            textC.setText(" ");
+                            Log.d(TAG, "TextView with id " + correctID + " set to empty string.");
+                        }
+                    } else {
+                        Log.d(TAG, "TextView with id " + correctID + " not found.");
+                    }
+                } else {
+                    Log.d(TAG, "correctList does not have enough elements for index " + i);
+                }
             }
+        } catch (Exception e) {
+            Log.d(ReviewName, "Failed with error: " + e.getMessage());
         }
     }
 
-    public void exChangeTextview(){
+    public void exChangeTextview() {
         TextView originalTextView = findViewById(R.id.Content);
         String originalText = originalTextView.getText().toString();
 
-        // 获取原始 TextView 的布局参数
+        // get original TextView layout
         ViewGroup.LayoutParams params = originalTextView.getLayoutParams();
         ViewGroup parent = (ViewGroup) originalTextView.getParent();
         int index = parent.indexOfChild(originalTextView); // 获取原始 TextView 在父容器中的索引
 
-        // 创建并设置 JustifyTextView
+        // build n set JustifyTextView
         JustifyTextView justifyTextView = new JustifyTextView(R_match.this, null);
         justifyTextView.setText(originalText);
         justifyTextView.setLayoutParams(params);
 
-        // 替换原始 TextView
+        // Replace TextView
         parent.removeView(originalTextView);
         parent.addView(justifyTextView, index);
+    }
+
+    //show Reminder dialog
+    private void showReminderDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("作答提醒");
+        builder.setMessage("輸入答案時，請依照選項大小寫作達，並且不要有任何空格。");
+        builder.setPositiveButton("了解", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.dimAmount = 2f;
+            window.setAttributes(layoutParams);
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
+
+        dialog.show();
+        // set background transparent degree
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 

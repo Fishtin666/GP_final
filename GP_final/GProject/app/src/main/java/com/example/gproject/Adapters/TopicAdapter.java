@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gproject.AiTeacher.AiTeacher2;
+import com.example.gproject.AiTeacher.CrossTopic_db;
 import com.example.gproject.Cross_Topic_qusetion;
 import com.example.gproject.Models.TopicModel;
 import com.example.gproject.R;
@@ -73,14 +74,14 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.viewholder>{
                     context.startActivity(intent);
                 }
 
-//                }else if (model.getPart()==3){
-//                    Bundle bundle=new Bundle();
-//                    Intent intent=new Intent(context, AiTeacher2.class);
-//                    bundle.putString("topic",model.getName());
-//                    bundle.putString("part",String.valueOf(model.getPart()));
-//                    intent.putExtras(bundle);
-//                    context.startActivity(intent);
-//                }
+                else if (model.getPart()==3){
+                    Bundle bundle=new Bundle();
+                    Intent intent=new Intent(context, CrossTopic_db.class);
+                    bundle.putString("topic",model.getName());
+                    bundle.putString("part",String.valueOf(model.getPart()));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
 
             }
 

@@ -124,7 +124,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
     String hint_answer,help_answer,selectedWord,judge,ROf_ques;  //hint_answer是一串,help_answer某個提示回答(一個)
 
-    ImageView mic,voice,hint,home;
+    ImageView mic,voice,hint,eye;
 
     ImageButton back;
     TextView answer,question;
@@ -184,6 +184,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        eye=findViewById(R.id.eye);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -206,12 +207,13 @@ public class Speaking_part1_answer extends AppCompatActivity {
         mic = findViewById(R.id.mic);
         voice = findViewById(R.id.Voice);
         question = findViewById(R.id.item_question);
+
         answer = findViewById(R.id.listenContent);
         hint = findViewById(R.id.hint);
         progressBar = findViewById(R.id.progressBar);
         send = findViewById(R.id.Finish);
         retry = findViewById(R.id.Retry);
-//        dic = findViewById(R.id.dic);
+
 
         progressBar.setVisibility(View.INVISIBLE);
         answer.setMovementMethod(new ScrollingMovementMethod());
@@ -263,10 +265,12 @@ public class Speaking_part1_answer extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             Question=extras.getString("question");
+
             QuesNum =extras.getString("num");
             Topic=extras.getString("topic");
-
+            tts.speak(Question, TextToSpeech.QUEUE_FLUSH, null);
         }
+
         String[] topic={"People","Place","Item","Experience"};
         for(int i=0;i<topic.length;i++){
             if(Topic.equals(topic[i])){
@@ -282,6 +286,8 @@ public class Speaking_part1_answer extends AppCompatActivity {
         ActivityCompat.requestPermissions(Speaking_part1_answer.this, new String[]{RECORD_AUDIO, INTERNET}, requestCode);
 
         question.setText(Question);
+        question.setVisibility(View.INVISIBLE);
+
 
         answer.setOnClickListener(v -> {
             StringTokenizer tokenizer = new StringTokenizer(answer.getText().toString(), " \t\n\r\f,.?!;:\"");
@@ -982,10 +988,16 @@ public class Speaking_part1_answer extends AppCompatActivity {
     }
 
     public void eyeClick(View v){
-        if(question.getVisibility()==View.VISIBLE)
+        if(question.getVisibility()==View.VISIBLE){
             question.setVisibility(View.INVISIBLE);
-        else
+            eye.setImageResource(R.drawable.eye_off);
+        }
+
+        else{
             question.setVisibility(View.VISIBLE);
+            eye.setImageResource(R.drawable.eye);
+        }
+
     }
 
     public void voiceClick(View v){

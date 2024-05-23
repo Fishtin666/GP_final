@@ -54,6 +54,7 @@ import com.example.gproject.MainActivity;
 import com.example.gproject.Message;
 import com.example.gproject.MessageAdapter;
 import com.example.gproject.MicrophoneStream;
+import com.example.gproject.PronunciationAssessment;
 import com.example.gproject.R;
 
 import com.example.gproject.Speaking.Speaking_part1_answer;
@@ -91,8 +92,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -296,6 +300,7 @@ public class AiTeacher2 extends AppCompatActivity {
             //如果原本是說話 -> 調回說話
                 if(Origin_is_speaking){
                     mic.setVisibility(View.VISIBLE);
+                    mic.setImageResource(R.drawable.mic);
                     hint.setVisibility(View.VISIBLE);
                     exit.setVisibility(View.VISIBLE);
                     keyboard.setImageResource(R.drawable.keyboard);
@@ -536,6 +541,21 @@ public class AiTeacher2 extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void show(){
+        AlertDialog.Builder P2_start = new AlertDialog.Builder(AiTeacher2.this);
+        P2_start.setTitle("提醒:未偵測到語音輸入");
+        P2_start.setMessage("未偵測到語音輸入，請重試!");
+        P2_start.setCancelable(false);
+        P2_start.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        P2_start.show();
+    }
+
+
     public void micClick() {
         mic.setImageResource(R.drawable.mic_gray);
         if(PA_mic){
@@ -585,7 +605,30 @@ public class AiTeacher2 extends AppCompatActivity {
 
 
                 Future<SpeechRecognitionResult> future = reco.recognizeOnceAsync();
+
+                // 添加超时机制
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Future<SpeechRecognitionResult> timeoutFuture = executor.submit(() -> {
+                    try {
+                        return future.get(10, TimeUnit.SECONDS); // 等待10秒
+                    } catch (TimeoutException e) {
+                        reco.stopContinuousRecognitionAsync(); // 超时后停止识别
+                        return null;
+                    }
+                });
+
                 SpeechRecognitionResult speechRecognitionResult = future.get();//(30, TimeUnit.SECONDS);
+
+                if (speechRecognitionResult == null || speechRecognitionResult.getText().isEmpty()) {
+                    Log.i(logTag, "No speech input detected or speech input too quiet.");
+                    reco.stopContinuousRecognitionAsync();
+                    mic.setImageResource(R.drawable.mic);
+                    show();
+                    Toast.makeText(AiTeacher2.this, "未偵測到語音輸入，請重試!", Toast.LENGTH_SHORT).show();
+                    this.releaseMicrophoneStream();
+                    return;
+                }
+
                 PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResult);
 
                 double point=pronResult.getPronunciationScore();
