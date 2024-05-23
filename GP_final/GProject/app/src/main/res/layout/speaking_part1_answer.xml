@@ -55,7 +55,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:onClick="eyeClick"
-        android:src="@drawable/eye"
+        android:src="@drawable/eye_off"
         app:layout_constraintStart_toStartOf="@+id/cardView2"
         app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 

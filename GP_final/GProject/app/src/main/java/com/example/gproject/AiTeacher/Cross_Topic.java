@@ -3,6 +3,7 @@ package com.example.gproject.AiTeacher;
 import static android.content.ContentValues.TAG;
 
 
+import static com.example.gproject.BuildConfig.apikey;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -145,6 +146,7 @@ public class Cross_Topic extends AppCompatActivity {
             public void onClick(View v) {
                 start.setText("正在串題...");
                 cross_question = editText.getText().toString();
+                Toast.makeText(Cross_Topic.this, cross_question, Toast.LENGTH_SHORT).show();
                 cross_result.setText("");
                 //defaultQuestion="Please help me generate an answer that can address the following questions."+cross_question;
                 //defaultQuestion ="The cross-topic technique involves identifying patterns between speaking topics, uncovering connections between each question, and using a single set of material/story to cover as many topics as possible.Please help me create cross-topic examples based on the following prompts."+cross_question;
@@ -206,7 +208,7 @@ public class Cross_Topic extends AppCompatActivity {
             DatabaseReference userAnswersRef = databaseReference
                     .child("CrossTopic")
                     .child(userId)
-                    .child("self")
+                    .child("自訂")
                     .child(String.valueOf(formattedDate));
 
 
@@ -264,7 +266,7 @@ public class Cross_Topic extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer ")
+                .header("Authorization", "Bearer "+apikey)
                 .post(body)
                 .build();
 
@@ -294,6 +296,7 @@ public class Cross_Topic extends AppCompatActivity {
                                 //cross_result.setText(result.trim());
                                 //cross_answer = cross_result.getText().toString();
                                 //cross_answer = result.trim();
+                                Toast.makeText(Cross_Topic.this, result.trim(), Toast.LENGTH_SHORT).show();
                                 cross_result.setText(result.trim());
                                 push(result.trim(),editText.getText().toString());
                                 //SpanningString();

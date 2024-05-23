@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
-        android:text="選擇你想練習的主題"
+        android:text="選擇主題"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"

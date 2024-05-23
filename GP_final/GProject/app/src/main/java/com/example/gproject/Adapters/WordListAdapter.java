@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.Adapters.WordListData;
 import com.google.android.material.snackbar.Snackbar;
@@ -91,7 +93,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
 
                 // 展示确认对话框
                 new AlertDialog.Builder(context)
-                        .setTitle("删除确认")
+                        .setTitle("确认")
                         .setMessage("确定要删除此项吗？")
                         .setPositiveButton("是", (dialog, which) -> {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -105,7 +107,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
                                 Log.e("collect", "User not authenticated");
                             }
                             dataList.remove(position); // 从 dataList 中移除删除的项
-                            notifyItemRemoved(position); // 通知适配器数据已删除
+                            System.out.println("單字list"+dataList.toString());
+                            notifyDataSetChanged();
+
+                            //notifyItemRemoved(position); // 通知适配器数据已删除
 
                             Snackbar.make(viewHolder.itemView, deletedWord + " 已被删除", Snackbar.LENGTH_LONG)
                                     .setAction("恢复", view -> {

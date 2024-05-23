@@ -46,6 +46,7 @@ public class ChooseCrossTopic extends AppCompatActivity {
         list.add(new TopicModel("Entertainment",R.drawable.entertainment,3));
         list.add(new TopicModel("Childhood",R.drawable.childhood,3));
         list.add(new TopicModel("Daily life",R.drawable.daily_life,3));
+        list.add(new TopicModel("自訂",R.drawable.dic2,3));
 
         adapter =new TopicAdapter(this,list);
         recy.setAdapter(adapter);

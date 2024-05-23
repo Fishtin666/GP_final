@@ -75,13 +75,13 @@ public class Writing_T1answer2 extends AppCompatActivity {
 
 
 
-        Ans.setText("The chart shows the percentages of paper and cardboard, glass containers, aluminium" +
-                "cans and plastics that were recycled in one country between 1982 and 2010." +
-                "In 1982, about 65% of paper and cardboard was recycled. This figure fluctuated before" +
-                "rising steeply to reach a peak of 80% in 1994. From then on, however, it decreased" +
-               "steadily to a level of 70% in 2010. In 1982, half of all glass containers were recycled;" +
-               "after dipping to a low of 40% in 1990, the glass recycling rate gradually increased to 60%" +
-                "by 2010.");
+//        Ans.setText("The chart shows the percentages of paper and cardboard, glass containers, aluminium" +
+//                "cans and plastics that were recycled in one country between 1982 and 2010." +
+//                "In 1982, about 65% of paper and cardboard was recycled. This figure fluctuated before" +
+//                "rising steeply to reach a peak of 80% in 1994. From then on, however, it decreased" +
+//               "steadily to a level of 70% in 2010. In 1982, half of all glass containers were recycled;" +
+//               "after dipping to a low of 40% in 1990, the glass recycling rate gradually increased to 60%" +
+//                "by 2010.");
 
     }
 
