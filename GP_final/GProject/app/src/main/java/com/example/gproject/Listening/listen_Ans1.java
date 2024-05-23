@@ -168,5 +168,6 @@ public class listen_Ans1 extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

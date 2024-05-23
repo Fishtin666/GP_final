@@ -406,6 +406,7 @@ public class listen_ftest1 extends AppCompatActivity {
         }
         intent.putExtras(bundle);
         startActivity(intent);
+        finish();
     }
 
     //音頻撥放

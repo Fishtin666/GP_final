@@ -85,7 +85,6 @@ public class RReview extends AppCompatActivity {
 
     private void getData(){
         Ans.removeAllViews();
-        getpic();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //int section = 1;
         DocumentReference Q = db.collection("Listen_" + test).document("S" + section + "_" + Qcount);
