@@ -9,6 +9,7 @@ public class WordQuizData {
     private String opt2;
     private String PartOfSpeech, word;
     private String documentId;
+    private boolean selected;
 
     public WordQuizData(String definition, String PartOfSpeech, String correctWord, String incorrectWord,String documentId) {
         this.definition = definition;
@@ -20,7 +21,13 @@ public class WordQuizData {
         this.documentId = documentId;
 
     }
+    public boolean isSelected() {
+        return selected;
+    }
 
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
     public String getDocumentId() {
         return documentId;
     }

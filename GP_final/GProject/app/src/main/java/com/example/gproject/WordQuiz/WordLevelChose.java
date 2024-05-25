@@ -1,10 +1,13 @@
 package com.example.gproject.WordQuiz;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,25 +31,50 @@ public class WordLevelChose extends AppCompatActivity {
             }
         });
     }
-    public void homeClick(View view){
+
+    public void homeClick(View view) {
         Intent intent = new Intent(WordLevelChose.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-    public void LevelA_Click(View view){
+
+    public void LevelA_Click(View view) {
         Intent intent = new Intent(WordLevelChose.this, LevelAQuizActivity.class);
         startActivity(intent);
-        finish();
+
     }
-    public void LevelB_Click(View view){
+
+    public void LevelB_Click(View view) {
         Intent intent = new Intent(WordLevelChose.this, LevelBQuizActivity.class);
         startActivity(intent);
-        finish();
+
     }
-    public void LevelC_Click(View view){
+
+    public void LevelC_Click(View view) {
         Intent intent = new Intent(WordLevelChose.this, LevelCQuizActivity.class);
         startActivity(intent);
-        finish();
+
+    }
+
+    //show Help dialog
+    public void ShowHelpDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.word_dialog_help);
+        Window window = dialog.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); // 设置宽高为全屏
+        dialog.show();
+
+        ImageButton close = dialog.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+    }
+
+    public void getHelp(View view) {
+        ShowHelpDialog();
     }
 
     //Set Next Form's chos Num
