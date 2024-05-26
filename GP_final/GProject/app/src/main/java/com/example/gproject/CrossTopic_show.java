@@ -1,25 +1,13 @@
 package com.example.gproject;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.gproject.AiTeacher.CrossTopic_db;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class CrossTopic_show extends AppCompatActivity {
     TextView ans;
@@ -44,7 +32,7 @@ public class CrossTopic_show extends AppCompatActivity {
             }
         });
 
-        TextView ques=findViewById(R.id.Question);
+        TextView ques=findViewById(R.id.EN);
         ans =findViewById(R.id.Ans);
 
         Bundle extras = getIntent().getExtras();

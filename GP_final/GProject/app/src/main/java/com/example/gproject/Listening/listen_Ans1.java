@@ -2,9 +2,11 @@ package com.example.gproject.Listening;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,10 @@ public class listen_Ans1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listen_ans1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
         TextView corView = findViewById(R.id.correcttext);
 
@@ -168,5 +174,6 @@ public class listen_Ans1 extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

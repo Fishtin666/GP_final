@@ -252,7 +252,7 @@ public class Fragment_listen_question1 extends Fragment {
                                         }
 
                                         // 将水平 LinearLayout 添加到父 LinearLayout
-                                        LinearLayout answer = rootView.findViewById(R.id.listenContent);
+                                        LinearLayout answer = rootView.findViewById(R.id.CH);
                                         answer.addView(horizonLayout);
                                     }
 

@@ -3,15 +3,18 @@ package com.example.gproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +50,7 @@ public class ReviewShow_appConversation extends AppCompatActivity {
     TextView checkJudge,Judge;
 //    String randomCode="-NxsG-gP0QuHJweA8BT2";
     String randomCode;  //隨機瑪
-    String topic="Hobby";  //主題
+    String topic;  //主題
     String num="0";    //第幾個回答
 
     private ArrayList<String> conversation;
@@ -55,12 +58,22 @@ public class ReviewShow_appConversation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_app_conversation);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
         home = findViewById(R.id.home);
         back =findViewById(R.id.back2);
         recy = findViewById(R.id.recy);
         checkJudge = findViewById(R.id.check_judge);
         Judge = findViewById(R.id.judge);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            topic = bundle.getString("topic");
+            randomCode = bundle.getString("radom");
+        }
 
 
 

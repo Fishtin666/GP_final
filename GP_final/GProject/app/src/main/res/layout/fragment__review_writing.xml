@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment_Review_writing">
+    tools:context=".Review.Review_choose">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,13 +34,13 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <Button
-            android:id="@+id/r_all9"
+            android:id="@+id/task1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="All"
+            android:text="Task 1"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -48,31 +48,17 @@
             app:layout_constraintTop_toBottomOf="@+id/view7" />
 
         <Button
-            android:id="@+id/r_all10"
+            android:id="@+id/task2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
-            android:backgroundTint="@color/gray"
-            android:text="Task 1"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/r_all9" />
-
-        <Button
-            android:id="@+id/r_all11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="81dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
             android:text="Task 2"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/r_all10"
+            app:layout_constraintStart_toEndOf="@+id/task1"
             app:layout_constraintTop_toBottomOf="@+id/view7" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

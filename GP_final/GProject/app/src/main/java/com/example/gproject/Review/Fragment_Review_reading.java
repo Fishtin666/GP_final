@@ -2,11 +2,13 @@ package com.example.gproject.Review;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.gproject.R;
@@ -49,11 +51,8 @@ public class Fragment_Review_reading extends Fragment {
         return fragment;
     }
 
-    private Button all;
-    private Button chose;
-    private Button blank;
-    private Button match;
-    private Button judge;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,40 +63,65 @@ public class Fragment_Review_reading extends Fragment {
         }
     }
 
+    public void setLreviewTestKey(String key) {
+        this.testsel = key;
+        Log.d("testKey ff set",testsel);
+    }
+    public String getLreviewTestKey() {
+        Log.d("testKey ff get",":"+selectedTest);
+        return selectedTest;
+    }
+
+    Button all,chose,blank,match,judge;
+    private String selectedTest; // 存储选定的按钮名称
+    private String testkey;
+    private String testsel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment__review_reading, container, false);
-        all = view.findViewById(R.id.R_all);
         chose = view.findViewById(R.id.R_chose);
         blank = view.findViewById(R.id.R_blank);
         match = view.findViewById(R.id.R_match);
         judge = view.findViewById(R.id.R_judge);
 
-        View.OnClickListener buttonClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 切换按钮的背景颜色
-                Button button = (Button) v;
-                if (button.isSelected()) {
-                    // 如果按钮是灰色的，则设为 dark_gray
-                    button.setSelected(false);
-                    button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.dark_gray)));
-                } else {
-                    // 如果按钮是 dark_gray 的，则设为灰色
-                    button.setSelected(true);
-                    button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
-                }
-            }
-        };
-
-        all.setOnClickListener(buttonClickListener);
-        chose.setOnClickListener(buttonClickListener);
-        blank.setOnClickListener(buttonClickListener);
-        match.setOnClickListener(buttonClickListener);
-        judge.setOnClickListener(buttonClickListener);
+        setToggleClickListener(chose);
+        setToggleClickListener(blank);
+        setToggleClickListener(match);
+        setToggleClickListener(judge);
 
         return view;
+    }
+
+    private void setToggleClickListener(final Button button) {
+        Log.d("TAG", "setToggleClickListener: Setting toggle click listener");
+        final boolean[] isClicked = {false}; // 使用数组来跟踪状态，以便在匿名内部类中修改
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "onClick: Button clicked");
+                if (isClicked[0]) {
+                    // 恢复到未点击状态的颜色
+                    button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
+                    selectedTest=null;
+                } else {
+                    // 遍历所有按钮，将它们的状态还原为未点击状态的颜色
+                    for (Button btn : new Button[]{chose, blank, match, judge}) {
+                        btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
+                    }
+                    // 设置为点击状态的颜色
+                    button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.darkGrey)));
+
+
+                    selectedTest = getResources().getResourceEntryName(button.getId()); // 获取按钮的XML ID名称
+                    Log.d("TAG", "select testkey"+selectedTest);
+                    setLreviewTestKey(selectedTest);
+                }
+                isClicked[0] = !isClicked[0]; // 切换按钮状态
+            }
+        });
     }
 }

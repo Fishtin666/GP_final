@@ -2,23 +2,24 @@ package com.example.gproject.Review;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import com.example.gproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_Review_writing#newInstance} factory method to
+ * Use the {@link Fragment_Review_conversation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Review_writing extends Fragment {
+public class Fragment_Review_conversation extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +30,7 @@ public class Fragment_Review_writing extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Fragment_Review_writing() {
+    public Fragment_Review_conversation() {
         // Required empty public constructor
     }
 
@@ -39,11 +40,11 @@ public class Fragment_Review_writing extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_Review_writing.
+     * @return A new instance of fragment Fragment_Review_conversation.
      */
     // TODO: Rename and change types and number of parameters
-    public static Fragment_Review_writing newInstance(String param1, String param2) {
-        Fragment_Review_writing fragment = new Fragment_Review_writing();
+    public static Fragment_Review_conversation newInstance(String param1, String param2) {
+        Fragment_Review_conversation fragment = new Fragment_Review_conversation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,27 +67,42 @@ public class Fragment_Review_writing extends Fragment {
         Log.d("testKey ff set",testsel);
     }
     public String getLreviewTestKey() {
-        Log.d("testKey ff get",":"+testkey);
-        return testkey;
+        Log.d("testKey ff get",":"+selectedTest);
+        return selectedTest;
     }
 
     private String selectedTest; // 存储选定的按钮名称
     private String testkey;
     private String testsel;
-    Button task1,task2;
-
+    Button travel,hobby,movie,sport,weather,country,food,pet;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment__review_writing, container, false);
-        task1 = root.findViewById(R.id.task1);
-        task2 = root.findViewById(R.id.task2);
+        View root = inflater.inflate(R.layout.fragment__review_conversation, container, false);
+        travel = root.findViewById(R.id.travel);
+        hobby = root.findViewById(R.id.hobby);
+        movie = root.findViewById(R.id.movie);
+        sport = root.findViewById(R.id.sport);
+        weather = root.findViewById(R.id.weather);
+        country = root.findViewById(R.id.country);
+        food = root.findViewById(R.id.food);
+        pet = root.findViewById(R.id.pet);
 
-        setToggleClickListener(task1);
-        setToggleClickListener(task2);
+        setToggleClickListener(travel);
+        setToggleClickListener(hobby);
+        setToggleClickListener(movie);
+        setToggleClickListener(sport);
+        setToggleClickListener(weather);
+        setToggleClickListener(country);
+        setToggleClickListener(food);
+        setToggleClickListener(pet);
+
+
+
         return root;
     }
+
     private void setToggleClickListener(final Button button) {
         Log.d("TAG", "setToggleClickListener: Setting toggle click listener");
         final boolean[] isClicked = {false}; // 使用数组来跟踪状态，以便在匿名内部类中修改
@@ -101,7 +117,7 @@ public class Fragment_Review_writing extends Fragment {
                     testkey=null;
                 } else {
                     // 遍历所有按钮，将它们的状态还原为未点击状态的颜色
-                    for (Button btn : new Button[]{task1,task2}) {
+                    for (Button btn : new Button[]{travel,hobby,movie,sport,weather,country,food,pet}) {
                         btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
                     }
                     // 设置为点击状态的颜色
@@ -109,14 +125,8 @@ public class Fragment_Review_writing extends Fragment {
 
 
                     selectedTest = button.getText().toString(); // 保存选定的按钮名称
-                    Log.d("selectedTest",selectedTest);
-                    if(selectedTest.equals("Task 1")){
-                        testkey="1";
-                    } else if (selectedTest.equals("Task 2")) {
-                        testkey ="2";
-                    }
-                    Log.d("TAG", "select testkey"+testkey);
-                    setLreviewTestKey(testkey);
+                    Log.d("TAG", "select testkey"+selectedTest);
+                    setLreviewTestKey(selectedTest);
                 }
                 isClicked[0] = !isClicked[0]; // 切换按钮状态
             }

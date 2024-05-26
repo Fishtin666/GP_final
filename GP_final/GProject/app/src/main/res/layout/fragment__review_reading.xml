@@ -17,7 +17,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="題型"
-            android:textColor="@color/gray"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,18 +29,18 @@
             android:layout_height="2dp"
             android:layout_marginStart="9dp"
             android:layout_marginTop="19dp"
-            android:background="@color/gray"
+            android:background="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <Button
-            android:id="@+id/R_all"
+            android:id="@+id/R_chose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="All"
+            android:text="選擇題"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -48,25 +48,11 @@
             app:layout_constraintTop_toBottomOf="@+id/view6" />
 
         <Button
-            android:id="@+id/R_chose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
-            android:backgroundTint="@color/gray"
-            android:text="選擇題"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/R_all" />
-
-        <Button
             android:id="@+id/R_blank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="81dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
             android:text="填空題"
             android:textColor="#000000"
@@ -80,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="81dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
             android:text="配合題"
             android:textColor="#000000"

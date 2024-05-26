@@ -12,6 +12,10 @@ import com.example.gproject.fragment.WrongFragment;
 
 public class PagesAdapter extends FragmentStateAdapter {
 
+    private String testKey;
+    private String spinner;
+    private String testSubKey;
+
     public PagesAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
@@ -26,6 +30,16 @@ public class PagesAdapter extends FragmentStateAdapter {
                 return new AiTeacherFragment();
             case 2:
                 return new WordFragment();
+                //R
+            case 3:
+                // 如果有传递参数，则传递给 WrongFragment
+                if (testKey != null && spinner != null) {
+                    return WrongFragment.newInstance(testKey, spinner, testSubKey);
+                } else if (testKey == null && spinner != null) {
+                    return WrongFragment.newInstance(testKey, spinner, testSubKey);
+                } else {
+                    return new WrongFragment();
+                }
             default:
                 return new WrongFragment();
 
@@ -39,4 +53,16 @@ public class PagesAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return 4;
     }
+    public void setWrongFragmentArgs(String testKey, String spinner, String testSubKey) {
+        this.testKey = testKey;
+        this.spinner = spinner;
+        this.testSubKey = testSubKey;
+        notifyDataSetChanged();
+    }
+//    public void speakWrongFragmentArgs(String testKey, String testSubKey ,String spinner) {
+//        this.testKey = testKey;
+//        this.spinner = spinner;
+//        this.testSubKey = testSubKey;
+//        notifyDataSetChanged();
+//    }
 }

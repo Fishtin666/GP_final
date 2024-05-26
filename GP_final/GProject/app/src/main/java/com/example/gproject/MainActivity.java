@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gproject.Adapters.PagesAdapter;
+import com.example.gproject.fragment.WrongFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager2 =findViewById(R.id.viewPager);
         viewPager2.setAdapter(new PagesAdapter(this));
         //viewPager2.registerOnPageChangeCallback(changeCallback);
+        //WrongFragment fragment = WrongFragment.newInstance("testkey", "spinner");
 
         tabLayout = findViewById(R.id.tabLayout);
 
@@ -100,6 +103,40 @@ public class MainActivity extends AppCompatActivity {
         }
         );
         tabLayoutMediator.attach();
+
+        //R
+        // 接收来自 Review_choose 的信息
+        Intent intent = getIntent();
+        if (intent != null) {
+            int selectedTab = intent.getIntExtra("selectedTab", -1);
+            String testKey = intent.getStringExtra("testKey");
+            String spinner = intent.getStringExtra("spinner");
+            String testSubKey = intent.getStringExtra("testSubKey");
+            Log.d("MainActivity", "selectedTab: " + selectedTab);
+            Log.d("MainActivity", "testKey: " + testKey);
+            Log.d("MainActivity", "spinner: " + spinner);
+            Log.d("MainActivity", "testSupKey: " + testSubKey);
+
+            if (selectedTab != -1) {
+                tabLayout.selectTab(tabLayout.getTabAt(selectedTab));
+                updateTabItemAppearance(tabLayout.getTabAt(selectedTab),true);
+                updateTabItemAppearance(tabLayout.getTabAt(0),false);
+                viewPager2.setCurrentItem(selectedTab);
+
+                if (selectedTab == 3 && testKey != null && spinner != null) {
+                    // 传递参数到 PagesAdapter
+                    PagesAdapter adapter = new PagesAdapter(this);
+                    adapter.setWrongFragmentArgs(testKey, spinner, testSubKey);
+                    viewPager2.setAdapter(adapter);
+                }
+                else if (selectedTab == 3 && testKey.equals("All") && spinner != null) {
+                    // 传递参数到 PagesAdapter
+                    PagesAdapter adapter = new PagesAdapter(this);
+                    adapter.setWrongFragmentArgs(testKey, testSubKey ,spinner);
+                    viewPager2.setAdapter(adapter);
+                }
+            }
+        }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 

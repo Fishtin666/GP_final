@@ -13,6 +13,12 @@
         android:theme="@style/Theme.GProject"
         tools:targetApi="31">
         <activity
+            android:name=".Review.favorite_question"
+            android:exported="false" />
+        <activity
+            android:name=".Review.ReviewShow_VR"
+            android:exported="false" />
+        <activity
             android:name=".ChooseCrossTopic"
             android:exported="false" />
         <activity
@@ -185,6 +191,21 @@
             android:exported="false" />
         <activity
             android:name=".Review.ReviewShow_Listencontent"
+            android:exported="false" />
+        <activity
+            android:name=".Re_Reading.Re_blank"
+            android:exported="false" />
+        <activity
+            android:name=".Re_Reading.Re_chose"
+            android:exported="false" />
+        <activity
+            android:name=".Re_Reading.Re_judge"
+            android:exported="false" />
+        <activity
+            android:name=".Re_Reading.Re_match"
+            android:exported="false" />
+        <activity
+            android:name=".Re_Reading.Re_multiple"
             android:exported="false" />
         <activity
             android:name=".login.login"
