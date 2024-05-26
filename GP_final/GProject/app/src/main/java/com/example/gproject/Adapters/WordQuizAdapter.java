@@ -120,6 +120,18 @@ public class WordQuizAdapter extends RecyclerView.Adapter<WordQuizAdapter.ViewHo
     public void setAnswerSubmitted(boolean submitted) {
         this.answerSubmitted = submitted;
     }
+    public RadioButton getSelectedRadioButton(int position, RecyclerView recyclerView) {
+        ViewHolder viewHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+        if (viewHolder != null) {
+            if (viewHolder.opt1RadioButton.isChecked()) {
+                return viewHolder.opt1RadioButton;
+            } else if (viewHolder.opt2RadioButton.isChecked()) {
+                return viewHolder.opt2RadioButton;
+            }
+        }
+        return null;
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView questionTextView;
@@ -152,6 +164,13 @@ public class WordQuizAdapter extends RecyclerView.Adapter<WordQuizAdapter.ViewHo
     public void addWordId(String word, String id) {
         wordIds.put(word, id);
     }
+//    public RadioButton getSelectedRadioButton(int position) {
+//        ViewHolder viewHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+//        if (viewHolder != null) {
+//            return viewHolder.radioButton;
+//        }
+//        return null;
+//    }
 
     // 获取单词的 ID
     public String getWordId(String word) {

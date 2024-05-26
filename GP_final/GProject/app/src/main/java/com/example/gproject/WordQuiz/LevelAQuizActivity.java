@@ -164,32 +164,26 @@ public class LevelAQuizActivity extends AppCompatActivity {
 //                    adapter.setAnswerSubmitted(true);
 //                }
 //            });
+
             // Send Answer button
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
+
+//                        sendAnswers();
                         wordSendButton.setVisibility(View.GONE);
                         int score = 0;
-                        // 遍歷 RecyclerView 中的每個可見的 ViewHolder
+
+                        // Traverse the data source instead of RecyclerView items
                         for (int i = 0; i < adapter.getItemCount(); i++) {
-                            RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
-                            if (viewHolder != null) {
-                                // 在 ViewHolder 中查找 RadioButton 和 QueWord
-                                RadioButton radioButton = adapter.getRadioButtonAtPosition(i, QuizRecycler);
-                                String selectedWord = radioButton.getText().toString();
+                            WordQuizData question = adapter.getQuestions().get(i);
+                            RadioButton selectedRadioButton = adapter.getSelectedRadioButton(i,QuizRecycler);
 
-                                TextView QueWord = viewHolder.itemView.findViewById(R.id.Que);
-                                Log.e("level_AAAA","Correct check"+ QueWord.getText().toString());
-
-                                // 检查用户选择的答案是否与正确答案匹配
-                                String selectedDocumentId = (String) viewHolder.itemView.getTag();
-
-                                if (selectedDocumentId.equals(selectedWord) && radioButton.isChecked()) {
-                                    score++;
-                                } else {
-                                    radioButton.setTextColor(Color.RED);
-                                }
+                            if (selectedRadioButton != null && selectedRadioButton.getText().toString().equals(question.getCorrectWord())) {
+                                score++;
+                            } else if (selectedRadioButton != null) {
+                                selectedRadioButton.setTextColor(Color.RED);
                             }
                         }
                         ShowScoreDialog(score, "A");
@@ -201,6 +195,9 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 }
             });
 
+
+
+
             // Get random questions and options from Firestore
             getRandomQuestionAndOptions(collectionName);
 
@@ -209,6 +206,28 @@ public class LevelAQuizActivity extends AppCompatActivity {
             Log.e("FireStore A1 ", "error: " + e.getMessage());
         }
     }
+//    private void sendAnswers() {
+//        adapter.setAnswerSubmitted(true);
+//        int score = calculateScore();
+//        ShowScoreDialog(score, "A");
+//    }
+//
+//    private int calculateScore() {
+//
+//        int score = 0;
+//        for (int i = 0; i < adapter.getItemCount(); i++) {
+//            RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
+//            WordQuizData question = adapter.getQuestions().get(i);
+//            RadioButton selectedRadioButton = adapter.getSelectedRadioButton(i, quizRecycler);
+//
+//            if (selectedRadioButton != null && selectedRadioButton.getText().toString().equals(question.getCorrectWord())) {
+//                score++;
+//            } else if (selectedRadioButton != null) {
+//                selectedRadioButton.setTextColor(Color.RED);
+//            }
+//        }
+//        return score;
+//    }
 
     //show Level n Score dialog
     public void ShowScoreDialog(int Score, String Level) {
