@@ -1,5 +1,6 @@
 package com.example.gproject.Listening;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -12,6 +13,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -474,9 +478,70 @@ public class listen_ftest1 extends AppCompatActivity {
             public void onFinish() {
                 // 倒计时结束，重置播放状态
                 isTimerPlay = false;
+                stopAudio();
                 Log.d("TimerService", "Timer finished");
+                // 显示提示对话框
+                new AlertDialog.Builder(listen_ftest1.this)
+                        .setTitle("作答時間結束")
+                        .setMessage("時間已到，點擊確定儲存答案。")
+                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 保存答案并启动新活动
+                                FirebaseUser currentUser = auth.getCurrentUser();
+                                if (currentUser != null) {
+                                    String userId = currentUser.getUid();
+                                    long currentTime = System.currentTimeMillis(); // 使用當前系統時間;
+                                    Date date = new Date(currentTime);
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                    String formattedDate = sdf.format(date);
+                                    for(int ansKey=1 ; ansKey<=40 ; ansKey++){
+
+                                        String answerText = editTextMapFG.get(ansKey);
+                                        DatabaseReference listenAnswersRef = databaseReference
+                                                .child("Listen")
+                                                .child(userId)
+                                                .child(String.valueOf(bundleValue))
+                                                .child(formattedDate)
+                                                .child(String.valueOf(ansKey));
+                                        //.push(); // 使用 push() 生成唯一键
+                                        listenAnswersRef.setValue(answerText)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            // 存储成功
+                                                            //Intent intent = new Intent(listen_ftest1.this, listen_Ans1.class);
+                                                            //startActivity(intent);
+                                                        } else {
+                                                            // 存储失败
+                                                            // 处理存储失败的情况
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                }
+
+                                Intent intent = new Intent(listen_ftest1.this,listen_Ans1.class);
+                                Bundle bundle = new Bundle();
+                                Log.d("TAG","bV: "+bundleValue);
+                                bundle.putInt("test",bundleValue);
+                                for (Map.Entry<Integer, String> entry : editTextMapFG.entrySet()) {
+                                    bundle.putString(String.valueOf(entry.getKey()),entry.getValue());
+                                }
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setCancelable(false) // 用户必须点击按钮才能关闭对话框
+                        .show();
             }
         }.start();
+    }
+
+    public void helpClick(){
+
     }
 
 
