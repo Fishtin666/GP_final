@@ -208,7 +208,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         voice = findViewById(R.id.Voice);
         question = findViewById(R.id.item_question);
 
-        answer = findViewById(R.id.listenContent);
+        answer = findViewById(R.id.CH);
         hint = findViewById(R.id.hint);
         progressBar = findViewById(R.id.progressBar);
         send = findViewById(R.id.Finish);

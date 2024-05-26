@@ -2,11 +2,14 @@ package com.example.gproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,8 +53,13 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_speaking);
-        Ques = findViewById(R.id.Question);
-        Ans = findViewById(R.id.listenContent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
+
+        Ques = findViewById(R.id.EN);
+        Ans = findViewById(R.id.CH);
         Judge = findViewById(R.id.Judge);
         home = findViewById(R.id.home);
 

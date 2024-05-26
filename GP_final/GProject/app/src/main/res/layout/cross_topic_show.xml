@@ -65,7 +65,7 @@
                 android:textStyle="bold" />
 
             <com.example.gproject.JustifyTextView4
-                android:id="@+id/Question"
+                android:id="@+id/EN"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

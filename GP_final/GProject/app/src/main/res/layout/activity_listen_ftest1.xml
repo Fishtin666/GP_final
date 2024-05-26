@@ -16,6 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/help"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:onClick="helpClick"
+        app:layout_constraintEnd_toEndOf="@+id/view18"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/help" />
+
     <ImageButton
         android:id="@+id/back"
         android:layout_width="60dp"
@@ -54,7 +65,7 @@
                 android:layout_width="25dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="79dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintStart_toEndOf="@+id/play_Btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:drawable/ic_lock_idle_alarm" />

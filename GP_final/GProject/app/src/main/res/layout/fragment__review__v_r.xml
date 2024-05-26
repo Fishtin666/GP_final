@@ -11,92 +11,13 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="40dp"
-            android:text="Part"
-            android:textColor="@color/gray"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/R_all" />
-
-        <View
-            android:id="@+id/view5"
-            android:layout_width="393dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="19dp"
-            android:background="@color/gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-        <Button
-            android:id="@+id/hometown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/gray"
-            android:text="All"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view5" />
-
-        <Button
-            android:id="@+id/r_all6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
-            android:backgroundTint="@color/gray"
-            android:text="Part 1"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hometown" />
-
-        <Button
-            android:id="@+id/r_all7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="81dp"
-            android:backgroundTint="@color/gray"
-            android:text="Part 2"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/r_all6"
-            app:layout_constraintTop_toBottomOf="@+id/view5" />
-
-        <Button
-            android:id="@+id/r_all8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:layout_marginTop="81dp"
-            android:backgroundTint="@color/gray"
-            android:text="Part 3"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/r_all7"
-            app:layout_constraintTop_toBottomOf="@+id/view5" />
-
-        <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="題型"
-            android:textColor="@color/gray"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,12 +29,12 @@
             android:layout_height="2dp"
             android:layout_marginStart="9dp"
             android:layout_marginTop="19dp"
-            android:background="@color/gray"
+            android:background="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <Button
-            android:id="@+id/R_all"
+            android:id="@+id/VRall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

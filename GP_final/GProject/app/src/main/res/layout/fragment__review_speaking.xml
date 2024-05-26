@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment_Review_speaking">
+    tools:context=".Review.Review_choose">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/r_all2" />
+            app:layout_constraintTop_toBottomOf="@+id/part1" />
 
         <TextView
             android:id="@+id/textView4"
@@ -56,229 +56,215 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-        <android.widget.Button
-            android:id="@+id/R_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button"
-            android:text="All"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view6" />
-
         <Button
-            android:id="@+id/r_all"
+            android:id="@+id/part1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/gray"
-            android:text="All"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-        <Button
-            android:id="@+id/r_all2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
             android:text="Part 1"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/r_all" />
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
 
         <Button
-            android:id="@+id/r_all3"
+            android:id="@+id/part2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
-            android:layout_marginTop="81dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
             android:text="Part 2+Part 3"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/r_all2"
+            app:layout_constraintStart_toEndOf="@+id/part1"
             app:layout_constraintTop_toBottomOf="@+id/view4" />
 
         <Button
-            android:id="@+id/study"
+            android:id="@+id/Study"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="study"
+            android:text="Study"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/R_all" />
-
-        <Button
-            android:id="@+id/work"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="78dp"
-            android:backgroundTint="@color/gray"
-            android:text="work"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/study"
             app:layout_constraintTop_toBottomOf="@+id/view6" />
 
         <Button
-            android:id="@+id/hometown"
+            android:id="@+id/Work"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="hometown"
+            android:text="Work"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/work"
+            app:layout_constraintStart_toEndOf="@+id/Study"
             app:layout_constraintTop_toBottomOf="@+id/view6" />
 
         <Button
-            android:id="@+id/accommodation"
+            android:id="@+id/Hometown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/gray"
+            android:text="Hometown"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/Work"
+            app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+        <Button
+            android:id="@+id/Accommodation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="accommodation"
+            android:text="Accommodation"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/study" />
+            app:layout_constraintTop_toBottomOf="@+id/Study" />
 
         <Button
-            android:id="@+id/friends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/gray"
-            android:text="friends"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accommodation" />
-
-        <Button
-            android:id="@+id/entertainment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/gray"
-            android:text="entertainment"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/friends"
-            app:layout_constraintTop_toBottomOf="@+id/accommodation" />
-
-        <Button
-            android:id="@+id/childhood"
+            android:id="@+id/Friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="childhood"
+            android:text="Friends"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/accommodation"
-            app:layout_constraintTop_toBottomOf="@+id/work" />
+            app:layout_constraintStart_toEndOf="@+id/Family"
+            app:layout_constraintTop_toBottomOf="@+id/Hometown" />
 
         <Button
-            android:id="@+id/dailylife"
+            android:id="@+id/Entertainment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="daily life"
+            android:text="Entertainment"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/friends" />
+            app:layout_constraintTop_toBottomOf="@+id/Accommodation" />
 
         <Button
-            android:id="@+id/people"
+            android:id="@+id/Childhood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="people"
+            android:text="Childhood"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/dailylife"
-            app:layout_constraintTop_toBottomOf="@+id/entertainment" />
+            app:layout_constraintStart_toEndOf="@+id/Entertainment"
+            app:layout_constraintTop_toBottomOf="@+id/Family" />
 
         <Button
-            android:id="@+id/place"
+            android:id="@+id/People"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="place"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/people"
-            app:layout_constraintTop_toBottomOf="@+id/entertainment" />
-
-        <Button
-            android:id="@+id/item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/gray"
-            android:text="item"
+            android:text="People"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dailylife" />
+            app:layout_constraintTop_toBottomOf="@+id/Dailylife" />
 
         <Button
-            android:id="@+id/experience"
+            android:id="@+id/Place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/gray"
-            android:text="experience"
+            android:text="Place"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/item"
-            app:layout_constraintTop_toBottomOf="@+id/dailylife" />
+            app:layout_constraintStart_toEndOf="@+id/People"
+            app:layout_constraintTop_toBottomOf="@+id/Dailylife" />
+
+        <Button
+            android:id="@+id/Item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/gray"
+            android:text="Item"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/Place"
+            app:layout_constraintTop_toBottomOf="@+id/Dailylife" />
+
+        <Button
+            android:id="@+id/Experience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/gray"
+            android:text="Experience"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/People" />
+
+        <Button
+            android:id="@+id/Family"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/gray"
+            android:text="Family"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/Accommodation"
+            app:layout_constraintTop_toBottomOf="@+id/Work" />
+
+        <Button
+            android:id="@+id/Dailylife"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/gray"
+            android:text="Daily life"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Entertainment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
