@@ -8,14 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.Adapters.WordListData;
 import com.google.android.material.snackbar.Snackbar;
@@ -85,80 +83,99 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
                 return true;
             }
 
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getBindingAdapterPosition();
-                deletedItem = dataList.get(position);
-                String deletedWord = deletedItem.getWord(); // 获取单词名称
-
-                // 展示确认对话框
-                new AlertDialog.Builder(context)
-                        .setTitle("确认")
-                        .setMessage("确定要删除此项吗？")
-                        .setPositiveButton("是", (dialog, which) -> {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            if (user != null) {
-                                String userId = user.getUid();
-                                FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                DatabaseReference root = db.getReference("word_collect");
-                                root.child(userId).child(deletedWord).removeValue();
-                                Log.e("collect", "Deleted from collection " + userId);
-                            } else {
-                                Log.e("collect", "User not authenticated");
-                            }
-                            dataList.remove(position); // 从 dataList 中移除删除的项
-                            System.out.println("單字list"+dataList.toString());
-                            notifyDataSetChanged();
-
-                            //notifyItemRemoved(position); // 通知适配器数据已删除
-
-                            Snackbar.make(viewHolder.itemView, deletedWord + " 已被删除", Snackbar.LENGTH_LONG)
-                                    .setAction("恢复", view -> {
-                                        dataList.add(position, deletedItem); // 恢复删除的项
-                                        notifyItemInserted(position); // 通知适配器数据已插入
-                                    }).show();
-                        })
-                        .setNegativeButton("否", (dialog, which) -> {
-                            notifyItemChanged(viewHolder.getBindingAdapterPosition()); // 重新加载该项以撤销滑动操作
-                        })
-                        .setOnDismissListener(dialog -> notifyItemChanged(viewHolder.getBindingAdapterPosition())) // 确保对话框关闭后重新加载该项
-                        .show();
-            }
-
-//            @Override
+            //            @Override
 //            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 //                int position = viewHolder.getBindingAdapterPosition();
 //                deletedItem = dataList.get(position);
 //                String deletedWord = deletedItem.getWord(); // 获取单词名称
+//                //database
+//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                String userId = user.getUid();
+//                FirebaseDatabase db = FirebaseDatabase.getInstance();
+//                DatabaseReference root = db.getReference("word_collect");
 //
 //                // 展示确认对话框
 //                new AlertDialog.Builder(context)
-//                        .setTitle("删除确认")
-//                        .setMessage("确定要删除此项吗？")
+//                        .setTitle("確認刪除")
+//                        .setMessage("確定要刪除此選項嗎？")
 //                        .setPositiveButton("是", (dialog, which) -> {
-//                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
 //                            if (user != null) {
-//                                String userId = user.getUid();
-//                                FirebaseDatabase db = FirebaseDatabase.getInstance();
-//                                DatabaseReference root = db.getReference("word_collect");
 //                                root.child(userId).child(deletedWord).removeValue();
 //                                Log.e("collect", "Deleted from collection " + userId);
+//                                notifyDataSetChanged();
 //                            } else {
 //                                Log.e("collect", "User not authenticated");
 //                            }
-//                            dataList.remove(position);
-//                            notifyItemRemoved(position);
-//                            Snackbar.make(viewHolder.itemView, deletedWord + " 已被删除", Snackbar.LENGTH_LONG)
-//                                    .setAction("恢复", view -> {
-//                                        dataList.add(position, deletedItem);
-//                                        notifyItemInserted(position);
+////                            dataList.remove(position); // 从dataList中删除项
+////                            notifyItemRemoved(position); // 通知适配器数据已删除
+//
+//                            Snackbar.make(viewHolder.itemView, deletedWord + " 已被刪除", Snackbar.LENGTH_LONG)
+//                                    .setAction("恢復", view -> {
+//                                        root.child(userId).child(deletedWord).setValue(deletedItem.getWord());
+////                                        dataList.add(position, deletedItem); // 恢复删除的项
+////                                        notifyItemInserted(position); // 通知适配器数据已插入
+////                                        deletedItem = null; // 重置deletedItem，防止重复操作
+////                                        notifyDataSetChanged(); // 重新加载适配器
 //                                    }).show();
+//                            notifyDataSetChanged(); // 重新加载适配器
 //                        })
 //                        .setNegativeButton("否", (dialog, which) -> {
+//                            notifyDataSetChanged();
 //                            notifyItemChanged(viewHolder.getBindingAdapterPosition()); // 重新加载该项以撤销滑动操作
+//                            deletedItem = null; // 重置deletedItem，防止重复操作
 //                        })
-//                        .setOnDismissListener(dialog -> notifyItemChanged(viewHolder.getBindingAdapterPosition())) // 确保对话框关闭后重新加载该项
+//                        .setOnDismissListener(dialog -> {
+//                            notifyItemChanged(viewHolder.getBindingAdapterPosition()); // 确保对话框关闭后重新加载该项
+//                            deletedItem = null; // 重置deletedItem，防止重复操作
+//                        })
 //                        .show();
+//            }
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getBindingAdapterPosition();
+                deletedItem = dataList.get(position);
+                String deletedWord = deletedItem.getWord(); // 獲取要刪除的單詞
+
+                // 從數據庫刪除單詞
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userId = user.getUid();
+                FirebaseDatabase db = FirebaseDatabase.getInstance();
+                DatabaseReference root = db.getReference("word_collect").child(userId);
+                root.child(deletedWord).removeValue();
+
+//                // 刪除 dataList 中的項目
+//                dataList.remove(position);
+
+                dataList.clear();
+
+//                // 通知適配器該項目已刪除
+//                notifyItemRemoved(position);
+//
+//                notifyItemRangeChanged(position, dataList.size());
+
+                notifyDataSetChanged();
+
+//                // 顯示Snackbar提示用戶
+//                Snackbar.make(viewHolder.itemView, deletedWord + "已被刪除", Snackbar.LENGTH_LONG)
+//                        .setAction("恢復", view -> {
+//                            root.setValue(deletedWord);
+//                        }).show();
+            }
+
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                //管理RecyclerView滑動操作
+//                int position = viewHolder.getAdapterPosition();
+//                switch (direction) {
+//                    case ItemTouchHelper.LEFT:
+//                    case ItemTouchHelper.RIGHT:
+//                        //刪除List中的position項資料
+//                        dataList.remove(position);
+//                        //於RecyclerView中刪除position項資料
+//                        notifyItemRemoved(position);
+//                        break;
+//                }
 //            }
 
 
@@ -199,6 +216,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
             });
         }
     }
+
     public List<WordListData> getDataList() {
         return dataList;
     }

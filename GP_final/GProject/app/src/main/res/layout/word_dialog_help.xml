@@ -48,7 +48,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="20dp"
-                android:text="將單字依照CEFR之A1、A2、B1、B2、C1、C2個等級畫分為Level A、Level B、Level C三級。"
+                android:text="將單字依照CEFR之A1、A2、B1、B2、C1、C2六個等級畫分為Level A、Level B、Level C三級。"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleQ" />
@@ -72,7 +72,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="20dp"
-                android:text="需先完成初次單字等級測驗，始能開始使用其他功能。\n而後想進行單字測驗，可至「單字」區域練習。"
+                android:text="初次使用系統，需先進行單字等級測驗，方能開始使用其他功能。\n之後想進行單字測驗，可至「單字」區域練習。"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/content2" />

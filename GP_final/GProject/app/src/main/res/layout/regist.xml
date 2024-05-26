@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="88dp"
                 android:hint="請輸入電子信箱"
+                android:imeOptions="actionNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
