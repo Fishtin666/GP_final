@@ -3,15 +3,18 @@ package com.example.gproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,11 +43,14 @@ public class ReviewShow_appConversation extends AppCompatActivity {
     List<Message> messageList;
     RecyclerView recy;
 
+
+
+
     PopupWindow popupWindow;
     TextView checkJudge,Judge;
 //    String randomCode="-NxsG-gP0QuHJweA8BT2";
     String randomCode;  //隨機瑪
-    String topic="Hobby";  //主題
+    String topic;  //主題
     String num="0";    //第幾個回答
 
     private ArrayList<String> conversation;
@@ -52,6 +58,10 @@ public class ReviewShow_appConversation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_app_conversation);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
         home = findViewById(R.id.home);
         back =findViewById(R.id.back2);
@@ -59,6 +69,11 @@ public class ReviewShow_appConversation extends AppCompatActivity {
         checkJudge = findViewById(R.id.check_judge);
         Judge = findViewById(R.id.judge);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            topic = bundle.getString("topic");
+            randomCode = bundle.getString("radom");
+        }
 
 
 
@@ -87,25 +102,25 @@ public class ReviewShow_appConversation extends AppCompatActivity {
             }
         });
 
-        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
-                getConversation();
-                getJudge();
+        getConversation();
+        getJudge();
 
-            }
-        });
+//        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
+//            @Override
+//            public void onRandomCodeGenerated(String randomCode) {
+//                getConversation();
+//                getJudge();
+//
+//            }
+//        });
 
 
     }
-    public interface OnRandomCodeGeneratedListener {
-        void onRandomCodeGenerated(String randomCode);
-    }
+//    public interface OnRandomCodeGeneratedListener {
+//        void onRandomCodeGenerated(String randomCode);
+//    }
 
     public void getConversation(){
-        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
                 FirebaseAuth auth;
                 DatabaseReference databaseReference;
                 auth = FirebaseAuth.getInstance();
@@ -155,78 +170,74 @@ public class ReviewShow_appConversation extends AppCompatActivity {
 
                     });
                 }
-            }
-        });
+
 
     }
 
-    public void getRandomCode(final ReviewShow_Speaking.OnRandomCodeGeneratedListener listener) {
-        auth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-
-            DatabaseReference targetRef = databaseReference
-                    .child("app_conversation")
-                    .child(userId)
-                    .child("Conversation")
-                    .child(topic);
-
-
-            targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // 检查数据是否有效
-                    if (dataSnapshot.exists()) {
-                        int count = 0;
-                        String code = null;
-
-                        // 遍历子项
-                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                            //Toast.makeText(ReviewShow_Speaking.this, count+","+num, Toast.LENGTH_SHORT).show();
-
-                            // 判断是否是第 "num" 个子项
-                            if (String.valueOf(count).equals(num)) {
-                                code = childSnapshot.getKey();
-                                //Toast.makeText(ReviewShow_Speaking.this, "找到code", Toast.LENGTH_SHORT).show();
-
-                                break;  // 获取第 "num" 个子项的 key 后即可退出循环
-                            }
-                            count++;  // 增加计数器
-                        }
-                        randomCode = code;
-
-                        if(code!=null){
-
-                            // Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
-
-                            listener.onRandomCodeGenerated(randomCode);
-                        }else Toast.makeText(ReviewShow_appConversation.this, "找不到randomcode", Toast.LENGTH_SHORT).show();
-
-
-
-
-                    } else {
-                        Toast.makeText(ReviewShow_appConversation.this, "数据库不存在", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // 读取数据时发生错误时调用此方法
-                    Log.e("FirebaseKey", "Error occurred while reading data", databaseError.toException());
-                }
-            });
-        }
-    }
+//    public void getRandomCode(final ReviewShow_Speaking.OnRandomCodeGeneratedListener listener) {
+//        auth = FirebaseAuth.getInstance();
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        FirebaseUser currentUser = auth.getCurrentUser();
+//        if (currentUser != null) {
+//            String userId = currentUser.getUid();
+//
+//            DatabaseReference targetRef = databaseReference
+//                    .child("app_conversation")
+//                    .child(userId)
+//                    .child("Conversation")
+//                    .child(topic);
+//
+//
+//            targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    // 检查数据是否有效
+//                    if (dataSnapshot.exists()) {
+//                        int count = 0;
+//                        String code = null;
+//
+//                        // 遍历子项
+//                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                            //Toast.makeText(ReviewShow_Speaking.this, count+","+num, Toast.LENGTH_SHORT).show();
+//
+//                            // 判断是否是第 "num" 个子项
+//                            if (String.valueOf(count).equals(num)) {
+//                                code = childSnapshot.getKey();
+//                                //Toast.makeText(ReviewShow_Speaking.this, "找到code", Toast.LENGTH_SHORT).show();
+//
+//                                break;  // 获取第 "num" 个子项的 key 后即可退出循环
+//                            }
+//                            count++;  // 增加计数器
+//                        }
+//                        randomCode = code;
+//
+//                        if(code!=null){
+//
+//                            // Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
+//
+//                            listener.onRandomCodeGenerated(randomCode);
+//                        }else Toast.makeText(ReviewShow_appConversation.this, "找不到randomcode", Toast.LENGTH_SHORT).show();
+//
+//
+//
+//
+//                    } else {
+//                        Toast.makeText(ReviewShow_appConversation.this, "数据库不存在", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    // 读取数据时发生错误时调用此方法
+//                    Log.e("FirebaseKey", "Error occurred while reading data", databaseError.toException());
+//                }
+//            });
+//        }
+//    }
 
 
     public void getJudge(){
-        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
                 auth = FirebaseAuth.getInstance();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -276,8 +287,6 @@ public class ReviewShow_appConversation extends AppCompatActivity {
 
                     });
                 }
-            }
-        });
 
     }
 
@@ -297,7 +306,6 @@ public class ReviewShow_appConversation extends AppCompatActivity {
 
     public void show_popup(String JudgeText){
         // 弹出 PopupWindow
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.review_judge_popup, null);
         int width = ConstraintLayout.LayoutParams.WRAP_CONTENT;;

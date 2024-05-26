@@ -1,11 +1,13 @@
-package Re_Reading;
+package com.example.gproject.Re_Reading;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.gproject.JustifyTextView;
 import com.example.gproject.R;
@@ -37,15 +40,26 @@ public class Re_match extends AppCompatActivity {
 
     String ReviewName = "R_match";
     int numberOfFields = 6;
+    String documentID;
+    String saveTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r_match);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
         Button sendBut = findViewById(R.id.sendAns);
         sendBut.setVisibility(View.GONE);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            documentID = bundle.getString("docID");
+            saveTime = bundle.getString("saveT");
+        }
         //delay loading page
         ConstraintLayout load = findViewById(R.id.load);
         load.setVisibility(View.INVISIBLE);
@@ -75,7 +89,7 @@ public class Re_match extends AppCompatActivity {
             Log.e(ReviewName, "i = " + i);
             String culName = "A" + (i + 1);
 
-            getReviewData("1", "2024-05-13 10:54:15", culName);
+            getReviewData(documentID, saveTime, culName);
         }
     }
 

@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 
 import com.example.gproject.Adapters.TopicAdapter;
 import com.example.gproject.Models.TopicModel;
@@ -34,6 +36,14 @@ public class AiChat extends AppCompatActivity {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
+
+        ImageButton back=findViewById(R.id.back2);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         RecyclerView recy = findViewById(R.id.aiChat_recy);
         list=new ArrayList<>();

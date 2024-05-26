@@ -1,11 +1,13 @@
-package Re_Reading;
+package com.example.gproject.Re_Reading;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.gproject.JustifyTextView;
 import com.example.gproject.R;
@@ -33,19 +36,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Re_chose extends AppCompatActivity {
+public class Re_multiple extends AppCompatActivity {
 
-    String ReviewName = "R_chose";
-    int numberOfFields = 4;
+    String ReviewName = "R_multiple";
+    int numberOfFields = 6;
 
+    String documentID;
+    String saveTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.r_chose);
+        setContentView(R.layout.r_multiple);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
         Button sendBut = findViewById(R.id.sendAns);
         sendBut.setVisibility(View.GONE);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            documentID = bundle.getString("docID");
+            saveTime = bundle.getString("saveT");
+        }
         //delay loading page
         ConstraintLayout load = findViewById(R.id.load);
         load.setVisibility(View.INVISIBLE);
@@ -75,12 +89,13 @@ public class Re_chose extends AppCompatActivity {
             Log.e(ReviewName, "i = " + i);
             String culName = "A" + (i + 1);
 
-            getReviewData("1", "2024-05-19 05:21:41", culName);
+            getReviewData(documentID, saveTime, culName);
         }
     }
 
     // get save data from database
     public void getReviewData(String documentID, String saveTime, String cul) {
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
@@ -92,16 +107,16 @@ public class Re_chose extends AppCompatActivity {
                 .child(saveTime)
                 .child(cul);
 
-        Log.d(ReviewName,"FirebasePath Path: " + R_ReviewRef.toString());  // Print the path
+        Log.d(ReviewName, "FirebasePath Path: " + R_ReviewRef.toString());  // Print the path
 
         R_ReviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(ReviewName,"DataSnapshot Data: " + dataSnapshot.toString());  // Print the data snapshot
+                Log.d(ReviewName, "DataSnapshot Data: " + dataSnapshot.toString());  // Print the data snapshot
 
                 if (dataSnapshot.exists()) {
                     String ANS = dataSnapshot.getValue(String.class);
-                    Log.d(ReviewName,"DataSnapshot ANS: " + ANS);  // Print the value
+                    Log.d(ReviewName, "DataSnapshot ANS: " + ANS);  // Print the value
 
                     FirebaseFirestore.getInstance().collection(ReviewName)
                             .document(documentID)
@@ -143,14 +158,18 @@ public class Re_chose extends AppCompatActivity {
                                                         Log.e(ReviewName, "No match for cul: " + cul + " with ANS: " + ANS);
                                                     }
 
-                                                    Log.e(ReviewName,"correct A: " + firestoreValue);
+                                                    Log.e("correct", "A: " + firestoreValue);
                                                     if (!ANS.equals(firestoreValue)) {
                                                         ansTextView.setTextColor(Color.RED); // Mark incorrect answer
                                                         incorrectAnswers.add(firestoreValue); // Add the incorrect answer to the list
                                                     } else {
                                                         incorrectAnswers.add(" ");
                                                     }
+                                                } else {
+                                                    Log.e(ReviewName, "EditText with id " + ansId + " not found");
+                                                    break;
                                                 }
+                                                Log.e(ReviewName, "correct ans: " + incorrectAnswers.get(i));
                                             }
                                             if (!incorrectAnswers.isEmpty()) {
                                                 SetCorrectAns(incorrectAnswers);
@@ -174,36 +193,48 @@ public class Re_chose extends AppCompatActivity {
             }
         });
     }
+
     // set question data
     public void setFireStoreData(DocumentSnapshot document) {
         try {
 
             for (int i = 0; i < numberOfFields; i++) {
 
-                String fieldName = "Q" + (i + 1);
                 String optName = "opt" + (i + 1);
+                String fieldName = "Q" + (i + 1);
                 String ansName = "A" + (i + 1);
+                String titleName = "title" + (i + 1);
 
                 int questionId = getResources().getIdentifier(fieldName, "id", getPackageName());
-                int optionId = getResources().getIdentifier(optName, "id", getPackageName());
+                int optId = getResources().getIdentifier(optName, "id", getPackageName());
                 int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                int titleId = getResources().getIdentifier(titleName, "id", getPackageName());
+                int matchId = getResources().getIdentifier("match", "id", getPackageName());
                 int content = getResources().getIdentifier("Content", "id", getPackageName());
 
                 //set Content
                 CheckSetData(document, "content", content);
+                Log.d(ReviewName, fieldName + "=" + questionId);
+                Log.d(ReviewName, optName + "=" + optId);
 
-                //set Q
-                CheckSetData(document,fieldName,questionId);
+                // check whether ans/option is exit
+                CheckHideData(document, ansName, ansId);
+
+                // check whether match is exit
+                CheckSetData(document, "match", matchId);
+
+                // check whether title is exit
+                CheckSetData(document, titleName, titleId);
 
                 //set opt
-                CheckSetData(document,optName,optionId);
+                CheckSetData(document, optName, optId);
 
-                //set ans
-                CheckHideData(document,ansName,ansId);
+                //set Q
+                CheckSetData(document, fieldName, questionId);
 
             }
         } catch (Exception e) {
-            Log.e("blank1", "Failed with error: " + e.getMessage());
+            Log.e(ReviewName, "Failed with error: " + e.getMessage());
         }
     }
 
@@ -228,6 +259,7 @@ public class Re_chose extends AppCompatActivity {
             Log.e(ReviewName, "TextView with id " + dataName + " not found");
         }
     }
+
     //check ans opt
     private void CheckHideData(DocumentSnapshot document, String dataName, int dataID) {
 

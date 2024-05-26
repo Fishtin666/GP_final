@@ -1,13 +1,19 @@
 package com.example.gproject.Review;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.gproject.R;
+
+import org.checkerframework.common.returnsreceiver.qual.This;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,10 +62,76 @@ public class Fragment_Review_listening extends Fragment {
         }
     }
 
+    // 设置 testkey 的方法
+    public void setLreviewTestKey(String key) {
+        this.testsel = key;
+        Log.d("testKey ff set",testsel);
+    }
+    public String getLreviewTestKey() {
+        Log.d("testKey ff get",":"+testkey);
+        return testkey;
+    }
+
+    private String selectedTest; // 存储选定的按钮名称
+    private String testkey;
+    private String testsel;
+    Button test1,test2,test3,test4;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__review_listening, container, false);
+        View root = inflater.inflate(R.layout.fragment__review_listening, container, false);
+        test1 = root.findViewById(R.id.Retest1);
+        test2 = root.findViewById(R.id.Retest2);
+        test3 = root.findViewById(R.id.Retest3);
+        test4 = root.findViewById(R.id.Retest4);
+
+        setToggleClickListener(test1);
+        setToggleClickListener(test2);
+        setToggleClickListener(test3);
+        setToggleClickListener(test4);
+
+
+
+        return root;
     }
+    private void setToggleClickListener(final Button button) {
+        Log.d("TAG", "setToggleClickListener: Setting toggle click listener");
+        final boolean[] isClicked = {false}; // 使用数组来跟踪状态，以便在匿名内部类中修改
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "onClick: Button clicked");
+                if (isClicked[0]) {
+                    // 恢复到未点击状态的颜色
+                    button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
+                    testkey=null;
+                } else {
+                    // 遍历所有按钮，将它们的状态还原为未点击状态的颜色
+                    for (Button btn : new Button[]{test1, test2, test3, test4}) {
+                        btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
+                    }
+                    // 设置为点击状态的颜色
+                    button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.darkGrey)));
+
+
+                    selectedTest = button.getText().toString(); // 保存选定的按钮名称
+                    if(selectedTest.equals("test1")){
+                        testkey="1";
+                    } else if (selectedTest.equals("test2")) {
+                        testkey="2";
+                    }else if (selectedTest.equals("test3")) {
+                        testkey="3";
+                    }else {
+                        testkey="4";
+                    }
+                    Log.d("TAG", "select testkey"+testkey);
+                    setLreviewTestKey(testkey);
+                }
+                isClicked[0] = !isClicked[0]; // 切换按钮状态
+            }
+        });
+    }
+
 }

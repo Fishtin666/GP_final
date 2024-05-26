@@ -65,9 +65,10 @@ public class Speaking extends AppCompatActivity {
     public void show(){
         AlertDialog.Builder P2_start = new AlertDialog.Builder(Speaking.this);
         P2_start.setTitle("確定要進入Speaking Part2+Part3?");
-        P2_start.setMessage("1. 進入Part2後會有一分鐘的時間讓您查看TaskCard，時間到後會跳出提醒。\n" +
-                "2. 回答時間有兩分鐘，時間到時會提醒，如怕影響回答，可以按下鈴鐺圖案的按鈕，將不會跳出回答時間到之提醒。" +
-                "\n3. 其他按鈕之說明可參照練習頁面右上方灰色問號。");
+        P2_start.setMessage("1. Part2及Part3的題目有相關，當Part2結束後，您能選擇是否要繼續進入Part3。(*注意:Part3無法單獨進行練習，須先進行Part2練習" +
+                "才能進入Part3)\n2. 進入Part2後會有一分鐘的時間讓您查 看TaskCard，時間到後會跳出提醒。\n" +
+                "3. 回答時間有兩分鐘，時間到時會提醒， 如怕影響回答，可以按下鈴鐺圖案的按鈕，將不會跳出回答時間到之提醒。" +
+                "\n4. 其他按鈕之說明可參照練習頁面右上方 灰色問號。");
         P2_start.setCancelable(false);
         P2_start.setPositiveButton("確定", new DialogInterface.OnClickListener() {
             @Override

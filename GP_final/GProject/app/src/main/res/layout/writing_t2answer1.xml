@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view" />
 
-    <com.example.gproject.JustifyTextView4
+    <com.example.gproject.JustifyTextView2
         android:id="@+id/question"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -36,7 +36,6 @@
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/gray"
         android:gravity="left|center_horizontal"
-        android:padding="10dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

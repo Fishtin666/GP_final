@@ -103,7 +103,7 @@ public class Writing_T1answer1 extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     String ques = documentSnapshot.getString("Question");
-                    question.setText(ques);
+                    question.setText(ques+"\n");
                     storageRef= FirebaseStorage.getInstance().getReference("Writing_Part1/"+QuesNum+".png");
                     try {
                         File localfile =File.createTempFile("tempfile",".png");

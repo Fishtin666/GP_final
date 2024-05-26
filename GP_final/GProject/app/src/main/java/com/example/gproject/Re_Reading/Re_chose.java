@@ -1,11 +1,13 @@
-package Re_Reading;
+package com.example.gproject.Re_Reading;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.gproject.JustifyTextView;
 import com.example.gproject.R;
@@ -33,18 +36,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Re_blank extends AppCompatActivity {
+public class Re_chose extends AppCompatActivity {
 
-    String ReviewName = "R_blank";
-    int numberOfFields = 6;
+    String ReviewName = "R_chose";
+    int numberOfFields = 4;
+    String documentID;
+    String saveTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.r_blank);
+        setContentView(R.layout.r_chose);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
         Button sendBut = findViewById(R.id.sendAns);
         sendBut.setVisibility(View.GONE);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            documentID = bundle.getString("docID");
+            saveTime = bundle.getString("saveT");
+        }
 
         //delay loading page
         ConstraintLayout load = findViewById(R.id.load);
@@ -55,7 +70,6 @@ public class Re_blank extends AppCompatActivity {
                 load.setVisibility(View.VISIBLE);
             }
         }, 2000);
-
 
         //back button
         ImageButton backButton = findViewById(R.id.back);
@@ -76,9 +90,10 @@ public class Re_blank extends AppCompatActivity {
             Log.e(ReviewName, "i = " + i);
             String culName = "A" + (i + 1);
 
-            getReviewData("3", "2024-05-18 14:49:21", culName);
+            getReviewData(documentID, saveTime, culName);
         }
     }
+
     // get save data from database
     public void getReviewData(String documentID, String saveTime, String cul) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,17 +132,11 @@ public class Re_blank extends AppCompatActivity {
 
                                             //replace textview
                                             TextView ContentTextView = findViewById(R.id.Content);
-                                            TextView Q1TextView = findViewById(R.id.Q1);
-
-                                            if (ContentTextView != null && Q1TextView != null) {
+                                            if (ContentTextView != null) {
                                                 CharSequence conText = ContentTextView.getText();
-                                                CharSequence Q1text = Q1TextView.getText();
-
-                                                Log.e(ReviewName, "successful getting content: " + conText);
-                                                Log.e(ReviewName, "successful getting Q1 text: " + Q1text);
-
                                                 replaceTextview(ContentTextView, conText);
-                                                replaceTextview(Q1TextView, Q1text);
+                                                Log.e(ReviewName, "successful getting content: " + conText);
+
                                             } else {
                                                 Log.e(ReviewName, "Q1TextView is null");
                                             }
@@ -156,11 +165,7 @@ public class Re_blank extends AppCompatActivity {
                                                     } else {
                                                         incorrectAnswers.add(" ");
                                                     }
-                                                }else{
-                                                    Log.e(ReviewName, "EditText with id " + ansId + " not found");
-                                                    break;
                                                 }
-                                                Log.e(ReviewName, "correct ans: " + incorrectAnswers.get(i) );
                                             }
                                             if (!incorrectAnswers.isEmpty()) {
                                                 SetCorrectAns(incorrectAnswers);
@@ -190,49 +195,30 @@ public class Re_blank extends AppCompatActivity {
 
             for (int i = 0; i < numberOfFields; i++) {
 
-                Log.e(ReviewName, "i = " + i);
+                String fieldName = "Q" + (i + 1);
+                String optName = "opt" + (i + 1);
                 String ansName = "A" + (i + 1);
-                String optName = "option" + (i + 1);
-                String titleName = "title" + (i + 1);
-                String correctName = "c" + (i + 1);
-//
-                int optId = getResources().getIdentifier(optName, "id", getPackageName());
-                int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
-                int titleId = getResources().getIdentifier(titleName, "id", getPackageName());
-                int matchId = getResources().getIdentifier("match", "id", getPackageName());
-                int SecId = getResources().getIdentifier("section1", "id", getPackageName());
-                int content = getResources().getIdentifier("Content", "id", getPackageName());
-                int Q1 = getResources().getIdentifier("Q1", "id", getPackageName());
-                int correctID = getResources().getIdentifier(correctName, "id", getPackageName());
 
-                // check whether Q is exit
-                CheckSetData(document, "Q1", Q1);
+                int questionId = getResources().getIdentifier(fieldName, "id", getPackageName());
+                int optionId = getResources().getIdentifier(optName, "id", getPackageName());
+                int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
+                int content = getResources().getIdentifier("Content", "id", getPackageName());
 
                 //set Content
                 CheckSetData(document, "content", content);
 
-                // check whether ans/option is exit
-                CheckHideData(document, ansName, ansId, optId);
+                //set Q
+                CheckSetData(document,fieldName,questionId);
 
-                // check whether section1 is exit
-                CheckSetData(document, "section1", SecId);
+                //set opt
+                CheckSetData(document,optName,optionId);
 
-                // check whether match is exit
-                CheckSetData(document, "match", matchId);
-
-                // check whether title is exit
-                CheckSetData(document, titleName, titleId);
-
-                //set correct ans
-                CheckHideData(document, ansName, ansId, correctID);
-
-
-                EditText AnsEditText = findViewById(ansId);
-                String editTextValue = AnsEditText.getText().toString().trim();
+                //set ans
+                CheckHideData(document,ansName,ansId);
 
             }
         } catch (Exception e) {
-            Log.e(ReviewName, "Failed with error: " + e.getMessage());
+            Log.e("blank1", "Failed with error: " + e.getMessage());
         }
     }
 
@@ -250,7 +236,6 @@ public class Re_blank extends AppCompatActivity {
                     combinedField.append(line.trim()).append("\n");
                 }
                 QTextView.setText(combinedField.toString());
-
             } else {
                 QTextView.setVisibility(View.GONE);
             }
@@ -258,9 +243,8 @@ public class Re_blank extends AppCompatActivity {
             Log.e(ReviewName, "TextView with id " + dataName + " not found");
         }
     }
-
     //check ans opt
-    private void CheckHideData(DocumentSnapshot document, String dataName, int dataID, int optId) {
+    private void CheckHideData(DocumentSnapshot document, String dataName, int dataID) {
 
         TextView QTextView = findViewById(dataID);
         if (QTextView != null) {
@@ -269,7 +253,6 @@ public class Re_blank extends AppCompatActivity {
                 QTextView.setVisibility(View.VISIBLE);
             } else {
                 QTextView.setVisibility(View.GONE);
-                findViewById(optId).setVisibility(View.GONE);
                 Log.e(ReviewName, "Can't hide： " + dataName + " not found");
             }
         } else {

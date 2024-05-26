@@ -1,10 +1,14 @@
 package com.example.gproject.Review;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.gproject.R;
@@ -56,10 +60,54 @@ public class Fragment_Review_VR extends Fragment {
         }
     }
 
+    public void setLreviewTestKey(String key) {
+        this.selectedTest = key;
+        Log.d("testKey ff set",selectedTest);
+    }
+    public String getLreviewTestKey() {
+        Log.d("testKey ff get",":"+selectedTest);
+        return selectedTest;
+    }
+    private String selectedTest; // 存储选定的按钮名称
+    Button all;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__review__v_r, container, false);
+        View view = inflater.inflate(R.layout.fragment__review__v_r, container, false);
+        all = view.findViewById(R.id.VRall);
+
+        setToggleClickListener(all);
+
+        return view;
+    }
+    private void setToggleClickListener(final Button button) {
+        Log.d("TAG", "setToggleClickListener: Setting toggle click listener");
+        final boolean[] isClicked = {false}; // 使用数组来跟踪状态，以便在匿名内部类中修改
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "onClick: Button clicked");
+                if (isClicked[0]) {
+                    // 恢复到未点击状态的颜色
+                    button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
+                    //testkey=null;
+                } else {
+                    // 遍历所有按钮，将它们的状态还原为未点击状态的颜色
+//                    for (Button btn : new Button[]{travel,hobby,movie,sport,weather,country,food,pet}) {
+//                        btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
+//                    }
+                    // 设置为点击状态的颜色
+                    button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.darkGrey)));
+
+
+                    selectedTest = button.getText().toString(); // 保存选定的按钮名称
+                    Log.d("TAG", "select testkey"+selectedTest);
+                    setLreviewTestKey(selectedTest);
+                }
+                isClicked[0] = !isClicked[0]; // 切换按钮状态
+            }
+        });
     }
 }

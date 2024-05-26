@@ -42,7 +42,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
@@ -54,9 +55,9 @@
 
             <com.example.gproject.JustifyTextView4
                 android:id="@+id/judge"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="350dp"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:background="@color/gray"
                 android:textSize="20sp" />

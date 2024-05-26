@@ -2,11 +2,15 @@ package com.example.gproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,24 +34,32 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     FirebaseAuth auth;
     private DatabaseReference databaseReference;
     ImageView home;
+    ImageButton back;
 
     TextView Ques,Ans,Judge;
     String topic;
     String ques_num; //第幾題
-    String num="1";  //第幾次回答
+    String num="0";  //第幾次回答
 
     String randomCode;
+
+    Boolean isPart3=false;
 
     //part3
     TextView part3,p3_question_title,p3_question,p3_ans_title,p3_answer,p3_judge_title,p3_judge;
 
-    //String randomCode="-NxTC6YNpganZiCH4JPg"; //隨機碼  //"NxTC6YNpganZiCH4JPg"
+    //String randomCode="-NyFiRofFevvxQOaVqZN"; //隨機碼  //"NxTC6YNpganZiCH4JPg"
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_speaking);
-        Ques = findViewById(R.id.Question);
-        Ans = findViewById(R.id.listenContent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
+
+        Ques = findViewById(R.id.EN);
+        Ans = findViewById(R.id.CH);
         Judge = findViewById(R.id.Judge);
         home = findViewById(R.id.home);
 
@@ -68,11 +80,29 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         p3_judge_title.setVisibility(View.GONE);
         p3_judge.setVisibility(View.GONE);
 
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
+            }
+        });
+
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             topic = bundle.getString("topic");
             ques_num = bundle.getString("speakQ");
+            randomCode = bundle.getString("times");
+        }
+
+        String[] Part3_topic={"People","Item","Place","Experience"};
+        for(int i=0;i<Part3_topic.length;i++){
+            if(topic.equals(Part3_topic[i]))
+                isPart3=true;
+
         }
 
         home.setOnClickListener(new View.OnClickListener() {
@@ -82,20 +112,26 @@ public class ReviewShow_Speaking extends AppCompatActivity {
             }
         });
 
-        getQues();
+
         //Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
 
+        getQues();
+        getJudge();
+        getAns();
+        if (isPart3)
+            getPart3();
 
-        getRandomCode(new OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
-
-                getJudge();
-                getAns();
-                getPart3();
-
-            }
-        });
+//        getRandomCode(new OnRandomCodeGeneratedListener() {
+//            @Override
+//            public void onRandomCodeGenerated(String randomCode) {
+//
+//
+//
+//
+//
+//
+//            }
+//        });
 
 
     }
@@ -154,9 +190,6 @@ public class ReviewShow_Speaking extends AppCompatActivity {
     }
 
     public void getJudge(){
-        getRandomCode(new OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
                 auth = FirebaseAuth.getInstance();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -202,66 +235,12 @@ public class ReviewShow_Speaking extends AppCompatActivity {
 
                     });
                 }
-            }
-        });
+
 
     }
 
-    public void getPart3Judge(){
-        getRandomCode(new OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
-                auth = FirebaseAuth.getInstance();
-                databaseReference = FirebaseDatabase.getInstance().getReference();
+    public void getPart3Judge() {
 
-                FirebaseUser currentUser = auth.getCurrentUser();
-                if (currentUser != null) {
-                    String userId = currentUser.getUid();
-
-                    DatabaseReference targetRef = databaseReference
-                            .child("users")
-                            .child(userId)
-                            .child("Judge")
-                            .child("Speaking_Part3");
-                    //.child(randomCode);    //###選擇是第幾次回答####
-
-
-                    targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            if (dataSnapshot.exists()) {
-                                // 检查特定 key 的值
-                                DataSnapshot valueSnapshot = dataSnapshot.child(randomCode);
-                                if (valueSnapshot.exists()) {
-                                    String value = valueSnapshot.getValue(String.class);
-                                    p3_judge.setText(value);
-                                    Log.d("FirebaseValue", "Value: " + value);
-                                } else {
-                                    Log.d("FirebaseValue", "Key not found");
-                                    Toast.makeText(ReviewShow_Speaking.this, "randomCode找不到", Toast.LENGTH_SHORT).show();
-
-                                }
-                            } else {
-                                Toast.makeText(ReviewShow_Speaking.this, "judge資料庫找不到", Toast.LENGTH_SHORT).show();
-
-                                Log.d("FirebaseValue", "Path not found");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-
-                    });
-                }
-            }
-        });
-
-    }
-
-    public void getRandomCode(final OnRandomCodeGeneratedListener listener) {
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -269,124 +248,167 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         if (currentUser != null) {
             String userId = currentUser.getUid();
 
-            DatabaseReference RandomCodeRef = databaseReference
+            DatabaseReference targetRef = databaseReference
                     .child("users")
                     .child(userId)
-                    .child("Speaking")
-                    .child(topic)
-                    .child(ques_num);  //###选择是第几题####
+                    .child("Judge")
+                    .child("Speaking_Part3");
+            //.child(randomCode);    //###選擇是第幾次回答####
 
-            RandomCodeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // 检查数据是否有效
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                     if (dataSnapshot.exists()) {
-                        int count = 0;
-                        String code = null;
+                        // 检查特定 key 的值
+                        DataSnapshot valueSnapshot = dataSnapshot.child(randomCode);
+                        if (valueSnapshot.exists()) {
+                            String value = valueSnapshot.getValue(String.class);
+                            p3_judge.setText(value);
+                            Log.d("FirebaseValue", "Value: " + value);
+                        } else {
+                            Log.d("FirebaseValue", "Key not found");
+                            Toast.makeText(ReviewShow_Speaking.this, "randomCode找不到", Toast.LENGTH_SHORT).show();
 
-                        // 遍历子项
-                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                            //Toast.makeText(ReviewShow_Speaking.this, count+","+num, Toast.LENGTH_SHORT).show();
-
-                            // 判断是否是第 "num" 个子项
-                            if (String.valueOf(count).equals(num)) {
-                                code = childSnapshot.getKey();
-                                //Toast.makeText(ReviewShow_Speaking.this, "找到code", Toast.LENGTH_SHORT).show();
-
-                                break;  // 获取第 "num" 个子项的 key 后即可退出循环
-                            }
-                            count++;  // 增加计数器
                         }
-                        randomCode = code;
-
-                        if(code!=null){
-
-                           // Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
-
-                            listener.onRandomCodeGenerated(randomCode);
-                        }else Toast.makeText(ReviewShow_Speaking.this, "找不到randomcode", Toast.LENGTH_SHORT).show();
-
-
-
-
                     } else {
-                        Toast.makeText(ReviewShow_Speaking.this, "数据库不存在", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReviewShow_Speaking.this, "judge資料庫找不到", Toast.LENGTH_SHORT).show();
+
+                        Log.d("FirebaseValue", "Path not found");
                     }
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // 读取数据时发生错误时调用此方法
-                    Log.e("FirebaseKey", "Error occurred while reading data", databaseError.toException());
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
+
             });
+
+
         }
     }
 
+//    public void getRandomCode(final OnRandomCodeGeneratedListener listener) {
+//        auth = FirebaseAuth.getInstance();
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        FirebaseUser currentUser = auth.getCurrentUser();
+//        if (currentUser != null) {
+//            String userId = currentUser.getUid();
+//
+//            DatabaseReference RandomCodeRef = databaseReference
+//                    .child("users")
+//                    .child(userId)
+//                    .child("Speaking")
+//                    .child(topic)
+//                    .child(ques_num);  //###选择是第几题####
+//            //Toast.makeText(ReviewShow_Speaking.this, ques_num, Toast.LENGTH_SHORT).show();
+//
+//
+//
+//            RandomCodeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    // 检查数据是否有效
+//                    if (dataSnapshot.exists()) {
+//                        int count = 0;
+//                        String code = null;
+//
+//                        // 遍历子项
+//                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                            //Toast.makeText(ReviewShow_Speaking.this, count+","+num, Toast.LENGTH_SHORT).show();
+//
+//                            // 判断是否是第 "num" 个子项
+//                            if (String.valueOf(count).equals(num)) {
+//                                code = childSnapshot.getKey();
+//                                //Toast.makeText(ReviewShow_Speaking.this, "找到code", Toast.LENGTH_SHORT).show();
+//
+//                                break;  // 获取第 "num" 个子项的 key 后即可退出循环
+//                            }
+//                            count++;  // 增加计数器
+//                        }
+//                        randomCode = code;
+//
+//                        if(code!=null){
+//
+//                           // Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
+//
+//                            listener.onRandomCodeGenerated(randomCode);
+//                        }else Toast.makeText(ReviewShow_Speaking.this, "找不到randomcode", Toast.LENGTH_SHORT).show();
+//
+//
+//
+//
+//                    } else {
+//                        Toast.makeText(ReviewShow_Speaking.this, "数据库不存在", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    // 读取数据时发生错误时调用此方法
+//                    Log.e("FirebaseKey", "Error occurred while reading data", databaseError.toException());
+//                }
+//            });
+//        }
+//    }
 
-    public void getAns(){
-        getRandomCode(new OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
-                auth = FirebaseAuth.getInstance();
-                databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                FirebaseUser currentUser = auth.getCurrentUser();
-                if (currentUser != null) {
-                    String userId = currentUser.getUid();
+        public void getAns () {
+            auth = FirebaseAuth.getInstance();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+
+            FirebaseUser currentUser = auth.getCurrentUser();
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
 
 
+                DatabaseReference targetRef = databaseReference
+                        .child("users")
+                        .child(userId)
+                        .child("Speaking")
+                        .child(topic)
+                        .child(ques_num); //###選擇是第幾題####
+                //.child(randomCode);    //###選擇是第幾次回答####
 
-                    DatabaseReference targetRef = databaseReference
-                            .child("users")
-                            .child(userId)
-                            .child("Speaking")
-                            .child(topic)
-                            .child(ques_num) ; //###選擇是第幾題####
-                            //.child(randomCode);    //###選擇是第幾次回答####
 
+                targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    targetRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            if (dataSnapshot.exists()) {
-                                // 检查特定 key 的值
-                                DataSnapshot valueSnapshot = dataSnapshot.child(randomCode);
-                                if (valueSnapshot.exists()) {
-                                    String value = valueSnapshot.getValue(String.class);
-                                    Ans.setText(value);
-                                    Log.d("FirebaseValue", "Value: " + value);
-                                } else {
-                                    Log.d("FirebaseValue", "Key not found");
-                                    Toast.makeText(ReviewShow_Speaking.this, "randomCode找不到", Toast.LENGTH_SHORT).show();
-
-                                }
+                        if (dataSnapshot.exists()) {
+                            // 检查特定 key 的值
+                            DataSnapshot valueSnapshot = dataSnapshot.child(randomCode);
+                            if (valueSnapshot.exists()) {
+                                String value = valueSnapshot.getValue(String.class);
+                                Ans.setText(value);
+                                Log.d("FirebaseValue", "Value: " + value);
                             } else {
-                                Toast.makeText(ReviewShow_Speaking.this, "Ans資料庫找不到", Toast.LENGTH_SHORT).show();
+                                Log.d("FirebaseValue", "Key not found");
+                                Toast.makeText(ReviewShow_Speaking.this, "randomCode找不到", Toast.LENGTH_SHORT).show();
 
-                                Log.d("FirebaseValue", "Path not found");
                             }
+                        } else {
+                            Toast.makeText(ReviewShow_Speaking.this, "Ans資料庫找不到", Toast.LENGTH_SHORT).show();
+
+                            Log.d("FirebaseValue", "Path not found");
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
+                    }
 
-                    });
-        }
+                });
             }
-        });
 
 
-    }
-
+        }
 
     public void getPart3(){
-        getRandomCode(new OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
                 auth = FirebaseAuth.getInstance();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -439,9 +461,9 @@ public class ReviewShow_Speaking extends AppCompatActivity {
 
                     });
                 }
-            }
-        });
+
 
 
     }
+
 }

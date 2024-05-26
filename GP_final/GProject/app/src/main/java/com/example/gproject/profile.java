@@ -33,7 +33,6 @@ import java.lang.reflect.Array;
 
 public class profile extends AppCompatActivity {
     Button logout;
-    Button test;
     ImageButton back;
     TextView email,Uid,w_done,l_done,s_done,r_done,voc;
     private ProgressBar w_progressBar,s_progressBar,l_progressBar,r_progressBar,voc_progressBar;
@@ -70,15 +69,7 @@ public class profile extends AppCompatActivity {
         email = findViewById(R.id.email);
         w_done= findViewById(R.id.writing_done);
 
-        test = findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(profile.this,ReviewShow_Speaking.class));
-                //startActivity(new Intent(profile.this,ReviewShow_Writing.class));
-//                startActivity(new Intent(profile.this,ReviewShow_appConversation.class));
-            }
-        });
+
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

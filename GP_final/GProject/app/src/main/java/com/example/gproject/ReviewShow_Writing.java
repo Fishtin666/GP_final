@@ -2,13 +2,17 @@ package com.example.gproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,14 +52,21 @@ public class ReviewShow_Writing extends AppCompatActivity {
 
     //String task=Task_passIn;
     String topic;
+
+    ImageButton back;
     String ques_num; //第幾題
     String num="0";  //第幾次回答
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_show_writing);
-        Ques = findViewById(R.id.Question);
-        Ans = findViewById(R.id.listenContent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
+
+        Ques = findViewById(R.id.EN);
+        Ans = findViewById(R.id.CH);
         Judge = findViewById(R.id.Judge);
         pic=findViewById(R.id.pic);
 
@@ -64,6 +75,17 @@ public class ReviewShow_Writing extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ReviewShow_Writing.this,MainActivity.class));
+            }
+        });
+
+
+        back = findViewById(R.id.back2);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(Speaking_part1_answer.this, Speaking_questionAdd.class));
+                finish();
             }
         });
 
@@ -84,21 +106,23 @@ public class ReviewShow_Writing extends AppCompatActivity {
             topic="Writing2";
 
 //        getQues();
-        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
 
-                getJudge();
-                getAns();
-
-            }
-        });
+        getJudge();
+        getAns();
+//        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
+//            @Override
+//            public void onRandomCodeGenerated(String randomCode) {
+//
+//
+//
+//            }
+//        });
 
     }
 
-    public interface OnRandomCodeGeneratedListener {
-        void onRandomCodeGenerated(String randomCode);
-    }
+//    public interface OnRandomCodeGeneratedListener {
+//        void onRandomCodeGenerated(String randomCode);
+//    }
 
     public void getQues(){
         auth = FirebaseAuth.getInstance();
@@ -197,72 +221,70 @@ public class ReviewShow_Writing extends AppCompatActivity {
 
     }
 
-    public void getRandomCode(final ReviewShow_Speaking.OnRandomCodeGeneratedListener listener) {
-        auth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-
-            DatabaseReference RandomCodeRef = databaseReference
-                    .child("users")
-                    .child(userId)
-                    .child("Writing")
-                    .child(Task_passIn)
-                    .child(ques_num);  //###选择是第几题####
-
-            RandomCodeRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // 检查数据是否有效
-                    if (dataSnapshot.exists()) {
-                        int count = 0;
-                        String code = null;
-
-                        // 遍历子项
-                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                            //Toast.makeText(ReviewShow_Speaking.this, count+","+num, Toast.LENGTH_SHORT).show();
-
-                            // 判断是否是第 "num" 个子项
-                            if (String.valueOf(count).equals(num)) {
-                                code = childSnapshot.getKey();
-                                //Toast.makeText(ReviewShow_Speaking.this, "找到code", Toast.LENGTH_SHORT).show();
-
-                                break;  // 获取第 "num" 个子项的 key 后即可退出循环
-                            }
-                            count++;  // 增加计数器
-                        }
-                        randomCode = code;
-
-                        if(code!=null){
-
-                            // Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
-
-                            listener.onRandomCodeGenerated(randomCode);
-                        }else Toast.makeText(ReviewShow_Writing.this, "找不到randomcode", Toast.LENGTH_SHORT).show();
-
-
-
-
-                    } else {
-                        Toast.makeText(ReviewShow_Writing.this, "数据库不存在", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // 读取数据时发生错误时调用此方法
-                    Log.e("FirebaseKey", "Error occurred while reading data", databaseError.toException());
-                }
-            });
-        }
-    }
+//    public void getRandomCode(final ReviewShow_Speaking.OnRandomCodeGeneratedListener listener) {
+//        auth = FirebaseAuth.getInstance();
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        FirebaseUser currentUser = auth.getCurrentUser();
+//        if (currentUser != null) {
+//            String userId = currentUser.getUid();
+//
+//            DatabaseReference RandomCodeRef = databaseReference
+//                    .child("users")
+//                    .child(userId)
+//                    .child("Writing")
+//                    .child(Task_passIn)
+//                    .child(ques_num);  //###选择是第几题####
+//
+//            RandomCodeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    // 检查数据是否有效
+//                    if (dataSnapshot.exists()) {
+//                        int count = 0;
+//                        String code = null;
+//
+//                        // 遍历子项
+//                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                            //Toast.makeText(ReviewShow_Speaking.this, count+","+num, Toast.LENGTH_SHORT).show();
+//
+//                            // 判断是否是第 "num" 个子项
+//                            if (String.valueOf(count).equals(num)) {
+//                                code = childSnapshot.getKey();
+//                                //Toast.makeText(ReviewShow_Speaking.this, "找到code", Toast.LENGTH_SHORT).show();
+//
+//                                break;  // 获取第 "num" 个子项的 key 后即可退出循环
+//                            }
+//                            count++;  // 增加计数器
+//                        }
+//                        randomCode = code;
+//
+//                        if(code!=null){
+//
+//                            // Toast.makeText(ReviewShow_Speaking.this, randomCode, Toast.LENGTH_SHORT).show();
+//
+//                            listener.onRandomCodeGenerated(randomCode);
+//                        }else Toast.makeText(ReviewShow_Writing.this, "找不到randomcode", Toast.LENGTH_SHORT).show();
+//
+//
+//
+//
+//                    } else {
+//                        Toast.makeText(ReviewShow_Writing.this, "数据库不存在", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    // 读取数据时发生错误时调用此方法
+//                    Log.e("FirebaseKey", "Error occurred while reading data", databaseError.toException());
+//                }
+//            });
+//        }
+//    }
 
     public void getAns(){
-        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
+
                 auth = FirebaseAuth.getInstance();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -309,15 +331,11 @@ public class ReviewShow_Writing extends AppCompatActivity {
 
                     });
                 }
-            }
-        });
 
     }
 
     public void getJudge(){
-        getRandomCode(new ReviewShow_Speaking.OnRandomCodeGeneratedListener() {
-            @Override
-            public void onRandomCodeGenerated(String randomCode) {
+
                 auth = FirebaseAuth.getInstance();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -364,9 +382,7 @@ public class ReviewShow_Writing extends AppCompatActivity {
                     });
                 }
             }
-        });
 
-    }
 }
 
 
