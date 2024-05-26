@@ -106,55 +106,98 @@ public class LevelAQuizActivity extends AppCompatActivity {
             }
 
             // Send Answer button
+//            wordSendButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//                        wordSendButton.setVisibility(View.GONE);
+//                        int score = 0;
+//                        // 遍历 RecyclerView 中的每个单词
+//                        for (int i = 0; i < adapter.getItemCount(); i++) {
+//                            try {
+//
+//                                Log.e("level_AAAA", "i = " + i);
+//                                // 获取当前位置的单词数据
+//                                WordQuizData word = adapter.getQuestions().get(i);
+//                                // 获取当前 RecyclerView 中的 ViewHolder
+//                                RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
+//
+//                                if (viewHolder != null) {
+//                                    // 在 ViewHolder 中查找 RadioButton 和 QueWord
+//                                    RadioButton radioButton = adapter.getRadioButtonAtPosition(i, QuizRecycler);
+//                                    String selectedWord = radioButton.getText().toString();
+//
+//                                    TextView QueWord = viewHolder.itemView.findViewById(R.id.Que);
+//
+//                                    // 检查用户选择的答案是否与正确答案匹配
+//                                    String selectedDocumentId = (String) viewHolder.itemView.getTag();
+//
+//                                    if (selectedDocumentId.equals(selectedWord) && radioButton.isChecked()) {
+////                                        if () {
+////                                            // 回答正确
+//                                            score++;
+//
+////                                        } else
+//////                                            radioButton.setTextColor(Color.RED);
+////                                            Log.e("Incorrect AAA", QueWord.getText().toString());
+////                                        Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
+//
+//                                    } else {
+//                                        radioButton.setTextColor(Color.RED);
+//                                    }
+//                                    Log.e("level_AAAA","Correct check"+ QueWord.getText().toString());
+//                                    Log.e("level_AAAA", "Correct Answer" + selectedDocumentId + ", Correct Option: " + i + selectedWord);
+//                                }
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                Log.e("FireStore A2 ", "error: " + e.getMessage());
+//                            }
+//                        }
+//                        Log.e("level AAAA", "show " + "A" + score);
+//                        ShowScoreDialog(score, "A");
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        Log.e("FireStore B1 ", "error: " + e.getMessage());
+//                    }
+//                    adapter.setAnswerSubmitted(true);
+//                }
+//            });
+            // Send Answer button
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
+                        wordSendButton.setVisibility(View.GONE);
                         int score = 0;
-                        // 遍历 RecyclerView 中的每个单词
+                        // 遍歷 RecyclerView 中的每個可見的 ViewHolder
                         for (int i = 0; i < adapter.getItemCount(); i++) {
-                            try {
-                                // 获取当前位置的单词数据
-                                WordQuizData word = adapter.getQuestions().get(i);
-                                // 获取当前单词的定义和词性
-                                String questionText = word.getDefinition() + " " + word.getPartOfSpeech();
-                                // 获取当前 RecyclerView 中的 ViewHolder
-                                RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
-                                if (viewHolder != null) {
-                                    // 在 ViewHolder 中查找 RadioButton 和 QueWord
-                                    RadioButton radioButton = adapter.getRadioButtonAtPosition(i, QuizRecycler);
-                                    String selectedWord = radioButton.getText().toString();
+                            RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
+                            if (viewHolder != null) {
+                                // 在 ViewHolder 中查找 RadioButton 和 QueWord
+                                RadioButton radioButton = adapter.getRadioButtonAtPosition(i, QuizRecycler);
+                                String selectedWord = radioButton.getText().toString();
 
-                                    TextView QueWord = viewHolder.itemView.findViewById(R.id.Que);
-                                    // 检查用户选择的答案是否与正确答案匹配
-                                    String selectedDocumentId = (String) viewHolder.itemView.getTag();
-                                    if (selectedDocumentId.equals(selectedWord)) {
-                                        if (radioButton.isChecked()) {
-                                            // 回答正确
-                                            score++;
-                                            Log.e("Correct check", QueWord.getText().toString());
-                                            Log.e("Correct Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
-                                        } else
-//                                            radioButton.setTextColor(Color.RED);
-                                            Log.e("Incorrect AAA", QueWord.getText().toString());
-                                        Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
-                                    } else {
-                                        radioButton.setTextColor(Color.RED);
-                                    }
+                                TextView QueWord = viewHolder.itemView.findViewById(R.id.Que);
+                                Log.e("level_AAAA","Correct check"+ QueWord.getText().toString());
+
+                                // 检查用户选择的答案是否与正确答案匹配
+                                String selectedDocumentId = (String) viewHolder.itemView.getTag();
+
+                                if (selectedDocumentId.equals(selectedWord) && radioButton.isChecked()) {
+                                    score++;
+                                } else {
+                                    radioButton.setTextColor(Color.RED);
                                 }
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("FireStore A2 ", "error: " + e.getMessage());
                             }
                         }
-                        Log.e("level A", "show " + "A" + score);
                         ShowScoreDialog(score, "A");
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("FireStore B1 ", "error: " + e.getMessage());
                     }
+                    adapter.setAnswerSubmitted(true);
                 }
             });
 
@@ -171,15 +214,16 @@ public class LevelAQuizActivity extends AppCompatActivity {
     public void ShowScoreDialog(int Score, String Level) {
         try {
 
+            SaveWordLevel(Level, Score);
+            // get Extra Word from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("WordLevel", MODE_PRIVATE);
+            String wordLog = sharedPreferences.getString("word_level", "unKnow");
+
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.word_dialog);
             Window window = dialog.getWindow();
             window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); // 设置宽高为全屏
             dialog.show();
-
-            // get Extra Word from SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("WordLevel", MODE_PRIVATE);
-            String wordLog = sharedPreferences.getString("word_level", "unKnow");
 
             // put Score
             TextView scoreTextView = dialog.findViewById(R.id.ShowScore);
@@ -205,13 +249,13 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (Score < 6) {
-                            // close dialog, stay in original page
-                            dialog.dismiss();
-                        } else {
-                            // back to wordFragment
-                            finish();
-                        }
+//                        if (Score < 6) {
+                        // close dialog, stay in original page
+                        dialog.dismiss();
+//                        } else {
+//                            // back to wordFragment
+//                            finish();
+//                        }
                     }
                 });
                 Log.i("dia11", "Gone 13");
@@ -222,13 +266,21 @@ public class LevelAQuizActivity extends AppCompatActivity {
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    if (!"unKnow".equals(wordLog)) {
+                    if (!"unKnow".equals(wordLog)) {
                         if (Score < 6) {
-                            GoToMain(Level);
+                            removeLog(sharedPreferences);
+                            Log.e("level_AAAA","finish suc");
+                            // back to wordFragment
+                            finish();
 
                         } else {
                             GoToNextLevel(Level);
                         }
+
+                    } else {
+//                        GoToMain(Level);
+                        finish();
+                    }
                 }
             });
 
@@ -236,6 +288,18 @@ public class LevelAQuizActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.i("dia11", "error: " + e.getMessage());
         }
+
+
+    }
+
+    public void removeLog(SharedPreferences shareR) {
+        // Remove Extra Value
+        SharedPreferences.Editor editor = shareR.edit();
+        editor.remove("word_level");
+        editor.apply();
+        getIntent().removeExtra("word");
+        Log.i("Level C", "delete " + "Login");
+
     }
 
     //show Help dialog
@@ -263,11 +327,9 @@ public class LevelAQuizActivity extends AppCompatActivity {
     public void GoToMain(String LevelValue) {
         //set hint
         Log.e("setHint", "show B ");
-//        Intent intentA = new Intent(this, MainActivity.class);
-//        startActivity(intentA);
+        Intent intentA = new Intent(this, MainActivity.class);
+        startActivity(intentA);
         finish();
-        SaveWordLevel(LevelValue);
-
     }
 
     //Go To Next Level
@@ -278,7 +340,6 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 startActivity(intentA);
                 break;
             case "B":
-                SaveWordLevel(LevelValue);
                 Intent intentB = new Intent(this, LevelCQuizActivity.class);
                 startActivity(intentB);
 
@@ -321,7 +382,7 @@ public class LevelAQuizActivity extends AppCompatActivity {
     }
 
     //save data into firebase
-    public void SaveWordLevel(String WordLevel) {
+    public void SaveWordLevel(String WordLevel, int score) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("word_Level");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -335,20 +396,47 @@ public class LevelAQuizActivity extends AppCompatActivity {
                     // 如果用户已存在，则更新其级别
                     String currentLevel = snapshot.child("WordLevel").getValue(String.class);
                     if (currentLevel != null) {
-                        // 用户已有级别，判断是否需要更新
-                        if ("C".equals(currentLevel)) {
-                            // 如果当前级别为C，不做任何变动
-                        } else if ("B".equals(currentLevel) && !"C".equals(WordLevel)) {
-                            // 如果当前级别为B，且新级别不是C，则更新为新级别
-                            userRef.child("WordLevel").setValue(WordLevel);
-                        } else if ("A".equals(currentLevel) && !"C".equals(WordLevel) && !"B".equals(WordLevel)) {
-                            // 如果当前级别为A，且新级别不是C或B，则更新为新级别
-                            userRef.child("WordLevel").setValue(WordLevel);
+                        if (score > 5) {
+                            // 用户已有级别，判断是否需要更新
+                            if ("C".equals(currentLevel)) {
+                                // 如果当前级别为C，不做任何变动
+                            } else if ("B".equals(currentLevel) && !"C".equals(WordLevel) && !"A".equals(WordLevel)) {
+                                // 如果当前级别为B，且新级别不是C，则更新为新级别
+                                userRef.child("WordLevel").setValue(WordLevel);
+                            } else if ("A".equals(currentLevel) || "No Level".equals(currentLevel)) {
+                                // 如果当前级别为A，且新级别不是C或B，则更新为新级别
+                                userRef.child("WordLevel").setValue(WordLevel);
+                            }
+                            Log.e("level AAAA", "pass save" + score + WordLevel + currentLevel);
+                        } else {
+
+//                            if ("C".equals(currentLevel)) {
+//                                userRef.child("WordLevel").setValue("B");
+//                            } else if ("B".equals(currentLevel) && !"C".equals(WordLevel)) {
+//                                // 如果当前级别为B，且新级别不是C，则更新为新级别
+//                                userRef.child("WordLevel").setValue("A");
+//                            } else if ("A".equals(currentLevel) || "No Level".equals(currentLevel)) {
+//                                // 如果当前级别为A，且新级别不是C或B，则更新为新级别
+                                userRef.child("WordLevel").setValue(currentLevel);
+//                            }
+                            Log.e("level AAAA", "pass failed save" + score + WordLevel);
                         }
                     } else {
-                        // 用户没有级别，直接设置新级别
-                        userRef.child("WordLevel").setValue(WordLevel);
+                        if(score < 5 ){
+
+                            if ("C".equals(WordLevel)) {
+                                userRef.child("WordLevel").setValue("B");
+                            } else if ("B".equals(WordLevel)) {
+                                userRef.child("WordLevel").setValue("A");
+                            } else {
+                                userRef.child("WordLevel").setValue("No Level");
+                            }
+
+                        }else {
+                            userRef.child("WordLevel").setValue(WordLevel);
+                        }
                     }
+
                 } else {
                     // 如果用户不存在，则创建用户并设置级别
                     root.child(userId).child("WordLevel").setValue(WordLevel);
@@ -431,6 +519,8 @@ public class LevelAQuizActivity extends AppCompatActivity {
                     adapter.addWordId(questionText2, questionWord.getWord());
                     adapter.getQuestions().add(new WordQuizData(questionText2, pos, correctOption, incorrectOption, questionWord.getDocumentId()));
                 }
+                // 设置标志为已提交答案
+
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(this, "Insufficient number of words to conduct quiz", Toast.LENGTH_SHORT).show();
@@ -439,13 +529,6 @@ public class LevelAQuizActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("Level B", "Failed with error: " + e.getMessage());
         }
-    }
-
-    public void getHelp() {
-        ///
-
-
-        ///
     }
 
     //save Score and Level

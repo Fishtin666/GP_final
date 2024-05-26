@@ -2,10 +2,13 @@ package com.example.gproject.meaning;
 
 import static java.util.Collections.emptyList;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -59,6 +62,8 @@ public class ShowMeaning extends AppCompatActivity {
                     finish();
                 }
             });
+
+            EditText search = findViewById(R.id.search_input);
             //Search Word
             binding.searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -67,6 +72,7 @@ public class ShowMeaning extends AppCompatActivity {
                     isWordCollected(currentWord);
                     getMeaning(currentWord);
                     star.setVisibility(View.VISIBLE);
+                    hideKeyboard(search);
                 }
             });
             collect_word(star);
@@ -232,6 +238,9 @@ public class ShowMeaning extends AppCompatActivity {
             binding.progressBar.setVisibility(View.INVISIBLE);
         }
     }
-
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }

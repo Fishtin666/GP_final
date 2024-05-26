@@ -21,6 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -106,8 +108,6 @@ public class LevelCQuizActivity extends AppCompatActivity {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(LevelCQuizActivity.this, WordFragment.class);
-//                        startActivity(intent);
                         finish();
                     }
                 });
@@ -118,12 +118,14 @@ public class LevelCQuizActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        wordSendButton.setVisibility(View.GONE);
                         int score = 0;
                         // 遍历 RecyclerView 中的每个单词
                         for (int i = 0; i < adapter.getItemCount(); i++) {
                             try {
                                 // 获取当前位置的单词数据
                                 WordQuizData word = adapter.getQuestions().get(i);
+                                adapter.setAnswerSubmitted(true);
                                 // 获取当前单词的定义和词性
                                 String questionText = word.getDefinition() + " " + word.getPartOfSpeech();
                                 // 获取当前 RecyclerView 中的 ViewHolder
@@ -180,6 +182,8 @@ public class LevelCQuizActivity extends AppCompatActivity {
     public void ShowScoreDialog(int Score, String Level) {
         try {
 
+            SaveWordLevel(Level,Score);
+
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.word_dialog);
             Window window = dialog.getWindow();
@@ -189,6 +193,9 @@ public class LevelCQuizActivity extends AppCompatActivity {
             // get Extra Word from SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("WordLevel", MODE_PRIVATE);
             String wordLog = sharedPreferences.getString("word_level", "unKnow");
+
+            removeLog(sharedPreferences);
+            Log.i("dia11", "exist " + wordLog);
 
             // put Score
             TextView scoreTextView = dialog.findViewById(R.id.ShowScore);
@@ -231,14 +238,14 @@ public class LevelCQuizActivity extends AppCompatActivity {
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (!"unKnow".equals(wordLog)) {
+                        GoToMain();
 
-                    GoToMain(Level);
-                    // Remove Extra Value
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.remove("word_level");
-                    editor.apply();
-                    getIntent().removeExtra("word");
-                    Log.i("dia11", "exist " + wordLog);
+                    } else {
+//                        GoToMain(Level);
+                        // back to wordFragment
+                        finish();
+                    }
                 }
             });
 
@@ -246,6 +253,17 @@ public class LevelCQuizActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.i("dia11", "error: " + e.getMessage());
         }
+    }
+
+    public void removeLog(SharedPreferences shareR) {
+
+        // Remove Extra Value
+        SharedPreferences.Editor editor = shareR.edit();
+        editor.remove("word_level");
+        editor.apply();
+        getIntent().removeExtra("word");
+        Log.i("Level C", "delete " + "Login");
+
     }
 
     //show Help dialog
@@ -270,13 +288,12 @@ public class LevelCQuizActivity extends AppCompatActivity {
     }
 
     //Stay in Original Level
-    public void GoToMain(String LevelValue) {
+    public void GoToMain() {
         //set hint
         Log.e("setHint", "show B ");
-//        Intent intentA = new Intent(this, MainActivity.class);
-//        startActivity(intentA);
+        Intent intentA = new Intent(this, MainActivity.class);
+        startActivity(intentA);
         finish();
-        SaveWordLevel(LevelValue);
 
     }
 
@@ -288,7 +305,6 @@ public class LevelCQuizActivity extends AppCompatActivity {
                 startActivity(intentA);
                 break;
             case "B":
-                SaveWordLevel(LevelValue);
                 Intent intentB = new Intent(this, LevelCQuizActivity.class);
                 startActivity(intentB);
 
@@ -331,7 +347,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
     }
 
     //save data into firebase
-    public void SaveWordLevel(String WordLevel) {
+    public void SaveWordLevel(String WordLevel, int score) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("word_Level");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -345,20 +361,47 @@ public class LevelCQuizActivity extends AppCompatActivity {
                     // 如果用户已存在，则更新其级别
                     String currentLevel = snapshot.child("WordLevel").getValue(String.class);
                     if (currentLevel != null) {
-                        // 用户已有级别，判断是否需要更新
-                        if ("C".equals(currentLevel)) {
-                            // 如果当前级别为C，不做任何变动
-                        } else if ("B".equals(currentLevel) && !"C".equals(WordLevel)) {
-                            // 如果当前级别为B，且新级别不是C，则更新为新级别
-                            userRef.child("WordLevel").setValue(WordLevel);
-                        } else if ("A".equals(currentLevel) && !"C".equals(WordLevel) && !"B".equals(WordLevel)) {
-                            // 如果当前级别为A，且新级别不是C或B，则更新为新级别
-                            userRef.child("WordLevel").setValue(WordLevel);
+                        if (score > 5) {
+                            // 用户已有级别，判断是否需要更新
+                            if ("C".equals(currentLevel)) {
+                                // 如果当前级别为C，不做任何变动
+                            } else if ("B".equals(currentLevel) && !"C".equals(WordLevel)&& !"A".equals(WordLevel)) {
+                                // 如果当前级别为B，且新级别不是C，则更新为新级别
+                                userRef.child("WordLevel").setValue(WordLevel);
+                            } else if ("A".equals(currentLevel) || "No Level".equals(currentLevel)) {
+                                // 如果当前级别为A，且新级别不是C或B，则更新为新级别
+                                userRef.child("WordLevel").setValue(WordLevel);
+                            }
+                            Log.e("level AAAA", "pass save" + score + WordLevel + currentLevel);
+                        } else {
+
+//                            if ("C".equals(currentLevel)) {
+//                                userRef.child("WordLevel").setValue("B");
+//                            } else if ("B".equals(currentLevel) && !"C".equals(WordLevel)) {
+//                                // 如果当前级别为B，且新级别不是C，则更新为新级别
+//                                userRef.child("WordLevel").setValue("A");
+//                            } else if ("A".equals(currentLevel) || "No Level".equals(currentLevel)) {
+//                                // 如果当前级别为A，且新级别不是C或B，则更新为新级别
+                            userRef.child("WordLevel").setValue(currentLevel);
+//                            }
+                            Log.e("level AAAA", "pass failed save" + score + WordLevel);
                         }
                     } else {
-                        // 用户没有级别，直接设置新级别
-                        userRef.child("WordLevel").setValue(WordLevel);
+                        if(score < 5 ){
+
+                            if ("C".equals(WordLevel)) {
+                                userRef.child("WordLevel").setValue("B");
+                            } else if ("B".equals(WordLevel)) {
+                                userRef.child("WordLevel").setValue("A");
+                            } else {
+                                userRef.child("WordLevel").setValue("No Level");
+                            }
+
+                        }else {
+                            userRef.child("WordLevel").setValue(WordLevel);
+                        }
                     }
+
                 } else {
                     // 如果用户不存在，则创建用户并设置级别
                     root.child(userId).child("WordLevel").setValue(WordLevel);
@@ -367,7 +410,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // 处理取消操作
+
             }
         });
     }
@@ -441,6 +484,7 @@ public class LevelCQuizActivity extends AppCompatActivity {
                     adapter.addWordId(questionText2, questionWord.getWord());
                     adapter.getQuestions().add(new WordQuizData(questionText2, pos, correctOption, incorrectOption, questionWord.getDocumentId()));
                 }
+
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(this, "Insufficient number of words to conduct quiz", Toast.LENGTH_SHORT).show();

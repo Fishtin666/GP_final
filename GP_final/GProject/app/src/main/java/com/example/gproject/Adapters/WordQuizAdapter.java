@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ public class WordQuizAdapter extends RecyclerView.Adapter<WordQuizAdapter.ViewHo
     private WordQuizData selectedWord;
     private RecyclerView recyclerView;
     private Map<String, String> wordIds;
+    private boolean answerSubmitted = false;
 
     public WordQuizAdapter(Context context, List<WordQuizData> questions) {
         this.context = context;
@@ -43,33 +45,53 @@ public class WordQuizAdapter extends RecyclerView.Adapter<WordQuizAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordQuizData question = questions.get(position);
-//        holder.questionTextView.setText(question.getDefinition() );
         String questionText = context.getString(R.string.question_text_format, question.getDefinition(), question.getPartOfSpeech());
         holder.questionTextView.setText(questionText);
         holder.opt1RadioButton.setText(question.getCorrectWord());
         holder.opt2RadioButton.setText(question.getIncorrectWord());
         holder.itemView.setTag(question.getDocumentId());
 
+//        if (answerSubmitted) {
+//            holder.opt1RadioButton.setEnabled(false);
+//            holder.opt2RadioButton.setEnabled(false);
+//        } else {
+//            holder.opt1RadioButton.setEnabled(true);
+//            holder.opt2RadioButton.setEnabled(true);
+//        }
+
         holder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // 使用 holder.getAdapterPosition() 获取当前准确的位置
+                if (answerSubmitted) return; // 如果答案已提交，不再響應點擊事件
+
                 int currentPosition = holder.getAdapterPosition();
 
-                // 更新 selectedOption
                 if (checkedId == R.id.A1) {
                     questions.get(currentPosition).setSelectedOption(1);
                 } else if (checkedId == R.id.A2) {
                     questions.get(currentPosition).setSelectedOption(2);
                 } else {
-                    questions.get(currentPosition).setSelectedOption(-1);  // 表示未选择
+                    questions.get(currentPosition).setSelectedOption(-1);
                 }
 
-                // 使用 holder.getAdapterPosition() 获取当前准确的位置
                 selectedWord = questions.get(currentPosition);
             }
         });
+//        holder.opt1RadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                question.setSelected(isChecked);
+//            }
+//        });
+//
+//        holder.opt2RadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                question.setSelected(isChecked);
+//            }
+//        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -94,6 +116,11 @@ public class WordQuizAdapter extends RecyclerView.Adapter<WordQuizAdapter.ViewHo
             viewHolder.radioButton.setTextColor(Color.RED);
         }
     }
+
+    public void setAnswerSubmitted(boolean submitted) {
+        this.answerSubmitted = submitted;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView questionTextView;
         RadioButton opt1RadioButton;
