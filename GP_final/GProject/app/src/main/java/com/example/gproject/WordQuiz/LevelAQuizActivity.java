@@ -105,88 +105,58 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 });
             }
 
-            // Send Answer button
-//            wordSendButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        wordSendButton.setVisibility(View.GONE);
-//                        int score = 0;
-//                        // 遍历 RecyclerView 中的每个单词
-//                        for (int i = 0; i < adapter.getItemCount(); i++) {
-//                            try {
-//
-//                                Log.e("level_AAAA", "i = " + i);
-//                                // 获取当前位置的单词数据
-//                                WordQuizData word = adapter.getQuestions().get(i);
-//                                // 获取当前 RecyclerView 中的 ViewHolder
-//                                RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
-//
-//                                if (viewHolder != null) {
-//                                    // 在 ViewHolder 中查找 RadioButton 和 QueWord
-//                                    RadioButton radioButton = adapter.getRadioButtonAtPosition(i, QuizRecycler);
-//                                    String selectedWord = radioButton.getText().toString();
-//
-//                                    TextView QueWord = viewHolder.itemView.findViewById(R.id.Que);
-//
-//                                    // 检查用户选择的答案是否与正确答案匹配
-//                                    String selectedDocumentId = (String) viewHolder.itemView.getTag();
-//
-//                                    if (selectedDocumentId.equals(selectedWord) && radioButton.isChecked()) {
-////                                        if () {
-////                                            // 回答正确
-//                                            score++;
-//
-////                                        } else
-//////                                            radioButton.setTextColor(Color.RED);
-////                                            Log.e("Incorrect AAA", QueWord.getText().toString());
-////                                        Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
-//
-//                                    } else {
-//                                        radioButton.setTextColor(Color.RED);
-//                                    }
-//                                    Log.e("level_AAAA","Correct check"+ QueWord.getText().toString());
-//                                    Log.e("level_AAAA", "Correct Answer" + selectedDocumentId + ", Correct Option: " + i + selectedWord);
-//                                }
-//
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                                Log.e("FireStore A2 ", "error: " + e.getMessage());
-//                            }
-//                        }
-//                        Log.e("level AAAA", "show " + "A" + score);
-//                        ShowScoreDialog(score, "A");
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        Log.e("FireStore B1 ", "error: " + e.getMessage());
-//                    }
-//                    adapter.setAnswerSubmitted(true);
-//                }
-//            });
-
-            // Send Answer button
+           //  Send Answer button
             wordSendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-
-//                        sendAnswers();
                         wordSendButton.setVisibility(View.GONE);
                         int score = 0;
-
-                        // Traverse the data source instead of RecyclerView items
+                        // 遍历 RecyclerView 中的每个单词
                         for (int i = 0; i < adapter.getItemCount(); i++) {
-                            WordQuizData question = adapter.getQuestions().get(i);
-                            RadioButton selectedRadioButton = adapter.getSelectedRadioButton(i,QuizRecycler);
+                            try {
 
-                            if (selectedRadioButton != null && selectedRadioButton.getText().toString().equals(question.getCorrectWord())) {
-                                score++;
-                            } else if (selectedRadioButton != null) {
-                                selectedRadioButton.setTextColor(Color.RED);
+                                Log.e("level_AAAA", "i = " + i);
+                                // 获取当前位置的单词数据
+                                WordQuizData word = adapter.getQuestions().get(i);
+                                // 获取当前 RecyclerView 中的 ViewHolder
+                                RecyclerView.ViewHolder viewHolder = QuizRecycler.findViewHolderForAdapterPosition(i);
+
+                                if (viewHolder != null) {
+                                    // 在 ViewHolder 中查找 RadioButton 和 QueWord
+                                    RadioButton radioButton = adapter.getRadioButtonAtPosition(i, QuizRecycler);
+                                    String selectedWord = radioButton.getText().toString();
+
+                                    TextView QueWord = viewHolder.itemView.findViewById(R.id.Que);
+
+                                    // 检查用户选择的答案是否与正确答案匹配
+                                    String selectedDocumentId = (String) viewHolder.itemView.getTag();
+
+                                    if (selectedDocumentId.equals(selectedWord) && radioButton.isChecked()) {
+//                                        if () {
+//                                            // 回答正确
+                                            score++;
+
+//                                        } else
+////                                            radioButton.setTextColor(Color.RED);
+//                                            Log.e("Incorrect AAA", QueWord.getText().toString());
+//                                        Log.e("Incorrect Answer", selectedDocumentId + ", Correct Option: " + selectedWord);
+
+                                    } else {
+                                        radioButton.setTextColor(Color.RED);
+                                    }
+                                    Log.e("level_AAAA","Correct check"+ QueWord.getText().toString());
+                                    Log.e("level_AAAA", "Correct Answer" + selectedDocumentId + ", Correct Option: " + i + selectedWord);
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e("FireStore A2 ", "error: " + e.getMessage());
                             }
                         }
+                        Log.e("level AAAA", "show " + "A" + score);
                         ShowScoreDialog(score, "A");
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("FireStore B1 ", "error: " + e.getMessage());
@@ -195,6 +165,36 @@ public class LevelAQuizActivity extends AppCompatActivity {
                 }
             });
 
+//            // Send Answer button
+//            wordSendButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//
+////                        sendAnswers();
+//                        wordSendButton.setVisibility(View.GONE);
+//                        int score = 0;
+//
+//                        // Traverse the data source instead of RecyclerView items
+//                        for (int i = 0; i < adapter.getItemCount(); i++) {
+//                            WordQuizData question = adapter.getQuestions().get(i);
+//                            RadioButton selectedRadioButton = adapter.getSelectedRadioButton(i,QuizRecycler);
+//
+//                            if (selectedRadioButton != null && selectedRadioButton.getText().toString().equals(question.getCorrectWord())) {
+//                                score++;
+//                            } else if (selectedRadioButton != null) {
+//                                selectedRadioButton.setTextColor(Color.RED);
+//                            }
+//                        }
+//                        ShowScoreDialog(score, "A");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        Log.e("FireStore B1 ", "error: " + e.getMessage());
+//                    }
+//                    adapter.setAnswerSubmitted(true);
+//                }
+//            });
+//
 
 
 
