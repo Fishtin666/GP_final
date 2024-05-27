@@ -8,41 +8,24 @@ import static com.example.gproject.BuildConfig.apikey;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.method.ScrollingMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gproject.Cross_Topic_topic;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
-import com.example.gproject.dictionary.MeaningAdapter;
-import com.example.gproject.dictionary.RetrofitInstance;
-import com.example.gproject.dictionary.WordResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,14 +39,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -105,7 +84,7 @@ public class Cross_Topic extends AppCompatActivity {
         //voice = findViewById(R.id.voice);
         start = findViewById(R.id.start_CrossTopic);
         cross_result = findViewById(R.id.result);
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         cross_result.setMovementMethod(new ScrollingMovementMethod());
 

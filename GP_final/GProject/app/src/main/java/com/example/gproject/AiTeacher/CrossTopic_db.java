@@ -2,13 +2,11 @@ package com.example.gproject.AiTeacher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,9 +14,7 @@ import android.widget.Toast;
 
 import com.example.gproject.Adapters.CrossAdapter;
 import com.example.gproject.MainActivity;
-import com.example.gproject.Models.TopicModel;
 import com.example.gproject.R;
-import com.example.gproject.ReviewShow_Speaking;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,7 +40,7 @@ public class CrossTopic_db extends AppCompatActivity {
         setContentView(R.layout.cross_topic_db);
 
         RecyclerView recy=findViewById(R.id.recy);
-        ImageButton back=findViewById(R.id.back2);
+        ImageButton back=findViewById(R.id.back);
         ImageView home=findViewById(R.id.home2);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

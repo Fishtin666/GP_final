@@ -35,7 +35,7 @@ public class Cross_Topic_topic extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
-        back=findViewById(R.id.back2);
+        back=findViewById(R.id.back);
         recyclerView = findViewById(R.id.recy);
         list = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);

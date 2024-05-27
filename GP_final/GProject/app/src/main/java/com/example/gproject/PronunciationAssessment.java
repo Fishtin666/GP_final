@@ -6,9 +6,6 @@ import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-import static java.security.AccessController.getContext;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +18,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -30,15 +26,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.gproject.Speaking.Speaking;
-import com.example.gproject.Speaking.Speaking_part2;
-import com.example.gproject.Speaking.Speaking_part2_answer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -54,11 +46,7 @@ import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 public class PronunciationAssessment extends Activity {
@@ -136,7 +124,7 @@ public class PronunciationAssessment extends Activity {
         clear = findViewById(R.id.retry);
         change = findViewById(R.id.finish2);
         home = findViewById(R.id.home);
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
         mic = findViewById(R.id.mic);
         showOptionDialog();
 

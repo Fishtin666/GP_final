@@ -1,5 +1,6 @@
 package com.example.gproject.Re_Reading;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.example.gproject.JustifyTextView;
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +80,15 @@ public class Re_multiple extends AppCompatActivity {
             public void onClick(View v) {
 //                Intent intent = new Intent(R_blank.this, R_topic.class);
 //                startActivity(intent);
+                finish();
+            }
+        });
+        ImageView home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Re_multiple.this, MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });

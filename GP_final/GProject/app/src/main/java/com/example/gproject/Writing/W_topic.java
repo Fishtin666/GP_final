@@ -28,7 +28,7 @@ public class W_topic extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

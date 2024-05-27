@@ -79,7 +79,7 @@ public class ReviewShow_Writing extends AppCompatActivity {
         });
 
 
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

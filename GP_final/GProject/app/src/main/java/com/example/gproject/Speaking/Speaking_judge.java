@@ -60,7 +60,7 @@ public class Speaking_judge extends AppCompatActivity {
 
         judge = findViewById(R.id.judge);
         home = findViewById(R.id.home);
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

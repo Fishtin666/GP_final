@@ -1,11 +1,15 @@
 package com.example.gproject.Review;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gproject.Adapters.QuestionAdapter;
 import com.example.gproject.Adapters.QuestionNumberAdapter;
+import com.example.gproject.MainActivity;
 import com.example.gproject.Models.QuestionModel;
 import com.example.gproject.Models.QuestionNumberModel;
 import com.example.gproject.R;
@@ -75,13 +80,35 @@ public class favorite_question extends AppCompatActivity {
         speaking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                speaking.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(favorite_question.this,R.color.darkGrey)));
+                writing.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(favorite_question.this,R.color.gray)));
                 loadQuestions("Speaking");
             }
         });
         writing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                writing.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(favorite_question.this,R.color.darkGrey)));
+                speaking.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(favorite_question.this,R.color.gray)));
                 loadQuestions("Writing");
+            }
+        });
+
+        //back button
+        ImageButton backButton = findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ImageView home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(favorite_question.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

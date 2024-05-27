@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.gproject.Adapters.QuestionAdapter;
-import com.example.gproject.MainActivity;
 import com.example.gproject.Models.QuestionModel;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,7 +43,7 @@ public class Speaking_part3_question extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaking_part3_question);
         auth = FirebaseAuth.getInstance();
-        back=findViewById(R.id.back2);
+        back=findViewById(R.id.back);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

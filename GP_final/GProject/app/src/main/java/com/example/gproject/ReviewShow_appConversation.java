@@ -11,13 +11,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +62,7 @@ public class ReviewShow_appConversation extends AppCompatActivity {
         }
 
         home = findViewById(R.id.home);
-        back =findViewById(R.id.back2);
+        back =findViewById(R.id.back);
         recy = findViewById(R.id.recy);
         checkJudge = findViewById(R.id.check_judge);
         Judge = findViewById(R.id.judge);

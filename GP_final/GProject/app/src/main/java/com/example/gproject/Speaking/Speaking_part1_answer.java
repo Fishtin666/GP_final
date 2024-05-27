@@ -217,7 +217,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
         progressBar.setVisibility(View.INVISIBLE);
         answer.setMovementMethod(new ScrollingMovementMethod());
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
