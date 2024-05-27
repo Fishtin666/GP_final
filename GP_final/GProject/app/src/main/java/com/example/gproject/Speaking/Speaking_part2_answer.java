@@ -143,7 +143,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
         clock = findViewById(R.id.clock);
         voice = findViewById(R.id.voice);
         progressBar.setVisibility(View.INVISIBLE);
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
         home=findViewById(R.id.home);
         mic  =findViewById(R.id.mic);
         mic.setOnClickListener(new View.OnClickListener() {

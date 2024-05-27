@@ -460,7 +460,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="183dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -629,7 +629,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="202dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:orientation="vertical">
@@ -813,7 +813,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="183dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -980,7 +980,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="202dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:orientation="vertical">
@@ -1157,7 +1157,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="183dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -1321,7 +1321,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="202dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:orientation="vertical">
@@ -1497,7 +1497,7 @@
         android:id="@+id/finish2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="143dp"
+        android:layout_marginStart="160dp"
         android:backgroundTint="@color/red"
         android:onClick="NextClick"
         android:text="finish"

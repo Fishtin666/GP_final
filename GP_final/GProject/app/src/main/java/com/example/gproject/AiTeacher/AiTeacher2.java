@@ -12,11 +12,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -29,7 +27,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,15 +46,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gproject.AiChat_Judge;
-import com.example.gproject.JustifyTextView4;
 import com.example.gproject.MainActivity;
 import com.example.gproject.Message;
 import com.example.gproject.MessageAdapter;
 import com.example.gproject.MicrophoneStream;
-import com.example.gproject.PronunciationAssessment;
 import com.example.gproject.R;
 
-import com.example.gproject.Speaking.Speaking_part1_answer;
 import com.example.gproject.dictionary.MeaningAdapter;
 import com.example.gproject.dictionary.RetrofitInstance;
 import com.example.gproject.dictionary.WordResult;
@@ -226,7 +220,7 @@ public class AiTeacher2 extends AppCompatActivity {
         close =findViewById(R.id.close);
         voice = findViewById(R.id.voice);
         progressBar = findViewById(R.id.progressBar);
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         progressBar.setVisibility(View.INVISIBLE);
         voice.setVisibility(View.INVISIBLE);

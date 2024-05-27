@@ -67,7 +67,7 @@ public class S_Judge_P2 extends AppCompatActivity {
         Response = findViewById(R.id.Response);
         rof1 = findViewById(R.id.ROf_Q1);
         Response.setMovementMethod(new ScrollingMovementMethod());
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         Bundle extras=getIntent().getExtras();
         if(extras!=null){

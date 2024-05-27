@@ -12,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.example.gproject.Re_Reading.Re_blank;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,6 +92,24 @@ public class RReview extends AppCompatActivity {
 
         getpic();
         getData();
+
+        //back button
+        ImageButton backButton = findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ImageView home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RReview.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 

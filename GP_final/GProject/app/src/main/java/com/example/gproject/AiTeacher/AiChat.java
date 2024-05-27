@@ -1,7 +1,5 @@
 package com.example.gproject.AiTeacher;
 
-import static java.security.AccessController.getContext;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,8 +17,6 @@ import com.example.gproject.R;
 
 import java.util.ArrayList;
 
-import io.grpc.android.BuildConfig;
-
 
 public class AiChat extends AppCompatActivity {
 
@@ -37,7 +33,7 @@ public class AiChat extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
-        ImageButton back=findViewById(R.id.back2);
+        ImageButton back=findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

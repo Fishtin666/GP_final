@@ -72,7 +72,7 @@ public class Fragment_Review_reading extends Fragment {
         return selectedTest;
     }
 
-    Button all,chose,blank,match,judge;
+    Button all,chose,blank,match,judge,mutliple;
     private String selectedTest; // 存储选定的按钮名称
     private String testkey;
     private String testsel;
@@ -86,11 +86,13 @@ public class Fragment_Review_reading extends Fragment {
         blank = view.findViewById(R.id.R_blank);
         match = view.findViewById(R.id.R_match);
         judge = view.findViewById(R.id.R_judge);
+        mutliple = view.findViewById(R.id.R_multiple);
 
         setToggleClickListener(chose);
         setToggleClickListener(blank);
         setToggleClickListener(match);
         setToggleClickListener(judge);
+        setToggleClickListener(mutliple);
 
         return view;
     }
@@ -109,7 +111,7 @@ public class Fragment_Review_reading extends Fragment {
                     selectedTest=null;
                 } else {
                     // 遍历所有按钮，将它们的状态还原为未点击状态的颜色
-                    for (Button btn : new Button[]{chose, blank, match, judge}) {
+                    for (Button btn : new Button[]{chose, blank, match, judge, mutliple}) {
                         btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray)));
                     }
                     // 设置为点击状态的颜色

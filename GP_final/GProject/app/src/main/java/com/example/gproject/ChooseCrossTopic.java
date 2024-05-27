@@ -24,7 +24,7 @@ public class ChooseCrossTopic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_cross_topic);
         recy=findViewById(R.id.recy);
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
