@@ -5,20 +5,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.gproject.Adapters.QuestionNumberAdapter;
 import com.example.gproject.Models.QuestionNumberModel;
-import com.example.gproject.Speaking.Speaking_part1;
-import com.example.gproject.Speaking.Speaking_part1_answer;
-import com.example.gproject.Writing.Writing_T1answer1;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -59,7 +53,7 @@ public class QuesNumAdd extends AppCompatActivity {
         task=getIntent().getStringExtra("task");
 
         db = FirebaseFirestore.getInstance();
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

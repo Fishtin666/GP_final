@@ -17,7 +17,7 @@ public class CrossTopic_show extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cross_topic_show);
 
-        ImageButton back=findViewById(R.id.back2);
+        ImageButton back=findViewById(R.id.back);
         ImageView home=findViewById(R.id.home2);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

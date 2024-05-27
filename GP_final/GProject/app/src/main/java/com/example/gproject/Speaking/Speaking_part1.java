@@ -30,7 +30,7 @@ public class Speaking_part1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaking_part1);
 
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

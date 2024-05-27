@@ -17,7 +17,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gproject.Adapters.CrossTopicAdapter;
-import com.example.gproject.Adapters.QuestionAdapter;
-import com.example.gproject.Models.QuestionModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,7 +84,7 @@ public class Cross_Topic_qusetion extends AppCompatActivity {
         start = findViewById(R.id.start_CrossTopic);
         Result = findViewById(R.id.result);
         Result.setMovementMethod(new ScrollingMovementMethod());
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
         home = findViewById(R.id.home2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

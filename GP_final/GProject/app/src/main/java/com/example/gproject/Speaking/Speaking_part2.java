@@ -5,7 +5,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -38,7 +37,7 @@ public class Speaking_part2 extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.aiChat_recy);
         list=new ArrayList<>();
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

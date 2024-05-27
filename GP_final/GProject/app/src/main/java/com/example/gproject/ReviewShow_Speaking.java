@@ -80,7 +80,7 @@ public class ReviewShow_Speaking extends AppCompatActivity {
         p3_judge_title.setVisibility(View.GONE);
         p3_judge.setVisibility(View.GONE);
 
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -185,6 +185,8 @@ public class WrongFragment extends Fragment {
             public  void onClick(View v){
                 spinner1.setEnabled(true);
                 setupSpinnerListener();
+                selectedSpinner=null;
+                selectedTestKey=null;
             }
         });
         fav.setOnClickListener(new View.OnClickListener(){
@@ -294,7 +296,7 @@ public class WrongFragment extends Fragment {
                                     // 创建一个按钮
                                     Button button = setbutton();
                                     // 设置按钮的文本为子节点的键名
-                                    button.setText("Reading \n" + key + " question " + subKey + "\n" +subSubKey);
+                                    button.setText("Reading \n" + key + "    question " + subKey + "\n" +subSubKey);
                                     // 将按钮添加到布局中
                                     reviewLayout.addView(button);
                                     // 为按钮设置点击事件
@@ -703,7 +705,7 @@ public class WrongFragment extends Fragment {
                                     // 创建一个按钮
                                     Button button = setbutton();
                                     // 设置按钮的文本为子节点的键名
-                                    button.setText("Reading \n" + selectedTestKey + " question " + subKey + "\n" +subSubKey);
+                                    button.setText("Reading \n" + selectedTestKey + "    question " + subKey + "\n" +subSubKey);
                                     // 将按钮添加到布局中
                                     reviewLayout.addView(button);
                                     // 为按钮设置点击事件

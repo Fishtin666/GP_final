@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -63,7 +62,7 @@ public class W_Judge_P1 extends AppCompatActivity {
         //judge.setMovementMethod(new ScrollingMovementMethod());
         databaseReference = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
-        back = findViewById(R.id.back2);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,14 +1,19 @@
 package com.example.gproject.Review;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -66,6 +71,24 @@ public class ReviewShow_Listencontent extends AppCompatActivity {
                 }
             });
         }
+
+        //back button
+        ImageButton backButton = findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ImageView home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ReviewShow_Listencontent.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 }
