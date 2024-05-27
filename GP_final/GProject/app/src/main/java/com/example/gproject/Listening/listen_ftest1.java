@@ -2,16 +2,21 @@ package com.example.gproject.Listening;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
@@ -75,6 +80,7 @@ public class listen_ftest1 extends AppCompatActivity {
     public int section = 1;//section變數
     private HashMap<Integer, String> editTextMapFG = new HashMap<>();
     // 定义 HashMap 用于存储 Fragment 中编辑的文本内容
+    private PopupWindow popupWindow;
 
 
     @Override
@@ -540,8 +546,40 @@ public class listen_ftest1 extends AppCompatActivity {
         }.start();
     }
 
-    public void helpClick(){
+    public void helpClick(View view){
+        // 初始化PopupWindow的布局
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.listen_pop_windows, null);
 
+        // 创建PopupWindow对象
+        popupWindow = new PopupWindow(popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true);
+
+        // 设置PopupWindow的背景为半透明
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x99000000)); // 半透明背景
+
+        // 设置点击外部区域关闭PopupWindow
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+
+        // 显示PopupWindow在屏幕中央
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+//        // 初始化PopupWindow布局中的控件
+//        TextView popupTitle = popupView.findViewById(R.id.textView6);
+//        TextView popupMessage = popupView.findViewById(R.id.textView8);
+//        Button popupButton = popupView.findViewById(R.id.popup_button);
+
+//        // 设置PopupWindow中控件的事件
+//        popupButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 点击确定按钮后关闭PopupWindow
+//                popupWindow.dismiss();
+//            }
+//        });
     }
 
 
