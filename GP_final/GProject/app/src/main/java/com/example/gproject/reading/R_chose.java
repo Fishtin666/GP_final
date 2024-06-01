@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -25,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.gproject.JustifyTextView;
+import com.example.gproject.JustifyTextView2;
+import com.example.gproject.JustifyTextView4;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -264,7 +267,7 @@ public class R_chose extends AppCompatActivity {
         ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
 
         //Create a new JustifyTextView
-        JustifyTextView JustifyText = new JustifyTextView(this, null);
+        JustifyTextView4 JustifyText = new JustifyTextView4(this, null);
         JustifyText.setId(textView.getId());  // Keep the same ID
         JustifyText.setLayoutParams(textView.getLayoutParams());
         JustifyText.setText(content);
@@ -286,6 +289,36 @@ public class R_chose extends AppCompatActivity {
         parentLayout.addView(JustifyText, index);
 
         Log.e("blank0", "replace Textview");
+    }
+
+    // Replace TextView with JustifyTextView
+    public void replaceTextview2(View textView, CharSequence content) {
+        // Get the parent layout
+        ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
+
+        // Create a new JustifyTextView
+        JustifyTextView2 JustifyText = new JustifyTextView2(this, null);
+        JustifyText.setId(textView.getId());  // Keep the same ID
+        JustifyText.setLayoutParams(textView.getLayoutParams());
+        JustifyText.setText(content);
+
+        // Copy TextView attributes to JustifyTextView
+        if (textView instanceof TextView && JustifyText instanceof TextView) {
+            TextView originalTextView = (TextView) textView;
+            TextView newJustifyTextView = (TextView) JustifyText;
+            newJustifyTextView.setTextColor(originalTextView.getCurrentTextColor());
+            newJustifyTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, originalTextView.getTextSize());
+            newJustifyTextView.setTypeface(Typeface.create(originalTextView.getTypeface(), Typeface.NORMAL)); // Remove bold style
+            newJustifyTextView.setGravity(originalTextView.getGravity());
+            newJustifyTextView.setPadding(originalTextView.getPaddingLeft(), originalTextView.getPaddingTop(), originalTextView.getPaddingRight(), originalTextView.getPaddingBottom());
+        }
+
+        // Replace the old TextView with the new CustomTextView
+        int index = parentLayout.indexOfChild(textView);
+        parentLayout.removeView(textView);
+        parentLayout.addView(JustifyText, index);
+
+        Log.e(ReviewName, "replace Textview");
     }
 
     public void homeClick(View view) {

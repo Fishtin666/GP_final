@@ -67,7 +67,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:text="title"
-                    android:textSize="36sp"
+                    android:textSize="34sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

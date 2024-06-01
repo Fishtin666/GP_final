@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.example.gproject.Re_Reading.Re_chose;
+import com.example.gproject.Re_Reading.Re_judge;
+import com.example.gproject.Re_Reading.Re_match;
 
 public class R_topic extends AppCompatActivity {
 

@@ -58,6 +58,9 @@
             android:name=".WordQuiz.WordListActivity"
             android:exported="true" />
         <activity
+            android:name=".WordQuiz.LevelAQuizActivity2"
+            android:exported="true" />
+        <activity
             android:name=".WordQuiz.WordLevelChose"
             android:exported="true" />
         <activity
