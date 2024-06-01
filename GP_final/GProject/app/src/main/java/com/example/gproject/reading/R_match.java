@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -30,6 +31,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.gproject.JustifyTextView;
 import com.example.gproject.JustifyTextView2;
+import com.example.gproject.JustifyTextView4;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.example.gproject.WordQuiz.WordListActivity;
@@ -111,11 +113,17 @@ public class R_match extends AppCompatActivity {
                                     //replace textview
                                     TextView ContentTextView = findViewById(R.id.Content);
                                     TextView SecTextView = findViewById(R.id.section1);
+                                    TextView matchTextView = findViewById(R.id.match);
+
                                     if (ContentTextView != null) {
                                         CharSequence conText = ContentTextView.getText();
                                         CharSequence secText = SecTextView.getText();
+                                        CharSequence matText = matchTextView.getText();
+
                                         replaceTextview(ContentTextView, conText);
                                         replaceTextview(SecTextView, secText);
+                                        replaceTextview2(matchTextView,matText);
+
                                         Log.e("blank0", "successful getting: " + conText + "+" + secText);
 
                                     } else {
@@ -284,7 +292,7 @@ public class R_match extends AppCompatActivity {
         ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
 
         //Create a new JustifyTextView
-        JustifyTextView JustifyText = new JustifyTextView(this, null);
+        JustifyTextView4 JustifyText = new JustifyTextView4(this, null);
         JustifyText.setId(textView.getId());  // Keep the same ID
         JustifyText.setLayoutParams(textView.getLayoutParams());
         JustifyText.setText(content);
@@ -307,6 +315,36 @@ public class R_match extends AppCompatActivity {
         parentLayout.addView(JustifyText, index);
 
         Log.e("blank0", "replace Textview");
+    }
+
+    // Replace TextView with JustifyTextView
+    public void replaceTextview2(View textView, CharSequence content) {
+        // Get the parent layout
+        ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
+
+        // Create a new JustifyTextView
+        JustifyTextView2 JustifyText = new JustifyTextView2(this, null);
+        JustifyText.setId(textView.getId());  // Keep the same ID
+        JustifyText.setLayoutParams(textView.getLayoutParams());
+        JustifyText.setText(content);
+
+        // Copy TextView attributes to JustifyTextView
+        if (textView instanceof TextView && JustifyText instanceof TextView) {
+            TextView originalTextView = (TextView) textView;
+            TextView newJustifyTextView = (TextView) JustifyText;
+            newJustifyTextView.setTextColor(originalTextView.getCurrentTextColor());
+            newJustifyTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, originalTextView.getTextSize());
+            newJustifyTextView.setTypeface(Typeface.create(originalTextView.getTypeface(), Typeface.NORMAL)); // Remove bold style
+            newJustifyTextView.setGravity(originalTextView.getGravity());
+            newJustifyTextView.setPadding(originalTextView.getPaddingLeft(), originalTextView.getPaddingTop(), originalTextView.getPaddingRight(), originalTextView.getPaddingBottom());
+        }
+
+        // Replace the old TextView with the new CustomTextView
+        int index = parentLayout.indexOfChild(textView);
+        parentLayout.removeView(textView);
+        parentLayout.addView(JustifyText, index);
+
+        Log.e(ReviewName, "replace Textview");
     }
 
     // save Review data
@@ -394,24 +432,6 @@ public class R_match extends AppCompatActivity {
         }
     }
 
-    public void exChangeTextview() {
-        TextView originalTextView = findViewById(R.id.Content);
-        String originalText = originalTextView.getText().toString();
-
-        // get original TextView layout
-        ViewGroup.LayoutParams params = originalTextView.getLayoutParams();
-        ViewGroup parent = (ViewGroup) originalTextView.getParent();
-        int index = parent.indexOfChild(originalTextView); // 获取原始 TextView 在父容器中的索引
-
-        // build n set JustifyTextView
-        JustifyTextView justifyTextView = new JustifyTextView(R_match.this, null);
-        justifyTextView.setText(originalText);
-        justifyTextView.setLayoutParams(params);
-
-        // Replace TextView
-        parent.removeView(originalTextView);
-        parent.addView(justifyTextView, index);
-    }
 
     //show Reminder dialog
     private void showReminderDialog() {

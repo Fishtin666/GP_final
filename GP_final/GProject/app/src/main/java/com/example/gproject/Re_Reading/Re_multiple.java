@@ -2,6 +2,7 @@ package com.example.gproject.Re_Reading;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.example.gproject.JustifyTextView;
+import com.example.gproject.JustifyTextView2;
+import com.example.gproject.JustifyTextView4;
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,7 +45,7 @@ import java.util.List;
 public class Re_multiple extends AppCompatActivity {
 
     String ReviewName = "R_multiple";
-    int numberOfFields = 6;
+    int numberOfFields = 4;
 
     String documentID;
     String saveTime;
@@ -71,7 +74,7 @@ public class Re_multiple extends AppCompatActivity {
             public void run() {
                 load.setVisibility(View.VISIBLE);
             }
-        }, 2000);
+        }, 1000);
 
         //back button
         ImageButton backButton = findViewById(R.id.back);
@@ -144,9 +147,14 @@ public class Re_multiple extends AppCompatActivity {
 
                                             //replace textview
                                             TextView ContentTextView = findViewById(R.id.Content);
+                                            TextView matchTextView = findViewById(R.id.match);
+
                                             if (ContentTextView != null) {
                                                 CharSequence conText = ContentTextView.getText();
+                                                CharSequence matText = matchTextView.getText();
                                                 replaceTextview(ContentTextView, conText);
+                                                replaceTextview2(matchTextView,matText);
+
                                                 Log.e(ReviewName, "successful getting content: " + conText);
 
                                             } else {
@@ -327,7 +335,7 @@ public class Re_multiple extends AppCompatActivity {
         ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
 
         //Create a new JustifyTextView
-        JustifyTextView JustifyText = new JustifyTextView(this, null);
+        JustifyTextView4 JustifyText = new JustifyTextView4(this, null);
         JustifyText.setId(textView.getId());  // Keep the same ID
         JustifyText.setLayoutParams(textView.getLayoutParams());
         JustifyText.setText(content);
@@ -342,6 +350,36 @@ public class Re_multiple extends AppCompatActivity {
             newJustifyTextView.setGravity(originalTextView.getGravity());
             newJustifyTextView.setPadding(originalTextView.getPaddingLeft(), originalTextView.getPaddingTop(), originalTextView.getPaddingRight(), originalTextView.getPaddingBottom());
             newJustifyTextView.setBackgroundColor(getResources().getColor(R.color.grey));
+        }
+
+        // Replace the old TextView with the new CustomTextView
+        int index = parentLayout.indexOfChild(textView);
+        parentLayout.removeView(textView);
+        parentLayout.addView(JustifyText, index);
+
+        Log.e(ReviewName, "replace Textview");
+    }
+
+    // Replace TextView with JustifyTextView
+    public void replaceTextview2(View textView, CharSequence content) {
+        // Get the parent layout
+        ConstraintLayout parentLayout = (ConstraintLayout) textView.getParent();
+
+        // Create a new JustifyTextView
+        JustifyTextView2 JustifyText = new JustifyTextView2(this, null);
+        JustifyText.setId(textView.getId());  // Keep the same ID
+        JustifyText.setLayoutParams(textView.getLayoutParams());
+        JustifyText.setText(content);
+
+        // Copy TextView attributes to JustifyTextView
+        if (textView instanceof TextView && JustifyText instanceof TextView) {
+            TextView originalTextView = (TextView) textView;
+            TextView newJustifyTextView = (TextView) JustifyText;
+            newJustifyTextView.setTextColor(originalTextView.getCurrentTextColor());
+            newJustifyTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, originalTextView.getTextSize());
+            newJustifyTextView.setTypeface(Typeface.create(originalTextView.getTypeface(), Typeface.NORMAL)); // Remove bold style
+            newJustifyTextView.setGravity(originalTextView.getGravity());
+            newJustifyTextView.setPadding(originalTextView.getPaddingLeft(), originalTextView.getPaddingTop(), originalTextView.getPaddingRight(), originalTextView.getPaddingBottom());
         }
 
         // Replace the old TextView with the new CustomTextView

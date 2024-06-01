@@ -44,8 +44,8 @@ public class WordListActivity extends AppCompatActivity {
         Button send = findViewById(R.id.wordSend);
         send.setVisibility(View.GONE);
 
-        TextView testWord = findViewById(R.id.testWord);
-        testWord.setVisibility(View.GONE);
+//        TextView testWord = findViewById(R.id.testWord);
+//        testWord.setVisibility(View.GONE);
 
         ImageView imageView = findViewById(R.id.imageView3);
         imageView.setVisibility(View.GONE);
@@ -95,25 +95,36 @@ public class WordListActivity extends AppCompatActivity {
         root.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot wordSnapshot : dataSnapshot.getChildren()) {
-                    try {
-                        String word = wordSnapshot.getKey();
-                        DataSnapshot speechTextSnapshot = wordSnapshot.child("speechText");
-                        String speechText = speechTextSnapshot.getValue(String.class);
+                // 檢查該使用者是否存在 word_collect 節點
+                if (dataSnapshot.exists()) {
+                    // 如果存在收藏單字，隱藏 testWord
+                    TextView testWord = findViewById(R.id.testWord);
+                    testWord.setVisibility(View.GONE);
 
-                        if (speechTextSnapshot.exists()) {
-                            WordListData cardData = new WordListData(word, speechText);
-                            adapter.getDataList().add(cardData); // Add Word into adapter
-                            Log.d("FirebaseData", "Key: " + word + ", speechText: " + cardData);
-                        } else {
-                            Log.d("FirebaseData2", "Key: " + word + ", speechText: " + speechText);
+                    for (DataSnapshot wordSnapshot : dataSnapshot.getChildren()) {
+                        try {
+                            String word = wordSnapshot.getKey();
+                            DataSnapshot speechTextSnapshot = wordSnapshot.child("speechText");
+                            String speechText = speechTextSnapshot.getValue(String.class);
+
+                            if (speechTextSnapshot.exists()) {
+                                WordListData cardData = new WordListData(word, speechText);
+                                adapter.getDataList().add(cardData); // Add Word into adapter
+                                Log.d("FirebaseData", "Key: " + word + ", speechText: " + cardData);
+                            } else {
+                                Log.d("FirebaseData2", "Key: " + word + ", speechText: " + speechText);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("WordListActivity", "Failed with error: " + e.getMessage());
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e("WordListActivity", "Failed with error: " + e.getMessage());
                     }
+                    adapter.notifyDataSetChanged(); // refresh RecyclerView
+                } else {
+                    // 如果不存在收藏單字，顯示 "尚未有收藏單字"
+                    TextView testWord = findViewById(R.id.testWord);
+                    testWord.setText("尚未有收藏單字");
                 }
-                adapter.notifyDataSetChanged(); // refresh RecyclerView
             }
 
             @Override
@@ -122,4 +133,5 @@ public class WordListActivity extends AppCompatActivity {
             }
         });
     }
+
 }
