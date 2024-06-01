@@ -90,7 +90,7 @@ public class QuesNumAdd extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         int documentCount = queryDocumentSnapshots.size();
                         for(int i=1;i<=documentCount;i++)
-                            list.add(new QuestionNumberModel("Question"+i,Integer.parseInt(task)));
+                            list.add(new QuestionNumberModel("Question"+i,Integer.parseInt(task),false));
 
                         adapter.notifyDataSetChanged();
                     }

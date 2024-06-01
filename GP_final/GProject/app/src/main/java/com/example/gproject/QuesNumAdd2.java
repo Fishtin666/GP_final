@@ -42,7 +42,7 @@ public class QuesNumAdd2 extends AppCompatActivity {
 
 
         for(int i=1;i<13;i++)
-            list.add(new QuestionNumberModel("考古題"+i,1));
+            list.add(new QuestionNumberModel("考古題"+i,1,false));
 
 
 

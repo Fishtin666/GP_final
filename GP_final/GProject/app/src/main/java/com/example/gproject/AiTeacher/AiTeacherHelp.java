@@ -57,7 +57,7 @@ public class AiTeacherHelp extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(help);
         while (matcher.find()) {
-            list.add(new QuestionNumberModel(matcher.group().trim(),-1));
+            list.add(new QuestionNumberModel(matcher.group().trim(),-1,false));
         }
 
 

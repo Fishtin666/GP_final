@@ -57,7 +57,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
     public static boolean sharedBoolean=false;
     String topic;
     int part;
-
+    Boolean isSeclect;
     private DatabaseReference databaseReference;
     FirebaseAuth auth;
 
@@ -79,143 +79,181 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
+        Log.d("QuestionNumberAdapter", "绑定数据到位置：" + position);
         QuestionNumberModel model =list.get(position);
         holder.ques_num.setText(model.getNum());
         part=model.getTask();
+        isSeclect=model.getStart();
 
-        if(star_show==false){
+
+        Log.d("QuestionNumberAdapter", "数据模型 - 任务: " + part + ", 是否选择: " + isSeclect);
+        if (star_show == false) {
             holder.star.setVisibility(View.INVISIBLE);
 
-        }else{
+        } else {
             holder.star.setVisibility(View.VISIBLE);
 
-            InDb(new QuestionNumberAdapter.OnDataReadyListener() {
-                int position = holder.getAdapterPosition();
+            if (isSeclect) {
+                holder.star.setImageResource(R.drawable.star_yellow);
+                position = holder.getAdapterPosition();
+                //holder.star.setOnClickListener(null);
+            } else {
 
-                @Override
-                public void onDataReady(ArrayList<String> keyList) {
-                    System.out.println("keylist:"+keyList);
-                    // 根据 keyList 判断是否包含当前位置的数据
-                    if (keyList.contains(String.valueOf(position+1))) {
-                        holder.star.setImageResource(R.drawable.star_yellow);
-                    } else {
-                        holder.star.setImageResource(R.drawable.star_black);
+                InDb(new QuestionNumberAdapter.OnDataReadyListener() {
+                    int position = holder.getAdapterPosition();
+
+                    @Override
+                    public void onDataReady(ArrayList<String> keyList) {
+                        System.out.println("keylist:" + keyList);
+                        // 根据 keyList 判断是否包含当前位置的数据
+                        if (keyList.contains(String.valueOf(position + 1))) {
+                            holder.star.setImageResource(R.drawable.star_yellow);
+                            getQues(position + 1, new FirestoreCallback() {
+                                @Override
+                                public void onCallback(String question) {
+
+                                }
+                            });
+                        } else {
+                            holder.star.setImageResource(R.drawable.star_black);
+                        }
                     }
+                });
+
+
+                holder.star.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        databaseReference = FirebaseDatabase.getInstance().getReference();
+                        auth = FirebaseAuth.getInstance();
+                        FirebaseUser currentUser = auth.getCurrentUser();
+
+                        int position = holder.getAdapterPosition();
+                        int part = model.getTask();
+
+                        if (star_yellow) {
+                            holder.star.setImageResource(R.drawable.star_black);
+                            star_yellow = false;
+
+                            //刪除資料庫
+                            if (currentUser != null) {
+                                String userId = currentUser.getUid();
+                                DatabaseReference userAnswersRef = databaseReference
+                                        .child("empty_question")
+                                        .child(userId)
+                                        .child("Writing")
+                                        .child(String.valueOf(part))
+                                        .child(String.valueOf(position + 1));
+
+
+                                userAnswersRef.removeValue();
+                            }
+                            Iterator<String> iterator = keyList.iterator();
+                            while (iterator.hasNext()) {
+                                String element = iterator.next();
+                                if (element.equals(String.valueOf(position + 1))) {
+                                    iterator.remove(); // 移除当前元素
+                                }
+                            }
+                            System.out.println("刪除後keylist" + keyList);
+                            //notifyDataSetChanged();
+                        } else {
+                            holder.star.setImageResource(R.drawable.star_yellow);
+                            star_yellow = true;
+
+                            //存進資料庫
+                            if (currentUser != null) {
+                                String userId = currentUser.getUid();
+
+                                getQues(position + 1, new FirestoreCallback() {
+                                    @Override
+                                    public void onCallback(String question) {
+                                        if (question != null) {
+                                            // Use the retrieved question here
+                                            DatabaseReference userAnswersRef = databaseReference
+                                                    .child("empty_question")
+                                                    .child(userId)
+                                                    .child("Writing")
+                                                    .child(String.valueOf(part))
+                                                    .child(String.valueOf(position + 1));
+
+                                            userAnswersRef.setValue(question);
+                                        } else {
+                                            // Handle case where question is not found or retrieval fails
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+
+                    }
+                });
+            }
+            Log.d("QuestionNumberAdapter", "设置点击监听器到位置：" + position);
+            int finalPosition = position;
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("QuestionNumberAdapter", "itemView 被点击，位置：" + finalPosition);
+                    Log.d("QuestionNumberAdapter", String.valueOf(model.getTask()));
+                    Intent intent;
+                    if (model.getTask()==1){
+                        Pattern pattern;
+                        intent = new Intent(context, Writing_T1answer1.class);
+                        String numString = model.getNum();
+                        if(isSeclect){
+                            pattern = Pattern.compile("Question(\\d+)");
+                            Log.d("QuestionNumberAdapter11", String.valueOf(pattern));
+                        } else {
+                            pattern = Pattern.compile("\\d+");
+                            Log.d("QuestionNumberAdapter", String.valueOf(pattern));
+                        };
+                        Matcher matcher = pattern.matcher(numString);
+                        if(matcher.find()){
+                            String numberString = isSeclect ? matcher.group(1) : matcher.group();  // 获取正确的捕获组
+                            int number = Integer.parseInt(numberString);
+                            intent.putExtra("num",number);
+
+                        }
+                        context.startActivity(intent);
+                    } else if (model.getTask()==-1) {
+                        //ai teacher help
+                        sharedString=model.getNum();
+                        sharedBoolean=true;
+                        star_show=true;
+                        ((AiTeacherHelp) context).finishCurrentActivity();
+
+                    } else if (model.getTask()==2){
+                        Pattern pattern;
+                        intent = new Intent(context, Writing_T2answer1.class);
+                        String numString = model.getNum();
+                        Log.d("QuestionNumberAdapter11", numString);
+                        if(isSeclect){
+                            pattern = Pattern.compile("Question(\\d+)");
+                            Log.d("QuestionNumberAdapter11", String.valueOf(pattern));
+                        } else {
+                            pattern = Pattern.compile("\\d+");
+                            Log.d("QuestionNumberAdapter", String.valueOf(pattern));
+                        }
+                        Matcher matcher = pattern.matcher(numString);
+                        if(matcher.find()){
+                            String numberString = isSeclect ? matcher.group(1) : matcher.group();  // 获取正确的捕获组
+                            int number = Integer.parseInt(numberString);
+                            intent.putExtra("num",number);
+                            Log.d("num", String.valueOf(number));
+                        }
+                        context.startActivity(intent);
+                    }
+
+
+
                 }
             });
         }
 
 
-        holder.star.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                databaseReference = FirebaseDatabase.getInstance().getReference();
-                auth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = auth.getCurrentUser();
-
-                int position = holder.getAdapterPosition();
-                int part=model.getTask();
-
-                if(star_yellow){
-                    holder.star.setImageResource(R.drawable.star_black);
-                    star_yellow=false;
-
-                    //刪除資料庫
-                    if (currentUser != null) {
-                        String userId = currentUser.getUid();
-                        DatabaseReference userAnswersRef = databaseReference
-                                .child("empty_question")
-                                .child(userId)
-                                .child("Writing")
-                                .child(String.valueOf(part))
-                                .child(String.valueOf(position + 1));
-
-
-                        userAnswersRef.removeValue();
-                    }
-                    Iterator<String> iterator = keyList.iterator();
-                    while (iterator.hasNext()) {
-                        String element = iterator.next();
-                        if (element.equals(String.valueOf(position+1))) {
-                            iterator.remove(); // 移除当前元素
-                        }
-                    }
-                    System.out.println("刪除後keylist"+keyList);
-                    //notifyDataSetChanged();
-                }else {
-                    holder.star.setImageResource(R.drawable.star_yellow);
-                    star_yellow=true;
-
-                    //存進資料庫
-                    if (currentUser != null) {
-                        String userId = currentUser.getUid();
-
-                        getQues(position + 1, new FirestoreCallback() {
-                            @Override
-                            public void onCallback(String question) {
-                                if (question != null) {
-                                    // Use the retrieved question here
-                                    DatabaseReference userAnswersRef = databaseReference
-                                            .child("empty_question")
-                                            .child(userId)
-                                            .child("Writing")
-                                            .child(String.valueOf(part))
-                                            .child(String.valueOf(position + 1));
-
-                                    userAnswersRef.setValue(question);
-                                } else {
-                                    // Handle case where question is not found or retrieval fails
-                                }
-                            }
-                        });
-                    }
-                }
-
-
-            }
-        });
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent;
-                if (model.getTask()==1){
-                    intent = new Intent(context, Writing_T1answer1.class);
-                    String numString = model.getNum();
-                    Pattern pattern = Pattern.compile("\\d+");
-                    Matcher matcher = pattern.matcher(numString);
-                    if(matcher.find()){
-                        String numberString = matcher.group();
-                        int number = Integer.parseInt(numberString);
-                        intent.putExtra("num",number);
-
-                    }
-                    context.startActivity(intent);
-                } else if (model.getTask()==-1) {
-                    //ai teacher help
-                    sharedString=model.getNum();
-                    sharedBoolean=true;
-                    star_show=true;
-                    ((AiTeacherHelp) context).finishCurrentActivity();
-
-                } else if (model.getTask()==2){
-                    intent = new Intent(context, Writing_T2answer1.class);
-                    String numString = model.getNum();
-                    Pattern pattern = Pattern.compile("\\d+");
-                    Matcher matcher = pattern.matcher(numString);
-                    if(matcher.find()){
-                        String numberString = matcher.group();
-                        int number = Integer.parseInt(numberString);
-                        intent.putExtra("num",number);
-                    }
-                    context.startActivity(intent);
-                }
-
-
-
-            }
-        });
 
 
     }
@@ -258,6 +296,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
                         String key= snapshot.getKey();
                         if(!keyList.contains(key))
                             keyList.add(key);
+                        System.out.println("QNA Key: " + key); // Log each key
                         System.out.println("keylist初次");
                     }
 

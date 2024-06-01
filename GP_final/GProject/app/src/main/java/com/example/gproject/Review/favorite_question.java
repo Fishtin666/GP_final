@@ -115,6 +115,7 @@ public class favorite_question extends AppCompatActivity {
     }
     @NonNull
     public void loadQuestions(String category) {
+        Log.d("FavoriteQuestion", "开始加载" + category + "数据");
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
@@ -145,7 +146,8 @@ public class favorite_question extends AppCompatActivity {
                                 String subKey = subChildSnapshot.getKey();
                                 Log.d("SubKey", subKey); //topic "OR" question幾
                                 if (category.equals("Writing")) {
-                                    list2.add(new QuestionNumberModel("Task "+key+"\nQuestion"+subKey,key));
+                                    list2.add(new QuestionNumberModel("Task "+key+"\nQuestion"+subKey,key,true));
+                                    Log.d("fav Writing","Task "+key+"  Question"+subKey+","+key);
                                     //adapter2.notifyDataSetChanged();
 
                                 }
@@ -156,7 +158,7 @@ public class favorite_question extends AppCompatActivity {
                                     Log.d("SubSubKey", subSubKey);
                                     Log.d("收藏的ref",key+"-"+"-"+subKey+"-"+subSubKey);
                                     if(category.equals("Speaking")) {
-                                        list.add(new QuestionModel("Part " + String.valueOf(key) + "\n" + question, key, subKey));
+                                        list.add(new QuestionModel("Part " + String.valueOf(key) + "&Part3\n" + question, key, subKey,true));
                                         //adapter.notifyDataSetChanged();
                                     }
                                 }

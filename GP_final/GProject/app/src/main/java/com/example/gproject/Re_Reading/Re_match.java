@@ -62,6 +62,7 @@ public class Re_match extends AppCompatActivity {
         if (bundle != null) {
             documentID = bundle.getString("docID");
             saveTime = bundle.getString("saveT");
+            Log.d("bundle",documentID+saveTime);
         }
         //delay loading page
         ConstraintLayout load = findViewById(R.id.load);
@@ -98,7 +99,7 @@ public class Re_match extends AppCompatActivity {
         DocumentReference documentRef = db.collection(ReviewName).document(String.valueOf(Dnumber));
         for (int i = 0; i < numberOfFields; i++) {
 
-            Log.e(ReviewName, "i = " + i);
+            Log.d(ReviewName, "i = " + i);
             String culName = "A" + (i + 1);
 
             getReviewData(documentID, saveTime, culName);
@@ -150,7 +151,7 @@ public class Re_match extends AppCompatActivity {
                                                 Log.e(ReviewName, "successful getting content: " + conText);
 
                                             } else {
-                                                Log.e(ReviewName, "Q1TextView is null");
+                                                Log.d(ReviewName, "Q1TextView is null");
                                             }
 
                                             for (int i = 0; i < numberOfFields; i++) {
@@ -167,10 +168,10 @@ public class Re_match extends AppCompatActivity {
                                                     if (firestoreDocument.contains(ansName) && cul.equals(ansName)) {
                                                         ansTextView.setText(ANS);
                                                     } else {
-                                                        Log.e(ReviewName, "No match for cul: " + cul + " with ANS: " + ANS);
+                                                        Log.d(ReviewName, "No match for cul: " + cul + " with ANS: " + ANS);
                                                     }
 
-                                                    Log.e("correct", "A: " + firestoreValue);
+                                                    Log.d("correct", "A: " + firestoreValue);
                                                     if (!ANS.equals(firestoreValue)) {
                                                         ansTextView.setTextColor(Color.RED); // Mark incorrect answer
                                                         incorrectAnswers.add(firestoreValue); // Add the incorrect answer to the list
@@ -178,30 +179,30 @@ public class Re_match extends AppCompatActivity {
                                                         incorrectAnswers.add(" ");
                                                     }
                                                 }else{
-                                                    Log.e(ReviewName, "EditText with id " + ansId + " not found");
+                                                    Log.d(ReviewName, "EditText with id " + ansId + " not found");
                                                     break;
                                                 }
-                                                Log.e(ReviewName, "correct ans: " + incorrectAnswers.get(i) );
+                                                Log.d(ReviewName, "correct ans: " + incorrectAnswers.get(i) );
                                             }
                                             if (!incorrectAnswers.isEmpty()) {
                                                 SetCorrectAns(incorrectAnswers);
                                             }
                                         } else {
-                                            Log.e(ReviewName, "Failed with error: " + task.getException());
+                                            Log.d(ReviewName, "Failed with error: " + task.getException());
                                         }
                                     } else {
-                                        Log.e(ReviewName, "get Failed error: " + task.getException());
+                                        Log.d(ReviewName, "get Failed error: " + task.getException());
                                     }
                                 }
                             });
                 } else {
-                    Log.e(ReviewName, "No data found in Realtime Database for the given path.");
+                    Log.d(ReviewName, "No data found in Realtime Database for the given path.");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(ReviewName, "Error reading Realtime Database", databaseError.toException());
+                Log.d(ReviewName, "Error reading Realtime Database", databaseError.toException());
             }
         });
     }
@@ -265,7 +266,7 @@ public class Re_match extends AppCompatActivity {
                 QTextView.setVisibility(View.GONE);
             }
         } else {
-            Log.e(ReviewName, "TextView with id " + dataName + " not found");
+            Log.d(ReviewName, "TextView with id " + dataName + " not found");
         }
     }
 

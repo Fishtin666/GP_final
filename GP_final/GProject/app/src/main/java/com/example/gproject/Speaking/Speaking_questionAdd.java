@@ -88,9 +88,9 @@ public class Speaking_questionAdd extends AppCompatActivity {
                                 String num = document.getString("num");
                                 if (question != null) {
                                     if (num == null)
-                                        list.add(new QuestionModel(question, 1,topic)); // 在这里添加 QuestionModel 到列表中
+                                        list.add(new QuestionModel(question, 1,topic,false)); // 在这里添加 QuestionModel 到列表中
                                     else
-                                        list.add(new QuestionModel(question, 2,topic));
+                                        list.add(new QuestionModel(question, 2,topic,false));
                                 }
                             }
                             adapter.notifyDataSetChanged();

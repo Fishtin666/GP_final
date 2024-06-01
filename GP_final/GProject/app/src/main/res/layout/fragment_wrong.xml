@@ -57,11 +57,11 @@
             android:id="@+id/pencil1"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="31dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="28dp"
             android:background="#00FF0000"
             android:scaleType="fitCenter"
-            android:src="@drawable/pencil1"
+            android:src="@drawable/set_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

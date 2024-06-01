@@ -39,8 +39,8 @@ public class listen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 启动新的Activity
-//                Intent intent = new Intent(listen.this, MainActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(listen.this, MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });

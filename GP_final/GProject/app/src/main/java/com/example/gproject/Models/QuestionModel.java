@@ -5,6 +5,7 @@ public class QuestionModel {
     int part;
 
     String topic;
+    boolean isSelect;
 
 
     public int getPart() {
@@ -15,10 +16,11 @@ public class QuestionModel {
         this.part = part;
     }
 
-    public QuestionModel(String question,int part,String topic) {
+    public QuestionModel(String question,int part,String topic,Boolean isSelect) {
         this.part =part;
         this.question = question;
         this.topic = topic;
+        this.isSelect = isSelect;
     }
 
     public String getTopic() {
@@ -36,4 +38,5 @@ public class QuestionModel {
     public void setQuestion(String question) {
         this.question = question;
     }
+    public Boolean getStart(){return isSelect;}
 }

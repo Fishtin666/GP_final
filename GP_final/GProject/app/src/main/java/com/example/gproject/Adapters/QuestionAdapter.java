@@ -47,6 +47,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
     FirebaseAuth auth;
     String topic;
     int part;
+    Boolean isSeclect;
 
     public QuestionAdapter(Context context, ArrayList<QuestionModel> list) {
         this.context = context;
@@ -66,29 +67,107 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
         holder.question.setText(model.getQuestion());
         topic=model.getTopic();
         part=model.getPart();
+        isSeclect=model.getStart();
 
 
-        InDb(new OnDataReadyListener() {
-            int position = holder.getAdapterPosition();
-            @Override
-            public void onDataReady(ArrayList<String> keyList) {
-                // 根据 keyList 判断是否包含当前位置的数据
-                if (keyList.contains(String.valueOf(position+1))) {
-                    holder.star.setImageResource(R.drawable.star_yellow);
-                } else {
-                    holder.star.setImageResource(R.drawable.star_black);
+        if (isSeclect) {
+            holder.star.setImageResource(R.drawable.star_yellow);
+            position = holder.getAdapterPosition();
+        }else {
+            InDb(new OnDataReadyListener() {
+                int position = holder.getAdapterPosition();
+
+                @Override
+                public void onDataReady(ArrayList<String> keyList) {
+                    // 根据 keyList 判断是否包含当前位置的数据
+                    if (keyList.contains(String.valueOf(position + 1))) {
+                        holder.star.setImageResource(R.drawable.star_yellow);
+                    } else {
+                        holder.star.setImageResource(R.drawable.star_black);
+                    }
                 }
-            }
-        });
+            });
+
+            holder.star.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    auth = FirebaseAuth.getInstance();
+                    FirebaseUser currentUser = auth.getCurrentUser();
+
+                    int position = holder.getAdapterPosition();
+                    int part=model.getPart();
+                    String question=model.getQuestion();
+                    String topic=model.getTopic();
+
+                    if(star_yellow){
+                        holder.star.setImageResource(R.drawable.star_black);
+                        star_yellow=false;
+
+                        //刪除資料庫
+                        if (currentUser != null) {
+                            String userId = currentUser.getUid();
+                            DatabaseReference userAnswersRef = databaseReference
+                                    .child("empty_question")
+                                    .child(userId)
+                                    .child("Speaking")
+                                    .child(String.valueOf(part))
+                                    .child(topic)
+                                    .child(String.valueOf(position+1));
+
+
+                            userAnswersRef.removeValue();
+
+                        }
+
+                        Iterator<String> iterator = keyList.iterator();
+                        while (iterator.hasNext()) {
+                            String element = iterator.next();
+                            if (element.equals(String.valueOf(position+1))) {
+                                iterator.remove(); // 移除当前元素
+                            }
+                        }
+                        System.out.println("刪除後keylist"+keyList);
+
+                    }else {
+                        holder.star.setImageResource(R.drawable.star_yellow);
+                        star_yellow=true;
+                        //存進資料庫
+                        if (currentUser != null) {
+                            String userId = currentUser.getUid();
+
+                            DatabaseReference userAnswersRef = databaseReference
+                                    .child("empty_question")
+                                    .child(userId)
+                                    .child("Speaking")
+                                    .child(String.valueOf(part))
+                                    .child(topic)
+                                    .child(String.valueOf(position+1));
+
+                            userAnswersRef.setValue(question);
+
+                        }
+
+                    }
+
+
+                }
+            });
+        }
+        Log.d("QuestionNumberAdapter", "设置点击监听器到位置：" + position);
+        int finalPosition = position;
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("QuestionAdapter", "itemView 被点击，位置：" + finalPosition);
+                Log.d("QuestionAdapter", String.valueOf(model.getPart()));
+                Intent intent;
                 if(model.getPart()==1){
                     //Intent intent =new Intent(context, Speaking_part1_answer.class);
                     int position = holder.getAdapterPosition();
                     Bundle bundle=new Bundle();
-                    Intent intent =new Intent(context, Speaking_part1_answer.class);
+                    intent =new Intent(context, Speaking_part1_answer.class);
                     bundle.putString("question",model.getQuestion());
                     bundle.putString("num",String.valueOf(position+1));
                     bundle.putString("topic",model.getTopic());
@@ -99,7 +178,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
                 } else if (model.getPart()==2) {
                     int position = holder.getAdapterPosition();
                     Bundle bundle=new Bundle();
-                    Intent intent =new Intent(context, Speaking_part2_answer.class);
+                    intent =new Intent(context, Speaking_part2_answer.class);
                     bundle.putString("question",model.getQuestion());
                     bundle.putString("num",String.valueOf(position+1));
                     bundle.putString("topic",model.getTopic());
@@ -109,72 +188,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.viewho
 
             }
         });
-        holder.star.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                databaseReference = FirebaseDatabase.getInstance().getReference();
-                auth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = auth.getCurrentUser();
-
-                int position = holder.getAdapterPosition();
-                int part=model.getPart();
-                String question=model.getQuestion();
-                String topic=model.getTopic();
-
-                if(star_yellow){
-                    holder.star.setImageResource(R.drawable.star_black);
-                    star_yellow=false;
-
-                    //刪除資料庫
-                    if (currentUser != null) {
-                        String userId = currentUser.getUid();
-                        DatabaseReference userAnswersRef = databaseReference
-                                .child("empty_question")
-                                .child(userId)
-                                .child("Speaking")
-                                .child(String.valueOf(part))
-                                .child(topic)
-                                .child(String.valueOf(position+1));
-
-
-                        userAnswersRef.removeValue();
-
-                    }
-
-                    Iterator<String> iterator = keyList.iterator();
-                    while (iterator.hasNext()) {
-                        String element = iterator.next();
-                        if (element.equals(String.valueOf(position+1))) {
-                            iterator.remove(); // 移除当前元素
-                        }
-                    }
-                    System.out.println("刪除後keylist"+keyList);
-
-                }else {
-                    holder.star.setImageResource(R.drawable.star_yellow);
-                    star_yellow=true;
-                    //存進資料庫
-                    if (currentUser != null) {
-                        String userId = currentUser.getUid();
-
-                        DatabaseReference userAnswersRef = databaseReference
-                                .child("empty_question")
-                                .child(userId)
-                                .child("Speaking")
-                                .child(String.valueOf(part))
-                                .child(topic)
-                                .child(String.valueOf(position+1));
-
-                        userAnswersRef.setValue(question);
-
-                    }
-
-                }
-
-
-            }
-        });
 
     }
 

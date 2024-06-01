@@ -116,17 +116,17 @@
 
         <TextView
             android:id="@+id/TaskCard"
-            android:gravity="left|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:gravity="left|center_horizontal"
             android:padding="15dp"
             android:text="Describe something you own which is very important to you.\n\nYou should say:\n
     where you got it from\n
     how long you have had it\n
     what you use it for\n
     explain why it is important to you"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
     </androidx.cardview.widget.CardView>
 
 
@@ -199,13 +199,13 @@
         android:id="@+id/textView_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="170dp"
+        android:layout_marginBottom="6dp"
         android:text="Answer"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/CH"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/time"

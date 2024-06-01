@@ -98,7 +98,7 @@ public class Speaking_part3_question extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String question = document.getString("Question");
                         // 在這裡處理問題值
-                        list.add(new QuestionModel(question, 1,Topic));
+                        list.add(new QuestionModel(question, 1,Topic,false));
                         Log.d("TAG", "資料庫存在: ");
 
                     }
