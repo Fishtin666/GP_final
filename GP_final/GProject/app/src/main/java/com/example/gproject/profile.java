@@ -369,20 +369,25 @@ public class profile extends AppCompatActivity {
 
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-
+                        TextView voc = findViewById(R.id.voc);
 
                             Object value = childSnapshot.getValue();
                             String word_level=String.valueOf(value);
                             voc.setText(word_level);
-                            if(word_level.equals("A"))
+                            if (word_level.equals("No Level")){
+                                voc_progressBar.setProgress(0);
+                                int paddingInDp = 30;  // 將dp轉換為像素
+                                float scale = getResources().getDisplayMetrics().density;
+                                int paddingInPx = (int) (paddingInDp * scale + 0.5f); // 將dp轉換為像素
+                                voc.setPadding(paddingInPx, 0, 0, 0);
+                            }
+                            else if (word_level.equals("A")) {
                                 voc_progressBar.setProgress(33);
+                            }
                             else if (word_level.equals("B"))
                                 voc_progressBar.setProgress(66);
                             else
                                 voc_progressBar.setProgress(100);
-
-
-
 
                         }
                     } else {
