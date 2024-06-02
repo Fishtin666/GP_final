@@ -145,7 +145,8 @@ public class Re_judge extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
                                         DocumentSnapshot firestoreDocument = task.getResult();
                                         if (firestoreDocument != null && firestoreDocument.exists()) {
                                             setFireStoreData(firestoreDocument);
@@ -176,16 +177,17 @@ public class Re_judge extends AppCompatActivity {
 
                                                 ansTextView.setKeyListener(null); // Set EditText unable to edit
 
-                                                if (ansTextView != null) {
+                                                if (document.contains(ansName)) {
                                                     String firestoreValue = firestoreDocument.getString(ansName);
                                                     if (firestoreDocument.contains(ansName) && cul.equals(ansName)) {
                                                         ansTextView.setText(ANS);
                                                     } else {
                                                         Log.e(ReviewName, "No match for cul: " + cul + " with ANS: " + ANS);
                                                     }
+                                                    String editTextValue = ansTextView.getText().toString().trim();
 
                                                     Log.e("correct", "A: " + firestoreValue);
-                                                    if (!ANS.equals(firestoreValue)) {
+                                                    if (!editTextValue.equals(firestoreValue)) {
                                                         ansTextView.setTextColor(Color.RED); // Mark incorrect answer
                                                         incorrectAnswers.add(firestoreValue); // Add the incorrect answer to the list
                                                     } else {

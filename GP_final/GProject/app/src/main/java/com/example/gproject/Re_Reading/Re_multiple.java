@@ -139,7 +139,8 @@ public class Re_multiple extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
                                         DocumentSnapshot firestoreDocument = task.getResult();
                                         if (firestoreDocument != null && firestoreDocument.exists()) {
                                             setFireStoreData(firestoreDocument);
@@ -155,18 +156,15 @@ public class Re_multiple extends AppCompatActivity {
                                                 replaceTextview(ContentTextView, conText);
                                                 replaceTextview2(matchTextView,matText);
 
-                                                Log.e(ReviewName, "successful getting content: " + conText);
-
                                             } else {
                                                 Log.e(ReviewName, "Q1TextView is null");
                                             }
 
                                             for (int i = 0; i < numberOfFields; i++) {
-                                                Log.e(ReviewName, "i = " + i);
                                                 String ansName = "A" + (i + 1);
 
                                                 int ansId = getResources().getIdentifier(ansName, "id", getPackageName());
-                                                TextView ansTextView = findViewById(ansId);
+                                               TextView ansTextView = findViewById(ansId);
 
                                                 ansTextView.setKeyListener(null); // Set EditText unable to edit
 
@@ -177,11 +175,13 @@ public class Re_multiple extends AppCompatActivity {
                                                     } else {
                                                         Log.e(ReviewName, "No match for cul: " + cul + " with ANS: " + ANS);
                                                     }
+                                                    String editTextValue = ansTextView.getText().toString().trim();
 
                                                     Log.e("correct", "A: " + firestoreValue);
-                                                    if (!ANS.equals(firestoreValue)) {
+                                                    if (!editTextValue.equals(firestoreValue)) {
                                                         ansTextView.setTextColor(Color.RED); // Mark incorrect answer
                                                         incorrectAnswers.add(firestoreValue); // Add the incorrect answer to the list
+                                                        Log.d(ReviewName, "Comparing ANS: [" + ANS + "] with firestoreValue: [" + firestoreValue + "]");
                                                     } else {
                                                         incorrectAnswers.add(" ");
                                                     }
@@ -219,7 +219,6 @@ public class Re_multiple extends AppCompatActivity {
         try {
 
             for (int i = 0; i < numberOfFields; i++) {
-
                 String optName = "opt" + (i + 1);
                 String fieldName = "Q" + (i + 1);
                 String ansName = "A" + (i + 1);
