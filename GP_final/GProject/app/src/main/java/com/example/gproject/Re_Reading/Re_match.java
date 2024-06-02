@@ -105,7 +105,7 @@ public class Re_match extends AppCompatActivity {
             Log.d(ReviewName, "i = " + i);
             String culName = "A" + (i + 1);
 
-            getReviewData("1", "2024-05-29 13:55:38", culName);
+            getReviewData(documentID, saveTime, culName);
         }
     }
 
