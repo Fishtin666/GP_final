@@ -105,7 +105,7 @@ public class ReviewShow_Writing extends AppCompatActivity {
         } else
             topic="Writing2";
 
-//        getQues();
+        getQues();
 
         getJudge();
         getAns();
