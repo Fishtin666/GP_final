@@ -70,7 +70,7 @@ public class listen_ftest1 extends AppCompatActivity {
     CountDownTimer countDownTimer;
     FirebaseAuth auth;
     private DatabaseReference databaseReference;
-    long totalTime = 60*1000;//(30 * 60+10) * 1000; // 30 minutes in milliseconds
+    long totalTime = (30 * 60+10) * 1000; // 30 minutes in milliseconds
     boolean isTimerPlay = false;
     MediaPlayer mediaPlayer;
     boolean isAudioPlay = false;// 标志用于跟踪播放状态

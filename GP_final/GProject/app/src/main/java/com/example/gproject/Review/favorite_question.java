@@ -158,7 +158,7 @@ public class favorite_question extends AppCompatActivity {
                                     Log.d("SubSubKey", subSubKey);
                                     Log.d("收藏的ref",key+"-"+"-"+subKey+"-"+subSubKey);
                                     if(category.equals("Speaking")) {
-                                        list.add(new QuestionModel("Part " + String.valueOf(key) + "&Part3\n" + question, key, subKey,true));
+                                        list.add(new QuestionModel("Part " + String.valueOf(key) + "\n" + question, key, subKey,true));
                                         //adapter.notifyDataSetChanged();
                                     }
                                 }
