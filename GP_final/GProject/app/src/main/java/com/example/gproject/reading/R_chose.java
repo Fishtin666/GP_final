@@ -416,7 +416,7 @@ public class R_chose extends AppCompatActivity {
     private void showReminderDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("作答提醒");
-        builder.setMessage("輸入答案時，請依照選項大小寫作達，並且不要有任何空格。");
+        builder.setMessage("輸入答案時，請依照選項大小寫作答，並且不要有任何空格。");
         builder.setPositiveButton("了解", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
