@@ -151,8 +151,8 @@
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/Family"
-            app:layout_constraintTop_toBottomOf="@+id/Hometown" />
+            app:layout_constraintStart_toEndOf="@+id/Dailylife"
+            app:layout_constraintTop_toBottomOf="@+id/Entertainment" />
 
         <Button
             android:id="@+id/Entertainment"
