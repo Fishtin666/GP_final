@@ -189,6 +189,7 @@ public class Re_match extends AppCompatActivity {
 
                                                     } else {
                                                         incorrectAnswers.add(" ");
+                                                        ansTextView.setTextColor(Color.BLACK);
                                                     }
                                                 }else{
                                                     Log.d(ReviewName, "EditText with id " + ansId + " not found");

@@ -184,6 +184,7 @@ public class Re_multiple extends AppCompatActivity {
                                                         Log.d(ReviewName, "Comparing ANS: [" + ANS + "] with firestoreValue: [" + firestoreValue + "]");
                                                     } else {
                                                         incorrectAnswers.add(" ");
+                                                        ansTextView.setTextColor(Color.BLACK);
                                                     }
                                                 } else {
                                                     Log.e(ReviewName, "EditText with id " + ansId + " not found");
