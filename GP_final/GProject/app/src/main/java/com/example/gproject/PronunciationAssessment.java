@@ -46,7 +46,11 @@ import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class PronunciationAssessment extends Activity {
@@ -345,29 +349,31 @@ public class PronunciationAssessment extends Activity {
 
             Future<SpeechRecognitionResult> future = reco.recognizeOnceAsync();
 
-//            // 添加超时机制
-//            ExecutorService executor = Executors.newSingleThreadExecutor();
-//            Future<SpeechRecognitionResult> timeoutFuture = executor.submit(() -> {
-//                try {
-//                    return future.get(10, TimeUnit.SECONDS); // 等待10秒
-//                } catch (TimeoutException e) {
-//                    reco.stopContinuousRecognitionAsync(); // 超时后停止识别
-//                    return null;
-//                }
-//            });
+            // 添加超时机制
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<SpeechRecognitionResult> timeoutFuture = executor.submit(() -> {
+                try {
+                    return future.get(10, TimeUnit.SECONDS); // 等待10秒
+                } catch (TimeoutException e) {
+                    //加
+                    article.setText(spannableString);
+                    reco.stopContinuousRecognitionAsync(); // 超时后停止识别
+                    return null;
+                }
+            });
 
 
             SpeechRecognitionResult speechRecognitionResult = future.get();//(30, TimeUnit.SECONDS);
 
-//            if (speechRecognitionResult == null || speechRecognitionResult.getText().isEmpty()) {
-//                Log.i(logTag, "No speech input detected or speech input too quiet.");
-//                reco.stopContinuousRecognitionAsync();
-//                mic.setImageResource(R.drawable.mic);
-//                show();
-//                //Toast.makeText(PronunciationAssessment.this, "未偵測到語音輸入，請重試!", Toast.LENGTH_SHORT).show();
-//                this.releaseMicrophoneStream();
-//                return;
-//            }
+            if (speechRecognitionResult == null || speechRecognitionResult.getText().isEmpty()) {
+                Log.i(logTag, "No speech input detected or speech input too quiet.");
+                reco.stopContinuousRecognitionAsync();
+                mic.setImageResource(R.drawable.mic);
+                show();
+                //Toast.makeText(PronunciationAssessment.this, "未偵測到語音輸入，請重試!", Toast.LENGTH_SHORT).show();
+                this.releaseMicrophoneStream();
+                return;
+            }
 
             PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResult);
             total_score = String.valueOf(pronResult.getPronunciationScore());

@@ -53,7 +53,7 @@
         <com.example.gproject.JustifyTextView4
             android:id="@+id/result"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:background="@drawable/rounded_corner"
             android:backgroundTint="@color/gray"

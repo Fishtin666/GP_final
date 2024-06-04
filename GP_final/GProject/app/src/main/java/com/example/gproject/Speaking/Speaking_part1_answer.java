@@ -47,6 +47,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gproject.AiTeacher.AiTeacher2;
 import com.example.gproject.AiTeacher.AiTeacherHelp;
 import com.example.gproject.MainActivity;
 import com.example.gproject.MicrophoneStream;
@@ -96,6 +97,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -155,6 +157,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
         // 檢查是否有新的 sharedstring
         if (sharedString != null && !sharedString.isEmpty()) {
+
             // 顯示 Toast
             //Toast.makeText(this, sharedString, Toast.LENGTH_SHORT).show();
 
@@ -196,6 +199,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
             public void onInit(int i) {
                 if (i != TextToSpeech.ERROR)
                     tts.setLanguage(Locale.UK);
+                    //tts.setLanguage(new Locale("en", ""));
             }
         });
 
@@ -265,11 +269,15 @@ public class Speaking_part1_answer extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             Question=extras.getString("question");
-
             QuesNum =extras.getString("num");
             Topic=extras.getString("topic");
-            tts.speak(Question, TextToSpeech.QUEUE_FLUSH, null);
+            //Toast.makeText(Speaking_part1_answer.this, Question, Toast.LENGTH_LONG).show();
+
+
+
         }
+        if(Question!=null)
+            tts.speak(Question, TextToSpeech.QUEUE_FLUSH, null);
 
         String[] topic={"People","Place","Item","Experience"};
         for(int i=0;i<topic.length;i++){
@@ -286,6 +294,7 @@ public class Speaking_part1_answer extends AppCompatActivity {
         ActivityCompat.requestPermissions(Speaking_part1_answer.this, new String[]{RECORD_AUDIO, INTERNET}, requestCode);
 
         question.setText(Question);
+
         question.setVisibility(View.INVISIBLE);
 
 
@@ -827,7 +836,30 @@ public class Speaking_part1_answer extends AppCompatActivity {
                 //Future<SpeechRecognitionResult> future = executor.submit(() -> reco.recognizeOnceAsync().get(30, TimeUnit.SECONDS));
 
                 Future<SpeechRecognitionResult> future = reco.recognizeOnceAsync();
-                SpeechRecognitionResult speechRecognitionResult = future.get(30, TimeUnit.SECONDS);
+                // 添加超时机制
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Future<SpeechRecognitionResult> timeoutFuture = executor.submit(() -> {
+                    try {
+                        return future.get(15, TimeUnit.SECONDS); // 等待20秒
+                    } catch (TimeoutException e) {
+                        answer.setText(spannableString);
+                        reco.stopContinuousRecognitionAsync(); // 超时后停止识别
+                        this.releaseMicrophoneStream();
+                        return null;
+                    }
+                });
+                SpeechRecognitionResult speechRecognitionResult = future.get();//(15, TimeUnit.SECONDS);
+
+                if (speechRecognitionResult == null || speechRecognitionResult.getText().isEmpty()) {
+                    //Log.i(logTag, "No speech input detected or speech input too quiet.");
+                    reco.stopContinuousRecognitionAsync();
+                    mic.setImageResource(R.drawable.mic);
+
+                    Toast.makeText(Speaking_part1_answer.this, "未偵測到語音輸入，請重試!", Toast.LENGTH_SHORT).show();
+
+                    this.releaseMicrophoneStream();
+                    return;
+                }
                 PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResult);
 
                 double point=pronResult.getPronunciationScore();

@@ -125,7 +125,7 @@ public class Cross_Topic extends AppCompatActivity {
             public void onClick(View v) {
                 start.setText("正在串題...");
                 cross_question = editText.getText().toString();
-                Toast.makeText(Cross_Topic.this, cross_question, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Cross_Topic.this, cross_question, Toast.LENGTH_SHORT).show();
                 cross_result.setText("");
                 //defaultQuestion="Please help me generate an answer that can address the following questions."+cross_question;
                 //defaultQuestion ="The cross-topic technique involves identifying patterns between speaking topics, uncovering connections between each question, and using a single set of material/story to cover as many topics as possible.Please help me create cross-topic examples based on the following prompts."+cross_question;
@@ -275,7 +275,7 @@ public class Cross_Topic extends AppCompatActivity {
                                 //cross_result.setText(result.trim());
                                 //cross_answer = cross_result.getText().toString();
                                 //cross_answer = result.trim();
-                                Toast.makeText(Cross_Topic.this, result.trim(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Cross_Topic.this, result.trim(), Toast.LENGTH_SHORT).show();
                                 cross_result.setText(result.trim());
                                 push(result.trim(),editText.getText().toString());
                                 //SpanningString();

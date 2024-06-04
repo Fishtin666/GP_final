@@ -193,7 +193,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
             S_Judge_P2.ROf_ques=false;
         }
 
-        long countdownTimeInMillis = 6000; // 60秒
+        long countdownTimeInMillis = 60000; // 60秒
 
         // 创建并启动倒计时器
         timer = new CountDownTimer(countdownTimeInMillis, 1000) {
@@ -222,7 +222,7 @@ public class Speaking_part2_answer extends AppCompatActivity {
                         voice.setImageResource(R.drawable.voice_gray);
                         eye_open=false;
                         // 重新启动计时器，如果需要的话
-                        long newCountdownTimeInMillis = 12000; // 新的倒计时时间，单位为毫秒120000
+                        long newCountdownTimeInMillis = 120000; // 新的倒计时时间，单位为毫秒120000
                         //CountDownTimer timer;
                         timer = new CountDownTimer(newCountdownTimeInMillis, 1000) {
                             @Override

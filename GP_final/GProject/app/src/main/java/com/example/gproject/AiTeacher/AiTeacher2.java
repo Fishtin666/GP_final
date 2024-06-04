@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +51,7 @@ import com.example.gproject.MainActivity;
 import com.example.gproject.Message;
 import com.example.gproject.MessageAdapter;
 import com.example.gproject.MicrophoneStream;
+import com.example.gproject.PronunciationAssessment;
 import com.example.gproject.R;
 
 import com.example.gproject.dictionary.MeaningAdapter;
@@ -581,7 +583,7 @@ public class AiTeacher2 extends AppCompatActivity {
             }
 
             try {
-                createMicrophoneStream();
+                //createMicrophoneStream();
                 final AudioConfig audioConfig = AudioConfig.fromStreamInput(createMicrophoneStream());
                 final com.microsoft.cognitiveservices.speech.SpeechRecognizer reco = new com.microsoft.cognitiveservices.speech.SpeechRecognizer(speechConfig, "en-US", audioConfig);
 
@@ -604,14 +606,15 @@ public class AiTeacher2 extends AppCompatActivity {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 Future<SpeechRecognitionResult> timeoutFuture = executor.submit(() -> {
                     try {
-                        return future.get(10, TimeUnit.SECONDS); // 等待10秒
+                        return future.get(20, TimeUnit.SECONDS); // 等待20秒
                     } catch (TimeoutException e) {
+                        helpTextview.setText(spannableString);
                         reco.stopContinuousRecognitionAsync(); // 超时后停止识别
                         return null;
                     }
                 });
 
-                SpeechRecognitionResult speechRecognitionResult = future.get();//(30, TimeUnit.SECONDS);
+                SpeechRecognitionResult speechRecognitionResult = future.get();//(20, TimeUnit.SECONDS);
 
                 if (speechRecognitionResult == null || speechRecognitionResult.getText().isEmpty()) {
                     Log.i(logTag, "No speech input detected or speech input too quiet.");
@@ -619,6 +622,7 @@ public class AiTeacher2 extends AppCompatActivity {
                     mic.setImageResource(R.drawable.mic);
                     show();
                     Toast.makeText(AiTeacher2.this, "未偵測到語音輸入，請重試!", Toast.LENGTH_SHORT).show();
+
                     this.releaseMicrophoneStream();
                     return;
                 }
@@ -626,8 +630,20 @@ public class AiTeacher2 extends AppCompatActivity {
                 PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResult);
 
                 double point=pronResult.getPronunciationScore();
+                AlertDialog.Builder score_show = new AlertDialog.Builder(AiTeacher2.this);
+                score_show.setTitle("發音評定結果");
+                score_show.setCancelable(false);
+                score_show.setMessage("發音評定分數為:"+point);
+                score_show.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                score_show.show();
+
                 if(point<70){
-                    PA_title.setText("可惜!超過70分就可以使用這個句子!\n再試一次吧!");
+                    PA_title.setText("可惜!你的分數為"+point+" 超過70分就可\n以使用這個句子!再試一次吧!");
                 }else{
                     PA_title.setText("超棒的!你的發音分數為"+point+"分");
                     addToChat(help_answer,Message.SENT_BY_ME);
@@ -752,6 +768,177 @@ public class AiTeacher2 extends AppCompatActivity {
 
     }
 
+
+
+//new
+//public void micClick() {
+//    mic.setImageResource(R.drawable.mic_gray);
+//    if (PA_mic) {
+//        try {
+//            int permissionRequestId = 5;
+//            ActivityCompat.requestPermissions(AiTeacher2.this, new String[]{RECORD_AUDIO, INTERNET, READ_EXTERNAL_STORAGE}, permissionRequestId);
+//        } catch (Exception ex) {
+//            Log.e("SpeechSDK", "could not init sdk, " + ex.toString());
+//        }
+//
+//        final String logTag = "pron";
+//        final SpeechConfig speechConfig;
+//        try {
+//            speechConfig = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
+//        } catch (Exception ex) {
+//            System.out.println("失敗原因:" + ex.getMessage());
+//            return;
+//        }
+//
+//        if (microphoneStream != null) {
+//            releaseMicrophoneStream();
+//            return;
+//        }
+//
+//        try {
+//            final AudioConfig audioConfig = AudioConfig.fromStreamInput(createMicrophoneStream());
+//            final com.microsoft.cognitiveservices.speech.SpeechRecognizer reco = new com.microsoft.cognitiveservices.speech.SpeechRecognizer(speechConfig, "en-US", audioConfig);
+//
+//            String referenceText = help_answer;
+//            String[] words = referenceText.split(" ");
+//            SpannableString spannableString = new SpannableString(referenceText);
+//
+//            PronunciationAssessmentConfig pronConfig = new PronunciationAssessmentConfig(referenceText, PronunciationAssessmentGradingSystem.HundredMark, PronunciationAssessmentGranularity.Phoneme);
+//            pronConfig.applyTo(reco);
+//
+//            Future<SpeechRecognitionResult> future = reco.recognizeOnceAsync();
+//
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+//            Future<SpeechRecognitionResult> timeoutFuture = executor.submit(() -> {
+//                try {
+//                    return future.get(20, TimeUnit.SECONDS);
+//                } catch (TimeoutException e) {
+//                    helpTextview.setText(spannableString);
+//                    reco.stopContinuousRecognitionAsync();
+//                    return null;
+//                }
+//            });
+//
+//            SpeechRecognitionResult speechRecognitionResult = timeoutFuture.get();
+//
+//            if (speechRecognitionResult == null || speechRecognitionResult.getText().isEmpty()) {
+//                Log.i(logTag, "No speech input detected or speech input too quiet.");
+//                reco.stopContinuousRecognitionAsync();
+//                mic.setImageResource(R.drawable.mic);
+//                show();
+//                Toast.makeText(AiTeacher2.this, "未偵測到語音輸入，請重試!", Toast.LENGTH_SHORT).show();
+//                this.releaseMicrophoneStream();
+//                return;
+//            }
+//
+//            PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResult);
+//            double point = pronResult.getPronunciationScore();
+//
+//            AlertDialog.Builder score_show = new AlertDialog.Builder(AiTeacher2.this);
+//            score_show.setTitle("發音評定結果");
+//            score_show.setCancelable(false);
+//            score_show.setMessage("發音評定分數為:" + point);
+//            score_show.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                }
+//            });
+//            score_show.show();
+//
+//            if (point < 70) {
+//                PA_title.setText("可惜!你的分數為" + point + " 超過70分就可以使用這個句子!再試一次吧!");
+//            } else {
+//                PA_title.setText("超棒的!你的發音分數為" + point + "分");
+//                addToChat(help_answer, Message.SENT_BY_ME);
+//                hintornot = false;
+//                callAPI(help_answer);
+//                PA_mic = false;
+//            }
+//            mic.setImageResource(R.drawable.mic);
+//
+//            reco.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
+//                String pronunciationAssessmentResultJson = speechRecognitionResult.getProperties().getProperty(PropertyId.SpeechServiceResponse_JsonResult);
+//
+//                int i = 0;
+//                int start = 0;
+//
+//                JsonParser jsonParser = new JsonParser();
+//                JsonElement jsonElement = jsonParser.parse(pronunciationAssessmentResultJson);
+//                if (jsonElement.isJsonObject()) {
+//                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+//                    JsonArray nBestArray = jsonObject.getAsJsonArray("NBest");
+//
+//                    for (JsonElement nBestElement : nBestArray) {
+//                        JsonObject nBestObject = nBestElement.getAsJsonObject();
+//                        JsonArray wordsArray = nBestObject.getAsJsonArray("Words");
+//
+//                        for (JsonElement wordElement : wordsArray) {
+//                            JsonObject wordObject = wordElement.getAsJsonObject();
+//                            JsonObject pronunciationAssessment = wordObject.getAsJsonObject("PronunciationAssessment");
+//
+//                            if (pronunciationAssessment != null && pronunciationAssessment.has("ErrorType")) {
+//                                String errorType = pronunciationAssessment.get("ErrorType").getAsString();
+//                                System.out.println("ErrorType: " + errorType);
+//
+//                                int end = start + words[i].length();
+//                                if (errorType.trim().equals("None")) {
+//                                    //spannableString.setSpan(new BackgroundColorSpan(Color.GREEN), start, end, 0);
+//                                } else if (errorType.trim().equals("Mispronunciation")) {
+//                                    spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), start, end, 0);
+//                                } else if (errorType.trim().equals("Omission")) {
+//                                    spannableString.setSpan(new BackgroundColorSpan(Color.GRAY), start, end, 0);
+//                                } else {
+//                                    spannableString.setSpan(new BackgroundColorSpan(Color.RED), start, end, 0);
+//                                }
+//                                start = end + 1;
+//                            }
+//                            i++;
+//                        }
+//                    }
+//                    helpTextview.setText(spannableString);
+//                }
+//            });
+//
+//            reco.sessionStopped.addEventListener((o, s) -> {
+//                Log.i(logTag, "Session stopped.");
+//                reco.stopContinuousRecognitionAsync();
+//                this.releaseMicrophoneStream();
+//            });
+//
+//            reco.recognizeOnceAsync();
+//
+//        } catch (Exception ex) {
+//            System.out.println("辨識過程中發生錯誤" + ex.getMessage());
+//            ex.printStackTrace();
+//            displayException(ex);
+//        }
+//    } else {
+//        try (SpeechConfig config = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
+//             com.microsoft.cognitiveservices.speech.SpeechRecognizer reco = new com.microsoft.cognitiveservices.speech.SpeechRecognizer(config)) {
+//
+//            Future<SpeechRecognitionResult> task = reco.recognizeOnceAsync();
+//            SpeechRecognitionResult result = task.get();
+//
+//            if (result.getReason() == ResultReason.RecognizedSpeech) {
+//                mic.setVisibility(View.INVISIBLE);
+//                hint.setVisibility(View.INVISIBLE);
+//                exit.setVisibility(View.INVISIBLE);
+//                linear_keyboard.setVisibility(View.VISIBLE);
+//                editText.setText(result.getText());
+//                Origin_is_speaking = true;
+//            } else {
+//                mic.setImageResource(R.drawable.mic);
+//                System.out.println("Error recognizing. Did you update the subscription info?" + System.lineSeparator() + result.toString());
+//            }
+//        } catch (Exception ex) {
+//            Log.e("SpeechSDKDemo", "unexpected " + ex.getMessage());
+//        }
+//    }
+//}
+
+
+
+
     public void helpClick(View view){
         PopupWindow popup;
         // 弹出 PopupWindow
@@ -766,6 +953,7 @@ public class AiTeacher2 extends AppCompatActivity {
 
     private MicrophoneStream microphoneStream;
     private MicrophoneStream createMicrophoneStream() {
+
         releaseMicrophoneStream();
         microphoneStream = new MicrophoneStream();
 
