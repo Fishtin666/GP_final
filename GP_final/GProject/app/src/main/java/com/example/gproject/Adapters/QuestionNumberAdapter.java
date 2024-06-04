@@ -191,6 +191,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
                     }
                 });
             }
+        }
             Log.d("QuestionNumberAdapter", "设置点击监听器到位置：" + position);
             int finalPosition = position;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +210,7 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
                         } else {
                             pattern = Pattern.compile("\\d+");
                             Log.d("QuestionNumberAdapter", String.valueOf(pattern));
-                        };
+                        }
                         Matcher matcher = pattern.matcher(numString);
                         if(matcher.find()){
                             String numberString = isSeclect ? matcher.group(1) : matcher.group();  // 获取正确的捕获组
@@ -251,7 +252,6 @@ public class QuestionNumberAdapter extends RecyclerView.Adapter<QuestionNumberAd
 
                 }
             });
-        }
 
 
 

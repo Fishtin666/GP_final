@@ -248,10 +248,10 @@ public class profile extends AppCompatActivity {
                                     progress=answerCount*100/s_num;
                                     s_progressBar.setProgress((int)progress);
                                     break;
-                                case "2" ://Listening
-                                    l_done.setText((answerCount)+"/"+l_num);
-                                    progress=answerCount*100/l_num;
-                                    l_progressBar.setProgress((int)progress);
+//                                case "2" ://Listening
+//                                    l_done.setText((answerCount)+"/"+l_num);
+//                                    progress=answerCount*100/l_num;
+//                                    l_progressBar.setProgress((int)progress);
 
                             }
 
@@ -320,7 +320,7 @@ public class profile extends AppCompatActivity {
             String userId = currentUser.getUid();
 
             // 构建路径以获取特定问题的答案数量
-            String answersPath = "R_Review/" + userId ;//+"/"+part
+            String answersPath = "Listen/" + userId ;//+"/"+part
 
             // 添加 ValueEventListener 监听器以获取数据快照
             databaseReference.child(answersPath).addListenerForSingleValueEvent(new ValueEventListener() {
