@@ -192,6 +192,7 @@ public class Re_judge extends AppCompatActivity {
                                                         incorrectAnswers.add(firestoreValue); // Add the incorrect answer to the list
                                                     } else {
                                                         incorrectAnswers.add(" ");
+                                                        ansTextView.setTextColor(Color.BLACK);
                                                     }
                                                 }else{
                                                     Log.e(ReviewName, "EditText with id " + ansId + " not found");

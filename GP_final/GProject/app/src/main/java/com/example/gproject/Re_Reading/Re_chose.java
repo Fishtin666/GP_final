@@ -182,6 +182,7 @@ public class Re_chose extends AppCompatActivity {
                                                         incorrectAnswers.add(firestoreValue); // Add the incorrect answer to the list
                                                     } else {
                                                         incorrectAnswers.add(" ");
+                                                        ansTextView.setTextColor(Color.BLACK);
                                                     }
                                                 }
                                             }

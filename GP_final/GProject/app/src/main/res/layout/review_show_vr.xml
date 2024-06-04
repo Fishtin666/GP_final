@@ -68,7 +68,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/rounded_corner"
                 android:backgroundTint="@color/gray"
-                android:text="question"
+                android:text=""
                 android:textSize="20sp" />
 
             <TextView
@@ -87,7 +87,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/rounded_corner"
-                android:text="judge"
+                android:text=""
                 android:textSize="20sp" />
 
         </LinearLayout>
