@@ -100,6 +100,16 @@
         app:layout_constraintTop_toTopOf="@+id/Voice"
         />
 
+    <ImageView
+        android:id="@+id/ChangeLanguage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:onClick="voiceClick"
+        android:src="@drawable/language"
+        app:layout_constraintStart_toEndOf="@+id/hint"
+        app:layout_constraintTop_toTopOf="@+id/eye" />
+
     <Button
         android:id="@+id/Retry"
         android:layout_width="wrap_content"

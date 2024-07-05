@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -92,6 +93,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -121,12 +123,12 @@ public class Speaking_part1_answer extends AppCompatActivity {
     boolean speakover=false,indic=true,PA_mic=false,star_yellow=false,pass_answer=false,spanning=false;
     Context context;
 
-
+    String language;
     String[] words;
 
     String hint_answer,help_answer,selectedWord,judge,ROf_ques;  //hint_answer是一串,help_answer某個提示回答(一個)
 
-    ImageView mic,voice,hint,eye;
+    ImageView mic,voice,hint,eye,changeLanguage;
 
     ImageButton back;
     TextView answer,question;
@@ -188,20 +190,79 @@ public class Speaking_part1_answer extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         eye=findViewById(R.id.eye);
+        changeLanguage = findViewById(R.id.ChangeLanguage);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
-
-        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        SetLanguage();
+        changeLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onInit(int i) {
-                if (i != TextToSpeech.ERROR)
-                    tts.setLanguage(Locale.UK);
-                    //tts.setLanguage(new Locale("en", ""));
+            public void onClick(View v) {
+                SetLanguage();
             }
         });
+
+//        final int[] selectedOptionIndex = {-1}; // 初始值設為-1，表示未選擇任何選項
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("選擇口音");
+//
+//        final String[] options = {"英國", "印度", "南非"};
+//
+//        builder.setSingleChoiceItems(options, selectedOptionIndex[0], new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                selectedOptionIndex[0] = which; // 更新選擇的選項索引
+//            }
+//        });
+//
+//        builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if (selectedOptionIndex[0] != -1) {
+//                    String selectedOption = options[selectedOptionIndex[0]];
+//                    Locale selectedLocale;
+//                    if (selectedOption.equals("英國")) {
+//                        selectedLocale = Locale.UK;
+//                    } else if (selectedOption.equals("印度")) {
+//                        selectedLocale = new Locale("en", "IN");
+//                    } else {
+//                        selectedLocale = new Locale("en","NG" );
+//                    }
+//
+//                    Toast.makeText(Speaking_part1_answer.this, "選擇的口音: " + selectedOption, Toast.LENGTH_LONG).show();
+//
+//                    // 初始化 TextToSpeech 並設置選擇的語言
+//                    tts = new TextToSpeech(Speaking_part1_answer.this, new TextToSpeech.OnInitListener() {
+//                        @Override
+//                        public void onInit(int status) {
+//                            if (status != TextToSpeech.ERROR) {
+//                                tts.setLanguage(selectedLocale);
+//                                Toast.makeText(Speaking_part1_answer.this, "語言: " + tts.getLanguage(), Toast.LENGTH_LONG).show();
+//                            }
+//                            if (status != TextToSpeech.ERROR) {
+//                                Set<Locale> availableLocales = tts.getAvailableLanguages();
+//                                for (Locale locale : availableLocales) {
+//                                    if (locale.getLanguage().equals("en")) {
+//                                        Toast.makeText(Speaking_part1_answer.this, "Available English locale: " + locale, Toast.LENGTH_LONG).show();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+//                }
+//
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -276,8 +337,8 @@ public class Speaking_part1_answer extends AppCompatActivity {
 
 
         }
-        if(Question!=null)
-            tts.speak(Question, TextToSpeech.QUEUE_FLUSH, null);
+//        if(Question!=null)
+//            tts.speak(Question, TextToSpeech.QUEUE_FLUSH, null);
 
         String[] topic={"People","Place","Item","Experience"};
         for(int i=0;i<topic.length;i++){
@@ -372,6 +433,66 @@ public class Speaking_part1_answer extends AppCompatActivity {
             });
 
         });
+    }
+
+    private int selectedOptionIndex = -1; // 初始值設為-1，表示未選擇任何選項
+    private void SetLanguage() {
+        final int[] selectedOptionIndex = {-1}; // 初始值設為-1，表示未選擇任何選項
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("選擇口音");
+
+        final String[] options = {"英國", "印度", "南非"};
+
+        builder.setSingleChoiceItems(options, selectedOptionIndex[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedOptionIndex[0] = which; // 更新選擇的選項索引
+            }
+        });
+
+        builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (selectedOptionIndex[0] != -1) {
+                    String selectedOption = options[selectedOptionIndex[0]];
+                    Locale selectedLocale;
+                    if (selectedOption.equals("英國")) {
+                        selectedLocale = Locale.UK;
+                    } else if (selectedOption.equals("印度")) {
+                        selectedLocale = new Locale("en", "IN");
+                    } else {
+                        selectedLocale = new Locale("en","NG" );
+                    }
+
+                    Toast.makeText(Speaking_part1_answer.this, "選擇的口音: " + selectedOption, Toast.LENGTH_LONG).show();
+
+                    // 初始化 TextToSpeech 並設置選擇的語言
+                    tts = new TextToSpeech(Speaking_part1_answer.this, new TextToSpeech.OnInitListener() {
+                        @Override
+                        public void onInit(int status) {
+                            if (status != TextToSpeech.ERROR) {
+                                tts.setLanguage(selectedLocale);
+                                Toast.makeText(Speaking_part1_answer.this, "語言: " + tts.getLanguage(), Toast.LENGTH_LONG).show();
+                            }
+                            if (status != TextToSpeech.ERROR) {
+                                Set<Locale> availableLocales = tts.getAvailableLanguages();
+                                for (Locale locale : availableLocales) {
+                                    if (locale.getLanguage().equals("en")) {
+                                        Toast.makeText(Speaking_part1_answer.this, "Available English locale: " + locale, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     Bundle bundle=new Bundle();
 
