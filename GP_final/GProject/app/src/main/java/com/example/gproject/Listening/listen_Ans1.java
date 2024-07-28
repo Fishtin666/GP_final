@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.gproject.MainActivity;
 import com.example.gproject.R;
+import com.example.gproject.Review.RReview;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -26,6 +28,9 @@ public class listen_Ans1 extends AppCompatActivity {
 
 
     int testValue;// 保存 Bundle 中的参数值
+    int AnsExit;//一題都沒寫
+    String subKey;//realtime 聽力的子節點(日期)
+    String testV;//傳給聽力review的testvalue
     int correct=0;
 //    private Map<Integer, Integer> docCountMap = new HashMap<>();
     private Map<Integer, String> answerMap = new HashMap<>();
@@ -40,13 +45,19 @@ public class listen_Ans1 extends AppCompatActivity {
         }
 
         TextView corView = findViewById(R.id.correcttext);
+        TextView scoreView = findViewById(R.id.score);
+        Button reviewButton = findViewById(R.id.review);
 
         // 获取传递的 Bundle 对象
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            testValue = bundle.getInt("test");
+            testValue = bundle.getInt("testValue");
+            subKey = bundle.getString("Ldate");
+            AnsExit = bundle.getInt("answerExit");
+            testV = String.valueOf(testValue);
             Log.d("TAG", "L_test value: " + testValue);
+            Log.d("TAG", "answerExit: " + AnsExit);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Listen_"+testValue)
                     .get()
@@ -95,10 +106,20 @@ public class listen_Ans1 extends AppCompatActivity {
 //                            Log.d("TAG", "docCountMap Key: " + entry.getKey() + ", Count: " + entry.getValue());
 //                        }
 
+
                         HashMap<String, String> hashMap = new HashMap<>();
                         for (String key : bundle.keySet()) {
                             hashMap.put(key, bundle.getString(key));
                         }
+                        // 打印 hashMap 的内容
+                        for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+                            Log.d("HashMapContent", "Key: " + entry.getKey() + ", Value: " + entry.getValue());
+                        }
+                        if (AnsExit==0) {
+                            reviewButton.setVisibility(View.GONE); // 隐藏 Button
+                        }
+
+
 
                         // 设置40个TextView的内容
                         for (int i = 1; i <= 40; i++) {
@@ -163,6 +184,9 @@ public class listen_Ans1 extends AppCompatActivity {
                             }
                         }
                         corView.setText(correct+"/40");
+                        // 根据正确的题数获取雅思分数并设置到TextView中
+                        double score = getIELTSScore(correct);
+                        scoreView.setText(String.valueOf(score));
                     })
                     .addOnFailureListener(e -> {
                         Log.e("TAG", "Error getting document count: ", e);
@@ -170,9 +194,58 @@ public class listen_Ans1 extends AppCompatActivity {
         }
     }
 
+    // 创建一个方法来根据正确题数返回雅思分数
+    public double getIELTSScore(int correct) {
+        if (correct >= 39) {
+            return 9.0;
+        } else if (correct >= 37) {
+            return 8.5;
+        } else if (correct >= 35) {
+            return 8.0;
+        } else if (correct >= 33) {
+            return 7.5;
+        } else if (correct >= 30) {
+            return 7.0;
+        } else if (correct >= 27) {
+            return 6.5;
+        } else if (correct >= 23) {
+            return 6.0;
+        } else if (correct >= 20) {
+            return 5.5;
+        } else if (correct >= 16) {
+            return 5.0;
+        } else if (correct >= 13) {
+            return 4.5;
+        } else if (correct >= 10) {
+            return 4.0;
+        } else if (correct >= 6) {
+            return 3.5;
+        } else if (correct >= 4) {
+            return 3.0;
+        } else if (correct == 3) {
+            return 2.5;
+        } else if (correct == 2) {
+            return 2.0;
+        } else if (correct == 1) {
+            return 1.0;
+        } else {
+            return 0.0; // assuming score is 0 for 0 correct answers
+        }
+    }
+
     public void NextClick(View view){
         Intent intent = new Intent();
-        intent.setClass(this, MainActivity.class);
+        intent.setClass(this, listen.class);
+        startActivity(intent);
+        finish();
+    }
+    public void listenReview(View view){
+        Intent intent = new Intent();
+        intent.setClass(this, RReview.class);
+        intent.putExtra("test", testV);
+        intent.putExtra("Ldate", subKey);
+        Log.d("LSubKey", testV+","+subKey);
+        // 启动新的 Activity
         startActivity(intent);
         finish();
     }

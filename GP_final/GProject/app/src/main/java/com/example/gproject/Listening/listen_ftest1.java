@@ -70,11 +70,12 @@ public class listen_ftest1 extends AppCompatActivity {
     CountDownTimer countDownTimer;
     FirebaseAuth auth;
     private DatabaseReference databaseReference;
-    long totalTime = (30 * 60+10) * 1000; // 30 minutes in milliseconds
+    long totalTime = (30 * 60) * 1000; // 30 minutes in milliseconds
     boolean isTimerPlay = false;
     MediaPlayer mediaPlayer;
     boolean isAudioPlay = false;// 标志用于跟踪播放状态
     int bundleValue;// 保存 Bundle 中的参数值
+    String formattedDate=null;//此次作答的時間日期紀錄
     int doccount;//此section有幾個題目
     int question=1;//要傳給fragment的值: S1_"1"
     public int section = 1;//section變數
@@ -387,7 +388,7 @@ public class listen_ftest1 extends AppCompatActivity {
             long currentTime = System.currentTimeMillis(); // 使用當前系統時間;
             Date date = new Date(currentTime);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            String formattedDate = sdf.format(date);
+            formattedDate = sdf.format(date);
             for(int ansKey=1 ; ansKey<=40 ; ansKey++){
 
                 String answerText = editTextMapFG.get(ansKey);
@@ -408,6 +409,7 @@ public class listen_ftest1 extends AppCompatActivity {
                                     //startActivity(intent);
                                 } else {
                                     // 存储失败
+                                    //Log.d("TAG","no answer");
                                     // 处理存储失败的情况
                                 }
                             }
@@ -418,7 +420,18 @@ public class listen_ftest1 extends AppCompatActivity {
         Intent intent = new Intent(this,listen_Ans1.class);
         Bundle bundle = new Bundle();
         Log.d("TAG","bV: "+bundleValue);
-        bundle.putInt("test",bundleValue);
+        bundle.putInt("testValue",bundleValue);
+        bundle.putString("Ldate",formattedDate);
+        boolean allValuesEmpty = true;
+        for (String value : editTextMapFG.values()) {
+            if (value != null && !value.isEmpty()) {
+                allValuesEmpty = false;
+                break;
+            }
+        }
+        if(allValuesEmpty){
+            bundle.putInt("answerExit",0);
+        } else {bundle.putInt("answerExit",1);}
         for (Map.Entry<Integer, String> entry : editTextMapFG.entrySet()) {
             bundle.putString(String.valueOf(entry.getKey()),entry.getValue());
         }
