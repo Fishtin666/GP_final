@@ -39,13 +39,35 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="16dp"
+                android:text="10"
+                android:textColor="@color/red"
+                android:textSize="34sp"
+                app:layout_constraintStart_toEndOf="@+id/textView9"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="31dp"
                 android:text="答對題數:"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="31dp"
+                android:text="換算分數:"
+                app:layout_constraintStart_toEndOf="@+id/correcttext"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -1497,12 +1519,23 @@
         android:id="@+id/finish2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="50dp"
         android:backgroundTint="@color/red"
         android:onClick="NextClick"
-        android:text="finish"
+        android:text="回到聽力選單"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:backgroundTint="@color/red"
+        android:onClick="listenReview"
+        android:text="到複習查看"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/finish2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
