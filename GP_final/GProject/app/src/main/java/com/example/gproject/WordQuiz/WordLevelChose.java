@@ -56,6 +56,28 @@ public class WordLevelChose extends AppCompatActivity {
 
     }
 
+    //chart show
+    public void read_chart(View view){
+        Show_read_chart();
+    }
+
+    public void Show_read_chart(){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.word_dialog_help2);
+        Window window = dialog.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); // 设置宽高为全屏
+        dialog.show();
+
+        ImageButton close = dialog.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+    }
+
     //show Help dialog
     public void ShowHelpDialog() {
         Dialog dialog = new Dialog(this);
